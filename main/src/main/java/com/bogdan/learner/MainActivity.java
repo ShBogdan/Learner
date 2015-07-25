@@ -40,6 +40,7 @@ public class MainActivity extends Activity implements FragmentListener {
 
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         uploadDb  = new DBHelper(this).uploadDb();
+        studyDays = new DayLibrary(this);
 
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
@@ -51,6 +52,13 @@ public class MainActivity extends Activity implements FragmentListener {
         fTrans = getFragmentManager().beginTransaction();
         fTrans.add(R.id.fragment_container, frgMainMenu);
         fTrans.commit();
+
+        ArrayList<String[]> s = studyDays.getDay(toDayDate);
+        for (String[] el: s){
+            Log.d(LOG_TAG, el[0] + "СЛОВО");
+        }
+
+
     }
 
     @Override

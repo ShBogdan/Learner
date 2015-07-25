@@ -72,7 +72,6 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
         }catch (ClassCastException cce){
             throw new ClassCastException(activity.toString());
         }
-
     }
 }
 
