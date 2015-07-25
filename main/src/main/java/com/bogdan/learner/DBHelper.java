@@ -72,7 +72,7 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ENG + "= ?", new String[]{english});
     }
 
-    /**Загружает таблибу и возвращает Map. Ключ дата изучения сзначение массив строк(значения слова)*/
+    /**Загружает таблибу и возвращает Map. Ключ дата изучения значение массив строк(значения слова)*/
     public TreeMap uploadDb() {
         TreeMap<Integer, ArrayList<String[]>> wordsDb = new TreeMap<>();
         sqLiteDatabase = this.getReadableDatabase();
