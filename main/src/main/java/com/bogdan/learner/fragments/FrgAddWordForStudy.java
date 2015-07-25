@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bogdan.learner.DayLibrary;
 import com.bogdan.learner.R;
 
-public class FrgAddWordToDay extends Fragment implements View.OnClickListener{
+public class FrgAddWordForStudy extends Fragment implements View.OnClickListener{
     private final  String LOG_TAG = ":::::::::::::FrgAddWordToDay:::::::::::::";
     private FragmentListener mCallback;
     private DayLibrary dayLibrary;
@@ -20,7 +20,7 @@ public class FrgAddWordToDay extends Fragment implements View.OnClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frg_add_word,null);
+        View view = inflater.inflate(R.layout.frg_add_word_for_study,null);
         dayLibrary = new DayLibrary(getActivity());
         word = dayLibrary.getWord();
 

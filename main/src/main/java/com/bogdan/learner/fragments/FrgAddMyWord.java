@@ -2,11 +2,13 @@ package com.bogdan.learner.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import com.bogdan.learner.DBHelper;
@@ -44,6 +46,8 @@ public class FrgAddMyWord extends Fragment implements View.OnClickListener{
                         transWord.getText().toString(),
                         russianWord.getText().toString(),
                         MainActivity.toDayDate);
+
+                hideKeyboard();
                 mCallback.onButtonSelected(getActivity().findViewById(R.id.btn_add));
                 Log.i(LOG_TAG, "Add to base: " + englishWord.getText().toString()+ "." + MainActivity.toDayDate);
                 break;
@@ -59,6 +63,14 @@ public class FrgAddMyWord extends Fragment implements View.OnClickListener{
         }catch (ClassCastException cce){
             throw new ClassCastException(activity.toString());
         }
+    }
 
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 }
