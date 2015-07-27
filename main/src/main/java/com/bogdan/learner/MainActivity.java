@@ -31,6 +31,7 @@ public class MainActivity extends Activity implements FragmentListener {
     FrgLearnToDay frgLearnToDay;
     FrgStatistic frgStatistic;
     FrgListAllWord frgListAllWord;
+    FrgGridLearnToday frgGridLearnToday; //t
     FragmentTransaction fTrans;
 
     @Override
@@ -49,14 +50,16 @@ public class MainActivity extends Activity implements FragmentListener {
         frgStatistic = new FrgStatistic();
         frgListAllWord = new FrgListAllWord();
 
+        frgGridLearnToday = new FrgGridLearnToday();
+
         fTrans = getFragmentManager().beginTransaction();
         fTrans.add(R.id.fragment_container, frgMainMenu);
         fTrans.commit();
 
-        ArrayList<String[]> s = studyDays.getDay(toDayDate);
-        for (String[] el: s){
-            Log.d(LOG_TAG, el[0] + "СЛОВО");
-        }
+//        ArrayList<String[]> s = studyDays.getDay(toDayDate);
+//        for (String[] el: s){
+//            Log.d(LOG_TAG, el[0] + "СЛОВО");
+//        }
 
 
     }
@@ -80,7 +83,7 @@ public class MainActivity extends Activity implements FragmentListener {
             /*Кнопки фрагментов*/
             /*Фрагмент MainMenu*/
             case R.id.btn_learnToday:
-                fTrans.replace(R.id.fragment_container,frgLearnToDay);
+                fTrans.replace(R.id.fragment_container,/*frgGridLearnToday*/frgLearnToDay);
                 Log.i(LOG_TAG, "Fragment: Учить сегоднешние");
                 break;
             case R.id.btn_addMoreWord:
