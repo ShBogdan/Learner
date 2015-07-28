@@ -43,6 +43,7 @@
                 android:text="ADD"
                 android:id="@+id/btn_add_to_base"
                 android:layout_gravity="center_horizontal"
+                android:background="@drawable/buttonstyle"
                 />
 
     </LinearLayout>

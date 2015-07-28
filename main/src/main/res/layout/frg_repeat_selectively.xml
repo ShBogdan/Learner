@@ -3,48 +3,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent" android:weightSum="1">
+              android:layout_height="match_parent"
+              android:weightSum="1"
+              android:background="@color/my_background">
 
     <Button
-            android:layout_width="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Повторение сегодня"
             android:id="@+id/btn_repeat_day1"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstyle"/>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Первое повторение(2 день)"
-            android:id="@+id/btn_repeat_day2" android:layout_gravity="center_horizontal"/>
+            android:id="@+id/btn_repeat_day2"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstyle"/>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Второе повторение(3 день)"
-            android:id="@+id/btn_repeat_day3" android:layout_gravity="center_horizontal"/>
+            android:id="@+id/btn_repeat_day3"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstyle"/>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Третье повторение(21 день)"
-            android:id="@+id/btn_repeat_day21" android:layout_gravity="center_horizontal"/>
+            android:id="@+id/btn_repeat_day21"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstyle"/>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Первое повторение(90 день)"
-            android:id="@+id/btn_repeat_day90" android:layout_gravity="center_horizontal"/>
+            android:text="Четвертое повторение(90 день)"
+            android:id="@+id/btn_repeat_day90"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstyle"/>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Календарь"
-            android:id="@+id/btn_calendar" android:layout_gravity="center_horizontal"/>
+            android:id="@+id/btn_calendar"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstyle"/>
     <Button
-            android:layout_width="wrap_content"
+
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Все слова"
-            android:id="@+id/btn_all_words" android:layout_gravity="center_horizontal"/>
+            android:id="@+id/btn_all_words"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstyle"/>
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="25dp" android:layout_weight="0.22">
+            android:layout_height="22dp"
+            >
     </LinearLayout>
     <CheckBox
             android:layout_width="match_parent"

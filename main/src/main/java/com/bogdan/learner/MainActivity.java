@@ -18,7 +18,7 @@ import java.util.TreeMap;
 
 
 public class MainActivity extends Activity implements FragmentListener {
-    private final String LOG_TAG = ":::::::::::::MainActivity:::::::::::::";
+    private final String LOG_TAG = "MainActivity";
 
     public static TreeMap<Integer, ArrayList<String[]>> uploadDb;
     public static String toDayDate;
