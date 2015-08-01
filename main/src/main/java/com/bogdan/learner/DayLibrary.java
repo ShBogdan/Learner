@@ -9,12 +9,12 @@ import java.util.Random;
 import java.util.TreeMap;
 
 public class DayLibrary {
-    private final String LOG_TAG = ":::::::::::::DayLibrary:::::::::::::";
+    private final String LOG_TAG = "::::DayLibrary::::";
     private Context context;
     private Integer date = Integer.parseInt(MainActivity.toDayDate);
     private TreeMap<Integer, ArrayList<String[]>> uploadDb = MainActivity.uploadDb; /*ключ: дата изучения. Валюе: изученые слова.*/
-    private ArrayList<String[]> listUnknownWords           = uploadDb.get(1);       /*под ключем 1 не изученные слова*/
-    private ArrayList<String[]> listKnownWords             = uploadDb.get(0);       /*под ключем 0 ранее известные слова пользователю*/
+    private ArrayList<String[]> listUnknownWords = uploadDb.get(1);       /*под ключем 1 не изученные слова*/
+    private ArrayList<String[]> listKnownWords = uploadDb.get(0);       /*под ключем 0 ранее известные слова пользователю*/
     private int rdWord;
     private String[] word;
 
@@ -22,8 +22,10 @@ public class DayLibrary {
         this.context = context;
     }
 
-    /**Проверяем на наличие не известных слов в базе. Если есть то выбираем случайное*/
-    public String[] getWord(){
+    /**
+     * Проверяем на наличие не известных слов в базе. Если есть то выбираем случайное
+     */
+    public String[] getWord() {
         if (listUnknownWords == null || listUnknownWords.size() == 0) {
             Log.d(LOG_TAG, "Поздравляем слова завершились");
             word = new String[]{"EMPTY"};
@@ -36,12 +38,14 @@ public class DayLibrary {
         return word;
     }
 
-    /**(true) учить:Проверяет есть ли в базе такой день.
+    /**
+     * (true) учить:Проверяет есть ли в базе такой день.
      * Нет то создаем и добавляем туда слово. Есть то просто добавляем.
      * (false) не учить.
-     * Вносим измениния в памяти и в файле*/
-    public void setWord(boolean bln){
-        if(bln){/*Учить*/
+     * Вносим измениния в памяти и в файле
+     */
+    public void setWord(boolean bln) {
+        if (bln) {/*Учить*/
             if (uploadDb.containsKey(date)) {
                 uploadDb.get(date)
                         .add(word);
@@ -53,17 +57,47 @@ public class DayLibrary {
             new DBHelper(context).updateWordDate(date.toString(), listUnknownWords.get(rdWord)[0]);
             listUnknownWords.remove(rdWord);
             Toast.makeText(context, "Учим", Toast.LENGTH_SHORT).show();
-        }else {/*Не учить*/
+        } else {/*Не учить*/
             new DBHelper(context).updateWordDate("0", listUnknownWords.get(rdWord)[0]);
             listUnknownWords.remove(rdWord);
             Toast.makeText(context, "Не учим", Toast.LENGTH_SHORT).show();
         }
     }
 
-    /**Получить все слова по конкретной дате(дню)*/
-    public ArrayList<String[]> getDay(String date){
+    /**
+     * Получить все слова по конкретной дате(дню)
+     */
+    public ArrayList<String[]> getListWordsByDate(String date) {
         return uploadDb.get(Integer.parseInt(date));
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //    /**1. Естьли не известные слова?
 //     * 2. Рандомно выбираем из ~первой сотни
 //     * 3. Учить: Ставим дату в upload, удаляем из памяти
@@ -93,4 +127,4 @@ public class DayLibrary {
 //            }
 //        }
 //    }
-}
+

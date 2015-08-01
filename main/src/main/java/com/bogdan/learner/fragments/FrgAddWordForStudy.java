@@ -13,7 +13,7 @@ import com.bogdan.learner.DayLibrary;
 import com.bogdan.learner.R;
 
 public class FrgAddWordForStudy extends Fragment implements View.OnClickListener{
-    private final  String LOG_TAG = ":::::::::::::FrgAddWordToDay:::::::::::::";
+    private final  String LOG_TAG = "::::FrgAddWordToDay::::";
     private FragmentListener mCallback;
     private DayLibrary dayLibrary;
     private String[] word;

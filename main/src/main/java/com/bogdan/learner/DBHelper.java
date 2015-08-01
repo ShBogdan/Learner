@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private final String LOG_TAG = ":::::::::::::DBHelper:::::::::::::";
+    private final String LOG_TAG = "::::DBHelper::::";
 
     public static final String KEY_ROWID = "_id";
     public static final String KEY_ENG   = "english";

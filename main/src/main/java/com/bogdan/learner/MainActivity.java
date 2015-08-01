@@ -28,10 +28,9 @@ public class MainActivity extends Activity implements FragmentListener {
     FrgAddWordForStudy frgAddWordForStudy;
     FrgAddMyWord frgAddMyWord;
     FrgRepeatSelectively frgRepeatSelectively;
-    FrgLearnToDay frgLearnToDay;
+    FrgRepeatToDay frgRepeatToDay;
     FrgStatistic frgStatistic;
     FrgListAllWord frgListAllWord;
-    FrgGridLearnToday frgGridLearnToday; //t
     FragmentTransaction fTrans;
 
     @Override
@@ -41,25 +40,21 @@ public class MainActivity extends Activity implements FragmentListener {
 
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         uploadDb  = new DBHelper(this).uploadDb();
-        studyDays = new DayLibrary(this);
+//        studyDays = new DayLibrary(this);
 
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
         frgRepeatSelectively = new FrgRepeatSelectively();
-        frgLearnToDay = new FrgLearnToDay();
+        frgRepeatToDay = new FrgRepeatToDay();
         frgStatistic = new FrgStatistic();
         frgListAllWord = new FrgListAllWord();
 
-        frgGridLearnToday = new FrgGridLearnToday();
 
         fTrans = getFragmentManager().beginTransaction();
         fTrans.add(R.id.fragment_container, frgMainMenu);
         fTrans.commit();
 
-//        ArrayList<String[]> s = studyDays.getDay(toDayDate);
-//        for (String[] el: s){
-//            Log.d(LOG_TAG, el[0] + "СЛОВО");
-//        }
+
 
 
     }
@@ -83,7 +78,7 @@ public class MainActivity extends Activity implements FragmentListener {
             /*Кнопки фрагментов*/
             /*Фрагмент MainMenu*/
             case R.id.btn_learnToday:
-                fTrans.replace(R.id.fragment_container,/*frgGridLearnToday*/frgLearnToDay);
+                fTrans.replace(R.id.fragment_container, frgRepeatToDay);
                 Log.i(LOG_TAG, "Fragment: Учить сегоднешние");
                 break;
             case R.id.btn_addMoreWord:
@@ -130,8 +125,5 @@ public class MainActivity extends Activity implements FragmentListener {
                 .setNegativeButton("Нет", null)
                 .show();
     }
-
-
-
 }
 
