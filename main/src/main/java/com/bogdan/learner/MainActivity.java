@@ -23,6 +23,7 @@ public class MainActivity extends Activity implements FragmentListener {
     public static TreeMap<Integer, ArrayList<String[]>> uploadDb;
     public static String toDayDate;
     public static DayLibrary studyDays;
+    public static ArrayList<String[]> toDayListWords;
 
     FrgMainMenu frgMainMenu;
     FrgAddWordForStudy frgAddWordForStudy;
@@ -40,6 +41,7 @@ public class MainActivity extends Activity implements FragmentListener {
 
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         uploadDb  = new DBHelper(this).uploadDb();
+        d(this);
 //        studyDays = new DayLibrary(this);
 
         frgMainMenu = new FrgMainMenu();
@@ -124,6 +126,10 @@ public class MainActivity extends Activity implements FragmentListener {
                 })
                 .setNegativeButton("Нет", null)
                 .show();
+    }
+
+    public static void d (Context context){
+        toDayListWords = new ArrayList<>(new DayLibrary(context).getListWordsByDate(toDayDate));
     }
 }
 

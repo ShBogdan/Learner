@@ -12,23 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.bogdan.learner.DayLibrary;
 import com.bogdan.learner.MainActivity;
+import com.bogdan.learner.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FrgRepeatToDay extends Fragment {
     private final String LOG_TAG = ":::::FrgLearnToDay:::::";
     private int buttonSize = 80;
-    ArrayList<String[]> toDayListWords = new ArrayList<>();
+    ArrayList<String[]> toDayListWords = MainActivity.toDayListWords;
     ArrayList<String> lettersEngWord;
     StringBuilder answer;
     String[] word;
     String englishWord;
     String russianWord;
     String transWord;
-
 
     LinearLayout linearLayoutMain;
     LinearLayout linearLayoutInnerAnswer;
@@ -39,16 +40,14 @@ public class FrgRepeatToDay extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(toDayListWords.size()==0){
+            Log.d(LOG_TAG, "до объявления " + toDayListWords.size());
+            MainActivity.d(getActivity());
+            toDayListWords = MainActivity.toDayListWords;
+            Log.d(LOG_TAG, "после объявления " + toDayListWords.size());}
 
-        toDayListWords = new DayLibrary(getActivity()).getListWordsByDate(MainActivity.toDayDate);
-        word        = toDayListWords.get(0);
-        englishWord = word[0];
-        russianWord = word[2];
-        transWord   = word[1];
-        answer      = new StringBuilder();
-
-
-
+        Log.d(LOG_TAG, "итерация "+toDayListWords.size());
+        returnRandomWord(toDayListWords);
 
 
         Log.d(LOG_TAG, "OnCreateView");
@@ -65,15 +64,28 @@ public class FrgRepeatToDay extends Fragment {
 
 
 
+
         return drawTheWord();
 
     }
-
+    /**Перемешивает!!! и возвращает случайное слово из сегоднешнего списка*/
+    protected void returnRandomWord(ArrayList<String[]>arrayWords){
+        if(arrayWords.size()!=0) {
+            Collections.shuffle(arrayWords);
+            word        = arrayWords.get(0);
+            englishWord = word[0];
+            russianWord = word[2];
+            transWord   = word[1];
+            answer      = new StringBuilder();
+        }
+    }
 
     protected View drawTheWord(){
+
         /*Создаем основной Макет*/
         linearLayoutMain = new LinearLayout(getActivity());
         linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
+        linearLayoutMain.setId(R.id.btn_learnToday);
 
         /*Создаем вложеный Макет*/
         linearLayoutInnerButtonLine_1 = new LinearLayout(getActivity());
@@ -88,6 +100,7 @@ public class FrgRepeatToDay extends Fragment {
         /*Создаем вложеные кнопки*/
         if( lettersEngWord == null){
             lettersEngWord = new ArrayList<>();
+            Log.d(LOG_TAG, "ПОСЛЕДНЕЕ СЛОВО" + englishWord);
             for(char c : englishWord.toCharArray()){
                 lettersEngWord.add(String.valueOf(c));
             }
@@ -115,11 +128,20 @@ public class FrgRepeatToDay extends Fragment {
                         v.setTag("to not used");
                         answer.append(letter);
                         btnAnswer.setText(answer);
-                        Log.d(LOG_TAG, englishWord + " " + answer.toString());
                         if(englishWord.equals(answer.toString())){
-                            Log.d(LOG_TAG, "ПРАВИЛЬНО"); /*Вызвать фрагмент снова*/
-                        }
+                            Toast.makeText(getActivity(), "Правильно", Toast.LENGTH_SHORT).show();
+                            Log.d(LOG_TAG, "Удаляем" + toDayListWords.get(0)[0]);
+                            if(toDayListWords.size()!=0){
+                                Log.d(LOG_TAG, "до удаления одной позиции " + toDayListWords.size());
+                                toDayListWords.remove(0);
+                                Log.d(LOG_TAG, "Удалили одну позицию " + toDayListWords.size());}
+                            else
+                                Toast.makeText(getActivity(),"Вы повторили все слова", Toast.LENGTH_SHORT).show();
 
+                            getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgRepeatToDay()).commit();
+
+
+                        }
                     }
                 }
             });
@@ -137,7 +159,7 @@ public class FrgRepeatToDay extends Fragment {
         return linearLayoutMain;
     }
 
-
+    /**Проверяет ширину экрана и делит ее назмер кнопки и возращает количество кнопок на строчку*/
     protected int buttonOnDisplayWidth(){
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         DisplayMetrics metricsB = new DisplayMetrics();
@@ -145,4 +167,10 @@ public class FrgRepeatToDay extends Fragment {
         return metricsB.widthPixels/buttonSize;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        lettersEngWord = null;
+
+    }
 }

@@ -1,6 +1,5 @@
 package com.bogdan.learner.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,13 +10,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 
 public class FrgAddMyWord extends Fragment implements View.OnClickListener{
-    private final  String LOG_TAG = ":::::::::::::FrgAddMyWord:::::::::::::";
-    private FragmentListener mCallback;
+    private final  String LOG_TAG = ":::::FrgAddMyWord::::";
     private DBHelper dbHelper;
     private EditText englishWord, transWord, russianWord;
     private Button btn_addToBase;
@@ -48,21 +47,11 @@ public class FrgAddMyWord extends Fragment implements View.OnClickListener{
                         MainActivity.toDayDate);
 
                 hideKeyboard();
-                mCallback.onButtonSelected(getActivity().findViewById(R.id.btn_add));
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgAddMyWord()).commit();
                 Log.i(LOG_TAG, "Add to base: " + englishWord.getText().toString()+ "." + MainActivity.toDayDate);
                 break;
         }
         dbHelper.close();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallback = (FragmentListener) activity;
-        }catch (ClassCastException cce){
-            throw new ClassCastException(activity.toString());
-        }
     }
 
     private void hideKeyboard() {

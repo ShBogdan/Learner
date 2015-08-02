@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class FrgListAllWord extends ListFragment {
-    private final String LOG_TAG = ":::::::::::FrgList:::::::::::";
+    private final String LOG_TAG = "::::FrgList::::";
     ArrayList<String> data;
     String[] words;
 
