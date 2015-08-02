@@ -9,11 +9,17 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import com.bogdan.learner.fragments.*;
 
-import java.text.SimpleDateFormat;
+import com.bogdan.learner.fragments.FragmentListener;
+import com.bogdan.learner.fragments.FrgAddMyWord;
+import com.bogdan.learner.fragments.FrgAddWordForStudy;
+import com.bogdan.learner.fragments.FrgListAllWord;
+import com.bogdan.learner.fragments.FrgMainMenu;
+import com.bogdan.learner.fragments.FrgRepeatSelectively;
+import com.bogdan.learner.fragments.FrgRepeatToDay;
+import com.bogdan.learner.fragments.FrgStatistic;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.TreeMap;
 
 
@@ -23,7 +29,7 @@ public class MainActivity extends Activity implements FragmentListener {
     public static TreeMap<Integer, ArrayList<String[]>> uploadDb;
     public static String toDayDate;
     public static DayLibrary studyDays;
-    public static ArrayList<String[]> toDayListWords;
+
 
     FrgMainMenu frgMainMenu;
     FrgAddWordForStudy frgAddWordForStudy;
@@ -39,9 +45,9 @@ public class MainActivity extends Activity implements FragmentListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        toDayDate = "20150801";  /*new SimpleDateFormat("yyyyMMdd").format(new Date());*/
         uploadDb  = new DBHelper(this).uploadDb();
-        d(this);
+
 //        studyDays = new DayLibrary(this);
 
         frgMainMenu = new FrgMainMenu();
@@ -128,8 +134,5 @@ public class MainActivity extends Activity implements FragmentListener {
                 .show();
     }
 
-    public static void d (Context context){
-        toDayListWords = new ArrayList<>(new DayLibrary(context).getListWordsByDate("20150801"/*toDayDate*/));
-    }
 }
 

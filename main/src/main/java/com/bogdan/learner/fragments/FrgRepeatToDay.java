@@ -1,6 +1,5 @@
 package com.bogdan.learner.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
@@ -17,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bogdan.learner.DayLibrary;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 
@@ -26,7 +26,7 @@ import java.util.Collections;
 public class FrgRepeatToDay extends Fragment {
     private final String LOG_TAG = ":::::FrgLearnToDay:::::";
     private int buttonSize = 80;
-    ArrayList<String[]> toDayListWords = MainActivity.toDayListWords;
+    ArrayList<String[]> toDayListWords;
     ArrayList<String> lettersEngWord;
     StringBuilder answer;
     String[] word;
@@ -39,24 +39,22 @@ public class FrgRepeatToDay extends Fragment {
     LinearLayout linearLayoutInnerButtonLine_1;
     LinearLayout linearLayoutInnerButtonLine_2;
     LinearLayout.LayoutParams layoutParams;
-    FragmentListener mCallback;
     Handler handler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        handler = new Handler();
-        if(toDayListWords.size()==0){
-            Log.d(LOG_TAG, "до объявления " + toDayListWords.size());
-            MainActivity.d(getActivity());
-
-            toDayListWords = MainActivity.toDayListWords;
-            Log.d(LOG_TAG, "после объявления " + toDayListWords.size());}
-
-        Log.d(LOG_TAG, "итерация "+toDayListWords.size());
-        returnRandomWord(toDayListWords);
-
-
         Log.d(LOG_TAG, "OnCreateView");
+        handler = new Handler();
+        if(toDayListWords == null || toDayListWords.size() == 0){
+            toDayListWords = new ArrayList<>(new DayLibrary(getActivity()).getListWordsByDate(MainActivity.toDayDate));
+        }
+
+        Log.d(LOG_TAG, "итерация " + toDayListWords.size());
+        returnRandomWord(toDayListWords);
+        return drawTheWord();
+
+
+
 //        View view = inflater.inflate(R.layout.frg_repeat_to_day, null);
 //
 //
@@ -66,34 +64,21 @@ public class FrgRepeatToDay extends Fragment {
 //
 //        return view;
 //
-
-
-
-
-
-        return drawTheWord();
+//
 
     }
     /**Перемешивает!!! и возвращает случайное слово из сегоднешнего списка*/
-    protected void returnRandomWord(ArrayList<String[]>arrayWords){
-        if(arrayWords.size()!=0) {
-            Collections.shuffle(arrayWords);
-            word        = arrayWords.get(0);
-            englishWord = word[0];
-            russianWord = word[2];
-            transWord   = word[1];
-            answer      = new StringBuilder();
-        }
-    }
 
     protected View drawTheWord(){
-        Log.d(LOG_TAG, "РЕСУЕМ ЕЩЕ РАЗ");
-        /*Создаем основной Макет*/
+        /*Создаем Макет*/
         linearLayoutMain = new LinearLayout(getActivity());
         linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
         linearLayoutMain.setId(R.id.btn_learnToday);
+        linearLayoutMain.setTag("MYTAG");
+        linearLayoutMain.setBackgroundColor(getResources().getColor(R.color.my_background));
 
-        /*Создаем вложеный Макет*/
+
+        /*Создаем вложеный поля*/
         linearLayoutInnerButtonLine_1 = new LinearLayout(getActivity());
         linearLayoutInnerButtonLine_1.setOrientation(LinearLayout.HORIZONTAL);
         linearLayoutInnerButtonLine_2 = new LinearLayout(getActivity());
@@ -103,19 +88,14 @@ public class FrgRepeatToDay extends Fragment {
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
 
-        /*Создаем вложеные кнопки*/
-        if( lettersEngWord == null){
-            lettersEngWord = new ArrayList<>();
-            Log.d(LOG_TAG, "ПОСЛЕДНЕЕ СЛОВО" + englishWord);
-            for(char c : englishWord.toCharArray()){
-                lettersEngWord.add(String.valueOf(c));
-            }
-        }
+        /*Создаем кнопки*/
         ViewGroup.LayoutParams btnViewParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final Button btnAnswer = new Button(getActivity());
-        btnAnswer.setBackgroundColor(Color.parseColor("#ffafcfff"));
+        btnAnswer.setBackgroundColor(getResources().getColor(R.color.my_background));
         btnAnswer.setText(russianWord);
+        btnAnswer.setTag("answerButton");
         linearLayoutInnerAnswer.addView(btnAnswer);
+
         int countLetter = 0;
         for (String x : lettersEngWord) {
             countLetter++;
@@ -124,14 +104,15 @@ public class FrgRepeatToDay extends Fragment {
             btnViewParams.height = buttonSize /*(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics())*/;
             btnLater.setText(x);
             btnLater.setTag(x);
-            btnLater.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
                     String letter = v.getTag().toString();
                     if (lettersEngWord.contains(letter)) {
                         lettersEngWord.remove(letter);
+                        Log.d(LOG_TAG, "Тег кнопки: " + btnLater.getTag());
                         btnLater.setEnabled(false);
-                        v.setTag("to not used");
+//                        v.setTag("to not used");
                         answer.append(letter);
                         btnAnswer.setText(answer);
                         if(englishWord.equals(answer.toString())){
@@ -149,12 +130,47 @@ public class FrgRepeatToDay extends Fragment {
                                     }
                                     reloadFragment();
                                 }
-                            }, 1000);
+                            }, 0);
+                        } if (englishWord.length() == answer.length() && !englishWord.equals(answer.toString())) {
+                            btnAnswer.setTextColor(Color.parseColor("#E63434"));
+                        }
+                    }
+                    if(v.getTag() == "answerButton" && answer.length()>=1){
+                        if (englishWord.length() == answer.length()) {
+                            btnAnswer.setTextColor(Color.parseColor("#000000"));
+                        }
+                        if(answer.length()>=2){
+                            String returnLetter = String.valueOf(answer.substring(answer.length() - 1));
+                            lettersEngWord.add(returnLetter);
+                            Log.d(LOG_TAG, "Вернули букву: " + returnLetter);
+                            answer.delete(answer.length() - 1, answer.length());
+                            btnAnswer.setText(answer.toString());
+                            for (String l : lettersEngWord){
+                                if(l.equals(returnLetter))
+                                    getActivity().getWindow().getDecorView().findViewWithTag(returnLetter).setEnabled(true);
+                                getActivity().getWindow().getDecorView().findViewWithTag(returnLetter).setTag("temp");
+
+                                Log.d(LOG_TAG, "Вернули кнопку");
+                            }
+                        }
+                        else {
+                            lettersEngWord.add(String.valueOf(answer));
+                            getActivity().getWindow().getDecorView().findViewWithTag(answer.toString()).setEnabled(true);
+                            for (String l : lettersEngWord){
+                                if(l.equals(answer.toString()))
+                                    getActivity().getWindow().getDecorView().findViewWithTag(answer.toString()).setEnabled(true);
+                                getActivity().getWindow().getDecorView().findViewWithTag(answer.toString()).setTag("temp");
+                                Log.d(LOG_TAG, "Вернули кнопку");
+                            }
+                            answer.setLength(0);
+                            btnAnswer.setText(answer.toString());
+
                         }
                     }
                 }
-            });
-
+            };
+            btnAnswer.setOnClickListener(onClickListener);
+            btnLater.setOnClickListener(onClickListener);
 
             if(countLetter> buttonOnDisplayWidth()-1/*1 - вскидка на пиксели между кнопками*/){
                 linearLayoutInnerButtonLine_1.addView(btnLater, btnViewParams);
@@ -168,6 +184,21 @@ public class FrgRepeatToDay extends Fragment {
         return linearLayoutMain;
     }
 
+    protected void returnRandomWord(ArrayList<String[]>arrayWords){
+        Collections.shuffle(arrayWords);
+        word        = arrayWords.get(0);
+        englishWord = word[0];
+        russianWord = word[2];
+        transWord   = word[1];
+        answer      = new StringBuilder();
+        if( lettersEngWord == null){
+            lettersEngWord = new ArrayList<>();
+            for(char c : englishWord.toCharArray()){
+                lettersEngWord.add(String.valueOf(c));
+            }
+        }
+    }
+
     /**Проверяет ширину экрана и делит ее назмер кнопки и возращает количество кнопок на строчку*/
     protected int buttonOnDisplayWidth(){
         Display display = getActivity().getWindowManager().getDefaultDisplay();
@@ -176,31 +207,18 @@ public class FrgRepeatToDay extends Fragment {
         return metricsB.widthPixels/buttonSize;
     }
 
+    public void reloadFragment(){
+        Fragment thisFrg = getFragmentManager().findFragmentByTag("TAG_FRG_REPEAT_TO_DAY");
+        final FragmentTransaction fTrans = getFragmentManager().beginTransaction();
+        fTrans.detach(thisFrg);
+        fTrans.attach(thisFrg);
+        fTrans.commit();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         lettersEngWord = null;
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallback = (FragmentListener) activity;
-        }catch (ClassCastException cce){
-            throw new ClassCastException(activity.toString());
-        }
-    }
-    public void reloadFragment(){
-        Fragment frg = null;
-        frg = getFragmentManager().findFragmentByTag("TAG_FRG_REPEAT_TO_DAY");
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(frg);
-        ft.attach(frg);
-        ft.commit();
-    }
-
-
-
 }
 
