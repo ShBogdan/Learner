@@ -79,19 +79,19 @@ public class MainActivity extends Activity implements FragmentListener {
 
             /*Кнопки фрагментов*/
             /*Фрагмент MainMenu*/
-            case R.id.btn_learnToday:
-                fTrans.replace(R.id.fragment_container, frgRepeatToDay);
-                Log.i(LOG_TAG, "Fragment: Учить сегоднешние");
-                break;
             case R.id.btn_addMoreWord:
-                frgAddWordForStudy = new FrgAddWordForStudy();
                 fTrans.replace(R.id.fragment_container, frgAddWordForStudy);
                 Log.i(LOG_TAG, "Fragment: Добавить еще слова");
+                break;
+            case R.id.btn_learnToday:
+                fTrans.replace(R.id.fragment_container, frgRepeatToDay, "TAG_FRG_REPEAT_TO_DAY");
+                Log.i(LOG_TAG, "Fragment: Учить сегоднешние");
                 break;
             case R.id.btn_repeat:
                 fTrans.replace(R.id.fragment_container, frgRepeatSelectively);
                 Log.i(LOG_TAG, "Fragment: Повторение изученого");
                 break;
+
             /*Фрагмент Повторение изученого*/
             case R.id.btn_all_words:
                 fTrans.replace(R.id.fragment_container, frgListAllWord);
@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements FragmentListener {
     }
 
     public static void d (Context context){
-        toDayListWords = new ArrayList<>(new DayLibrary(context).getListWordsByDate(toDayDate));
+        toDayListWords = new ArrayList<>(new DayLibrary(context).getListWordsByDate("20150801"/*toDayDate*/));
     }
 }
 

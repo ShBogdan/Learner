@@ -1,8 +1,11 @@
 package com.bogdan.learner.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -36,13 +39,16 @@ public class FrgRepeatToDay extends Fragment {
     LinearLayout linearLayoutInnerButtonLine_1;
     LinearLayout linearLayoutInnerButtonLine_2;
     LinearLayout.LayoutParams layoutParams;
-
+    FragmentListener mCallback;
+    Handler handler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        handler = new Handler();
         if(toDayListWords.size()==0){
             Log.d(LOG_TAG, "до объявления " + toDayListWords.size());
             MainActivity.d(getActivity());
+
             toDayListWords = MainActivity.toDayListWords;
             Log.d(LOG_TAG, "после объявления " + toDayListWords.size());}
 
@@ -81,7 +87,7 @@ public class FrgRepeatToDay extends Fragment {
     }
 
     protected View drawTheWord(){
-
+        Log.d(LOG_TAG, "РЕСУЕМ ЕЩЕ РАЗ");
         /*Создаем основной Макет*/
         linearLayoutMain = new LinearLayout(getActivity());
         linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
@@ -131,16 +137,19 @@ public class FrgRepeatToDay extends Fragment {
                         if(englishWord.equals(answer.toString())){
                             Toast.makeText(getActivity(), "Правильно", Toast.LENGTH_SHORT).show();
                             Log.d(LOG_TAG, "Удаляем" + toDayListWords.get(0)[0]);
-                            if(toDayListWords.size()!=0){
-                                Log.d(LOG_TAG, "до удаления одной позиции " + toDayListWords.size());
-                                toDayListWords.remove(0);
-                                Log.d(LOG_TAG, "Удалили одну позицию " + toDayListWords.size());}
-                            else
-                                Toast.makeText(getActivity(),"Вы повторили все слова", Toast.LENGTH_SHORT).show();
-
-                            getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgRepeatToDay()).commit();
-
-
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (toDayListWords.size() != 0) {
+                                        Log.d(LOG_TAG, "до удаления одной позиции " + toDayListWords.size());
+                                        toDayListWords.remove(0);
+                                        Log.d(LOG_TAG, "Удалили одну позицию " + toDayListWords.size());
+                                    } else {
+                                        Toast.makeText(getActivity(), "Вы повторили все слова", Toast.LENGTH_SHORT).show();
+                                    }
+                                    reloadFragment();
+                                }
+                            }, 1000);
                         }
                     }
                 }
@@ -171,6 +180,27 @@ public class FrgRepeatToDay extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         lettersEngWord = null;
-
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallback = (FragmentListener) activity;
+        }catch (ClassCastException cce){
+            throw new ClassCastException(activity.toString());
+        }
+    }
+    public void reloadFragment(){
+        Fragment frg = null;
+        frg = getFragmentManager().findFragmentByTag("TAG_FRG_REPEAT_TO_DAY");
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
+    }
+
+
+
 }
+
