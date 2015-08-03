@@ -97,11 +97,13 @@ public class FrgRepeatToDay extends Fragment {
         linearLayoutInnerAnswer.addView(btnAnswer);
 
         int countLetter = 0;
+        final ArrayList<String[]> deletedBtn = new ArrayList<>();
         for (String x : lettersEngWord) {
             countLetter++;
             final Button btnLater = new Button(getActivity());
             btnViewParams.width  = buttonSize /*(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics())*/;
             btnViewParams.height = buttonSize /*(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics())*/;
+            btnLater.setId(countLetter);
             btnLater.setText(x);
             btnLater.setTag(x);
             View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -110,9 +112,9 @@ public class FrgRepeatToDay extends Fragment {
                     String letter = v.getTag().toString();
                     if (lettersEngWord.contains(letter)) {
                         lettersEngWord.remove(letter);
-                        Log.d(LOG_TAG, "Тег кнопки: " + btnLater.getTag());
                         btnLater.setEnabled(false);
-//                        v.setTag("to not used");
+                        deletedBtn.add(new String[]{letter, String.valueOf((int) btnLater.getId())});
+                        Log.d(LOG_TAG, "Не активная кнопкаЖ " + letter +" id"+ btnLater.getId() +" количество удал"+ deletedBtn.size());
                         answer.append(letter);
                         btnAnswer.setText(answer);
                         if(englishWord.equals(answer.toString())){
@@ -135,6 +137,7 @@ public class FrgRepeatToDay extends Fragment {
                             btnAnswer.setTextColor(Color.parseColor("#E63434"));
                         }
                     }
+                    /*вкрнуть кнопку*/
                     if(v.getTag() == "answerButton" && answer.length()>=1){
                         if (englishWord.length() == answer.length()) {
                             btnAnswer.setTextColor(Color.parseColor("#000000"));
@@ -145,23 +148,29 @@ public class FrgRepeatToDay extends Fragment {
                             Log.d(LOG_TAG, "Вернули букву: " + returnLetter);
                             answer.delete(answer.length() - 1, answer.length());
                             btnAnswer.setText(answer.toString());
-                            for (String l : lettersEngWord){
-                                if(l.equals(returnLetter))
-                                    getActivity().getWindow().getDecorView().findViewWithTag(returnLetter).setEnabled(true);
-                                getActivity().getWindow().getDecorView().findViewWithTag(returnLetter).setTag("temp");
 
-                                Log.d(LOG_TAG, "Вернули кнопку");
+                            for(String[] s : deletedBtn) {
+                                if(s[0].equals(returnLetter)) {
+                                    getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1])).setEnabled(true);
+                                    deletedBtn.remove(s);
+                                    break;
+                                }
                             }
+
+                            Log.d(LOG_TAG, "Вернули кнопку " + deletedBtn.size());
+
                         }
                         else {
                             lettersEngWord.add(String.valueOf(answer));
-                            getActivity().getWindow().getDecorView().findViewWithTag(answer.toString()).setEnabled(true);
-                            for (String l : lettersEngWord){
-                                if(l.equals(answer.toString()))
-                                    getActivity().getWindow().getDecorView().findViewWithTag(answer.toString()).setEnabled(true);
-                                getActivity().getWindow().getDecorView().findViewWithTag(answer.toString()).setTag("temp");
-                                Log.d(LOG_TAG, "Вернули кнопку");
+                            for(String[] s : deletedBtn) {
+                                if(s[0].equals(String.valueOf(answer))) {
+                                    getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1])).setEnabled(true);
+                                    deletedBtn.remove(s);
+                                    break;
+                                }
                             }
+                            Log.d(LOG_TAG, "Вернули кнопку 2");
+
                             answer.setLength(0);
                             btnAnswer.setText(answer.toString());
 
