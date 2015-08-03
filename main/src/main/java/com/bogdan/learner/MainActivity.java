@@ -19,7 +19,9 @@ import com.bogdan.learner.fragments.FrgRepeatSelectively;
 import com.bogdan.learner.fragments.FrgRepeatToDay;
 import com.bogdan.learner.fragments.FrgStatistic;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.TreeMap;
 
 
@@ -45,7 +47,7 @@ public class MainActivity extends Activity implements FragmentListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toDayDate = "20150801";  /*new SimpleDateFormat("yyyyMMdd").format(new Date());*/
+        toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         uploadDb  = new DBHelper(this).uploadDb();
 
 //        studyDays = new DayLibrary(this);
