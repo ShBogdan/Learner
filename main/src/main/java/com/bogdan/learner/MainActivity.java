@@ -10,14 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.bogdan.learner.fragments.FragmentListener;
-import com.bogdan.learner.fragments.FrgAddMyWord;
-import com.bogdan.learner.fragments.FrgAddWordForStudy;
-import com.bogdan.learner.fragments.FrgListAllWord;
-import com.bogdan.learner.fragments.FrgMainMenu;
-import com.bogdan.learner.fragments.FrgRepeatSelectively;
-import com.bogdan.learner.fragments.FrgRepeatToDay;
-import com.bogdan.learner.fragments.FrgStatistic;
+import com.bogdan.learner.fragments.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +34,7 @@ public class MainActivity extends Activity implements FragmentListener {
     FrgStatistic frgStatistic;
     FrgListAllWord frgListAllWord;
     FragmentTransaction fTrans;
+    FrgCalendar frgCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +50,10 @@ public class MainActivity extends Activity implements FragmentListener {
         frgAddWordForStudy = new FrgAddWordForStudy();
         frgRepeatSelectively = new FrgRepeatSelectively();
         frgRepeatToDay = new FrgRepeatToDay();
-
         frgStatistic = new FrgStatistic();
         frgListAllWord = new FrgListAllWord();
+        frgCalendar = new FrgCalendar();
+
 
 
         fTrans = getFragmentManager().beginTransaction();
@@ -106,6 +101,9 @@ public class MainActivity extends Activity implements FragmentListener {
                 fTrans.replace(R.id.fragment_container, frgListAllWord);
                 Log.i(LOG_TAG, "Fragment: Все слова");
                 break;
+
+            case R.id.btn_calendar:
+                fTrans.replace(R.id.fragment_container, frgCalendar);
         }
         fTrans.commit();
     }

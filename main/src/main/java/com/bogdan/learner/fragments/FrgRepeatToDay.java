@@ -8,16 +8,12 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bogdan.learner.DayLibrary;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
@@ -27,7 +23,6 @@ import java.util.Collections;
 
 public class FrgRepeatToDay extends Fragment {
     private final String LOG_TAG = ":::::FrgLearnToDay:::::";
-    private int buttonSize = 100;
 
     ArrayList<String[]> toDayListWords;
     ArrayList<String> lettersEngWord;
@@ -37,22 +32,17 @@ public class FrgRepeatToDay extends Fragment {
     String russianWord;
     String transWord;
 
-    LinearLayout linearLayoutMain;
-    LinearLayout linearLayoutInnerButtonLine_1;
-    LinearLayout linearLayoutInnerButtonLine_2;
-    LinearLayout.LayoutParams layoutParams;
     Handler handler;
     boolean onCreate;
-    boolean onDestroy;
     boolean onResume;
+    boolean onDestroy;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_repeat_to_day, null);
         onCreate = true;
         onResume = false;
-        Log.d(LOG_TAG, "OnCreateView");
-        handler = new Handler();
+
         if(toDayListWords == null || toDayListWords.size() == 0){
             toDayListWords = new ArrayList<>(new DayLibrary(getActivity()).getListWordsByDate(MainActivity.toDayDate));
         }
@@ -63,12 +53,10 @@ public class FrgRepeatToDay extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(LOG_TAG, "onStart");
         if (onCreate){
             drawTheWord();}
         if(onResume){
             reloadFragment();}
-
         onCreate = false;
         onDestroy = false;
         onResume = false;
@@ -81,51 +69,48 @@ public class FrgRepeatToDay extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy");
+    public void onDestroyView() {
+        super.onDestroyView();
         onDestroy = true;
+        lettersEngWord = null;
+
     }
 
-    /**Перемешивает!!! и возвращает случайное слово из сегоднешнего списка*/
-
+    /**Рисует кнопки для ответа*/
     protected void drawTheWord(){
+        int buttonSize = 100;
+        handler = new Handler();
         /*Создаем Макет*/
-        linearLayoutMain = (LinearLayout)getActivity().findViewById(R.id.testLayout);
-        /*Создаем вложеный поля*/
-
-        linearLayoutInnerButtonLine_1 = new LinearLayout(getActivity());
+        LinearLayout linearLayoutMain = (LinearLayout)getActivity().findViewById(R.id.testLayout);
+        LinearLayout linearLayoutInnerButtonLine_1 = new LinearLayout(getActivity());
         linearLayoutInnerButtonLine_1.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayoutInnerButtonLine_2 = new LinearLayout(getActivity());
+        LinearLayout linearLayoutInnerButtonLine_2 = new LinearLayout(getActivity());
         linearLayoutInnerButtonLine_2.setOrientation(LinearLayout.HORIZONTAL);
-
-        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout linearLayoutInnerButtonLine_3 = new LinearLayout(getActivity());
+        linearLayoutInnerButtonLine_3.setOrientation(LinearLayout.HORIZONTAL);
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
-
-
 
         /*Создаем кнопки*/
         ViewGroup.LayoutParams btnViewParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btnViewParams.width  = buttonSize;
+        btnViewParams.height = buttonSize;
 
         final TextView txtAnswer = (TextView)getActivity().findViewById(R.id.russianWord);
         txtAnswer.setText(russianWord.toLowerCase());
         txtAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics()));
         txtAnswer.setTextColor(Color.parseColor("#000000"));
 
-
         final TextView tvAnswer = (TextView)getActivity().findViewById(R.id.answerBtn);
         tvAnswer.setText("");
         tvAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()));
         tvAnswer.setTag("com.bogdan.learner.fragments.answer");
-
 
         int countLetter = 0;
         final ArrayList<String[]> deletedBtn = new ArrayList<>();
         for (String x : lettersEngWord) {
             countLetter++;
             final Button btnLater = new Button(getActivity());
-            btnViewParams.width  = buttonSize /*(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics())*/;
-            btnViewParams.height = buttonSize /*(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics())*/;
             btnLater.setId(countLetter);
             btnLater.setText(x);
             btnLater.setTag(x);
@@ -154,7 +139,6 @@ public class FrgRepeatToDay extends Fragment {
                                     Log.d(LOG_TAG, onDestroy +"");
                                     if(!onDestroy){
                                         reloadFragment();}
-
                                 }
                             }, 1500);
                         } if (englishWord.length() == answer.length() && !englishWord.equals(answer.toString())) {
@@ -198,17 +182,29 @@ public class FrgRepeatToDay extends Fragment {
             tvAnswer.setOnClickListener(onClickListener);
             btnLater.setOnClickListener(onClickListener);
 
-            if(countLetter < buttonOnDisplayWidth()-1/*1 - вскидка на пиксели между кнопками*/){
+            /*Проверяет ширину экрана и возращает количество кнопок на строчку*/
+            Display display = getActivity().getWindowManager().getDefaultDisplay();
+            DisplayMetrics metricsB = new DisplayMetrics();
+            display.getMetrics(metricsB);
+            int buttonOnDisplayWidth = metricsB.widthPixels/buttonSize;
+
+            if(countLetter < buttonOnDisplayWidth){
                 linearLayoutInnerButtonLine_1.addView(btnLater, btnViewParams);
-            } else {
+            }
+            if(countLetter >= buttonOnDisplayWidth && countLetter < buttonOnDisplayWidth*2){
                 linearLayoutInnerButtonLine_2.addView(btnLater, btnViewParams);
+            }
+            if(countLetter >= buttonOnDisplayWidth*2){
+                linearLayoutInnerButtonLine_3.addView(btnLater, btnViewParams);
             }
         }
         linearLayoutMain.addView(linearLayoutInnerButtonLine_1, layoutParams);
         linearLayoutMain.addView(linearLayoutInnerButtonLine_2, layoutParams);
+        linearLayoutMain.addView(linearLayoutInnerButtonLine_3, layoutParams);
 
     }
 
+    /**Перемешивает!!! и возвращает случайное слово из сегоднешнего списка*/
     protected void returnRandomWord(ArrayList<String[]>arrayWords){
         Collections.shuffle(arrayWords);
         word        = arrayWords.get(0);
@@ -225,14 +221,6 @@ public class FrgRepeatToDay extends Fragment {
         Collections.shuffle(lettersEngWord);
     }
 
-    /**Проверяет ширину экрана и делит ее назмер кнопки и возращает количество кнопок на строчку*/
-    protected int buttonOnDisplayWidth(){
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        DisplayMetrics metricsB = new DisplayMetrics();
-        display.getMetrics(metricsB);
-        return metricsB.widthPixels/buttonSize;
-    }
-
     public void reloadFragment(){
         Fragment thisFrg = getActivity().getFragmentManager().findFragmentByTag("TAG_FRG_REPEAT_TO_DAY");
         final FragmentTransaction fTrans = getFragmentManager().beginTransaction();
@@ -241,12 +229,6 @@ public class FrgRepeatToDay extends Fragment {
         fTrans.commit();
 
 
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        lettersEngWord = null;
     }
 }
 
