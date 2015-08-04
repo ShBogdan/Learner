@@ -56,6 +56,7 @@ public class MainActivity extends Activity implements FragmentListener {
         frgAddWordForStudy = new FrgAddWordForStudy();
         frgRepeatSelectively = new FrgRepeatSelectively();
         frgRepeatToDay = new FrgRepeatToDay();
+
         frgStatistic = new FrgStatistic();
         frgListAllWord = new FrgListAllWord();
 

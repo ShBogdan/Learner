@@ -27,7 +27,8 @@ import java.util.Collections;
 
 public class FrgRepeatToDay extends Fragment {
     private final String LOG_TAG = ":::::FrgLearnToDay:::::";
-    private int buttonSize = 80;
+    private int buttonSize = 100;
+
     ArrayList<String[]> toDayListWords;
     ArrayList<String> lettersEngWord;
     StringBuilder answer;
@@ -37,85 +38,86 @@ public class FrgRepeatToDay extends Fragment {
     String transWord;
 
     LinearLayout linearLayoutMain;
-    LinearLayout linearLayoutEmptySpace;
-    LinearLayout linearLayoutInnerRussian;
-    LinearLayout linearLayoutInnerAnswer;
     LinearLayout linearLayoutInnerButtonLine_1;
     LinearLayout linearLayoutInnerButtonLine_2;
     LinearLayout.LayoutParams layoutParams;
-    LinearLayout.LayoutParams layoutParamsEmptySpace;
     Handler handler;
+    boolean onCreate;
+    boolean onDestroy;
+    boolean onResume;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.frg_repeat_to_day, null);
+        onCreate = true;
+        onResume = false;
         Log.d(LOG_TAG, "OnCreateView");
         handler = new Handler();
         if(toDayListWords == null || toDayListWords.size() == 0){
             toDayListWords = new ArrayList<>(new DayLibrary(getActivity()).getListWordsByDate(MainActivity.toDayDate));
         }
-
-        Log.d(LOG_TAG, "итерация " + toDayListWords.size());
         returnRandomWord(toDayListWords);
-        return drawTheWord();
-
-
-
-//        View view = inflater.inflate(R.layout.frg_repeat_to_day, null);
-//
-//
-//        for (String[] el: toDayListWords){
-//            Log.d(LOG_TAG, Arrays.asList(el)+"");
-//        }
-//
-//        return view;
-//
-//
-
+        return view;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(LOG_TAG, "onStart");
+        if (onCreate){
+            drawTheWord();}
+        if(onResume){
+            reloadFragment();}
+
+        onCreate = false;
+        onDestroy = false;
+        onResume = false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onResume = true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy");
+        onDestroy = true;
+    }
+
     /**Перемешивает!!! и возвращает случайное слово из сегоднешнего списка*/
 
-    protected View drawTheWord(){
+    protected void drawTheWord(){
         /*Создаем Макет*/
-        linearLayoutMain = new LinearLayout(getActivity());
-        linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
-        linearLayoutMain.setId(R.id.btn_learnToday);
-//        linearLayoutMain.setTag("MYTAG");
-        linearLayoutMain.setBackgroundColor(getResources().getColor(R.color.my_background));
-
-
+        linearLayoutMain = (LinearLayout)getActivity().findViewById(R.id.testLayout);
         /*Создаем вложеный поля*/
-        linearLayoutEmptySpace = new LinearLayout(getActivity());
-        linearLayoutEmptySpace.setOrientation(LinearLayout.HORIZONTAL);
+
         linearLayoutInnerButtonLine_1 = new LinearLayout(getActivity());
         linearLayoutInnerButtonLine_1.setOrientation(LinearLayout.HORIZONTAL);
         linearLayoutInnerButtonLine_2 = new LinearLayout(getActivity());
         linearLayoutInnerButtonLine_2.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayoutInnerRussian = new LinearLayout(getActivity());
-        linearLayoutInnerRussian.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayoutInnerAnswer = new LinearLayout(getActivity());
-        linearLayoutInnerAnswer.setOrientation(LinearLayout.HORIZONTAL);
+
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
-        layoutParamsEmptySpace = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParamsEmptySpace.gravity = Gravity.CENTER;
-        layoutParamsEmptySpace.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+
 
 
         /*Создаем кнопки*/
         ViewGroup.LayoutParams btnViewParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        final TextView txtAnswer = new TextView(getActivity());
+        final TextView txtAnswer = (TextView)getActivity().findViewById(R.id.russianWord);
         txtAnswer.setText(russianWord.toLowerCase());
         txtAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics()));
         txtAnswer.setTextColor(Color.parseColor("#000000"));
-        linearLayoutInnerRussian.addView(txtAnswer);
 
-        final Button btnAnswer = new Button(getActivity());
-        btnAnswer.setBackgroundColor(getResources().getColor(R.color.my_background));
-        btnAnswer.setText("");
-        btnAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()));
-        btnAnswer.setTag("com.bogdan.learner.fragments.answerButton");
-        linearLayoutInnerAnswer.addView(btnAnswer);
+
+        final TextView tvAnswer = (TextView)getActivity().findViewById(R.id.answerBtn);
+        tvAnswer.setText("");
+        tvAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()));
+        tvAnswer.setTag("com.bogdan.learner.fragments.answer");
+
 
         int countLetter = 0;
         final ArrayList<String[]> deletedBtn = new ArrayList<>();
@@ -136,11 +138,11 @@ public class FrgRepeatToDay extends Fragment {
                         btnLater.setEnabled(false);
                         deletedBtn.add(new String[]{letter, String.valueOf((int) btnLater.getId())});
                         answer.append(letter);
-                        btnAnswer.setText(answer);
+                        tvAnswer.setText(answer);
                         if(englishWord.equals(answer.toString())){
                             Toast.makeText(getActivity(), "Правильно", Toast.LENGTH_SHORT).show();
-                            btnAnswer.setEnabled(false);
-                            btnAnswer.setTextColor(Color.parseColor("#000000"));
+                            tvAnswer.setEnabled(false);
+                            tvAnswer.setTextColor(Color.parseColor("#000000"));
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -149,24 +151,27 @@ public class FrgRepeatToDay extends Fragment {
                                     } else {
                                         Toast.makeText(getActivity(), "Вы повторили все слова", Toast.LENGTH_SHORT).show();
                                     }
-                                    reloadFragment();
+                                    Log.d(LOG_TAG, onDestroy +"");
+                                    if(!onDestroy){
+                                        reloadFragment();}
+
                                 }
                             }, 1500);
                         } if (englishWord.length() == answer.length() && !englishWord.equals(answer.toString())) {
-                            btnAnswer.setTextColor(Color.parseColor("#E63434"));
+                            tvAnswer.setTextColor(Color.parseColor("#E63434"));
                         }
                     }
                     /*вернуть кнопку*/
-                    if(v.getTag() == "com.bogdan.learner.fragments.answerButton" && answer.length()>=1){
+                    if(v.getTag() == "com.bogdan.learner.fragments.answer" && answer.length()>=1){
                         if (englishWord.length() == answer.length()) {
-                            btnAnswer.setTextColor(Color.parseColor("#000000"));
+                            tvAnswer.setTextColor(Color.parseColor("#000000"));
                         }
                         if(answer.length()>=2){
                             String returnLetter = String.valueOf(answer.substring(answer.length() - 1));
                             lettersEngWord.add(returnLetter);
                             Log.d(LOG_TAG, "Вернули букву: " + returnLetter);
                             answer.delete(answer.length() - 1, answer.length());
-                            btnAnswer.setText(answer.toString());
+                            tvAnswer.setText(answer.toString());
                             for(String[] s : deletedBtn) {
                                 if(s[0].equals(returnLetter)) {
                                     getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1])).setEnabled(true);
@@ -185,26 +190,23 @@ public class FrgRepeatToDay extends Fragment {
                                 }
                             }
                             answer.setLength(0);
-                            btnAnswer.setText(answer.toString());
+                            tvAnswer.setText(answer.toString());
                         }
                     }
                 }
             };
-            btnAnswer.setOnClickListener(onClickListener);
+            tvAnswer.setOnClickListener(onClickListener);
             btnLater.setOnClickListener(onClickListener);
 
-            if(countLetter> buttonOnDisplayWidth()-1/*1 - вскидка на пиксели между кнопками*/){
+            if(countLetter < buttonOnDisplayWidth()-1/*1 - вскидка на пиксели между кнопками*/){
                 linearLayoutInnerButtonLine_1.addView(btnLater, btnViewParams);
             } else {
                 linearLayoutInnerButtonLine_2.addView(btnLater, btnViewParams);
             }
         }
-        linearLayoutMain.addView(linearLayoutEmptySpace, layoutParamsEmptySpace);
-        linearLayoutMain.addView(linearLayoutInnerRussian, layoutParams);
-        linearLayoutMain.addView(linearLayoutInnerAnswer, layoutParams);
-        linearLayoutMain.addView(linearLayoutInnerButtonLine_2, layoutParams);
         linearLayoutMain.addView(linearLayoutInnerButtonLine_1, layoutParams);
-        return linearLayoutMain;
+        linearLayoutMain.addView(linearLayoutInnerButtonLine_2, layoutParams);
+
     }
 
     protected void returnRandomWord(ArrayList<String[]>arrayWords){
@@ -232,11 +234,13 @@ public class FrgRepeatToDay extends Fragment {
     }
 
     public void reloadFragment(){
-        Fragment thisFrg = getFragmentManager().findFragmentByTag("TAG_FRG_REPEAT_TO_DAY");
+        Fragment thisFrg = getActivity().getFragmentManager().findFragmentByTag("TAG_FRG_REPEAT_TO_DAY");
         final FragmentTransaction fTrans = getFragmentManager().beginTransaction();
         fTrans.detach(thisFrg);
         fTrans.attach(thisFrg);
         fTrans.commit();
+
+
     }
 
     @Override
