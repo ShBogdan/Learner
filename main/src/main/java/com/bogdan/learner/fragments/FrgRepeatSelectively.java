@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import com.bogdan.learner.R;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class FrgRepeatSelectively extends Fragment implements View.OnClickListener{
     FragmentListener mCallback;
     @Override
@@ -28,6 +31,15 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
         btn_calendar.setOnClickListener(this);
         Button btn_all_words = (Button) view.findViewById(R.id.btn_all_words);
         btn_all_words.setOnClickListener(this);
+
+/*выбрать 91 день*/
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DATE,-91);
+        System.out.println(calendar.getTime());
+
+
         return view;
     }
 

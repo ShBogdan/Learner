@@ -25,10 +25,10 @@ public class DayLibrary {
     /**
      * Проверяем на наличие не известных слов в базе. Если есть то выбираем случайное
      */
-    public String[] getWord() {
+    public String[] getWord() throws NullPointerException {
         if (listUnknownWords == null || listUnknownWords.size() == 0) {
             Log.d(LOG_TAG, "Поздравляем слова завершились");
-            word = new String[]{"EMPTY"};
+            throw new NullPointerException("Слова закончились");
         } else {
             Random random = new Random();
             rdWord = random.nextInt((listUnknownWords.size() < 100) ? listUnknownWords.size() : listUnknownWords.size() / 5);/*если больше 100 слов то рандом в 5 раз меньше*/
@@ -71,8 +71,6 @@ public class DayLibrary {
         return uploadDb.get(Integer.parseInt(date));
     }
 }
-
-
 
 
 

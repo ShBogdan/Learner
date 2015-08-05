@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.bogdan.learner.DayLibrary;
 import com.bogdan.learner.R;
 
@@ -22,14 +23,19 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_add_word_for_study,null);
         dayLibrary = new DayLibrary(getActivity());
-        word = dayLibrary.getWord();
-
-        TextView tv_english       = (TextView) view.findViewById(R.id.tv_english);
-        tv_english.setText(word[0]);
-        TextView tv_transcription = (TextView) view.findViewById(R.id.tv_transcription);
-        tv_transcription.setText(word[1]);
-        TextView tv_russian       = (TextView) view.findViewById(R.id.tv_russian);
-        tv_russian.setText(word[2]);
+        try {
+            word = dayLibrary.getWord();
+            TextView tv_english       = (TextView) view.findViewById(R.id.tv_english);
+            tv_english.setText(word[0]);
+            TextView tv_transcription = (TextView) view.findViewById(R.id.tv_transcription);
+            tv_transcription.setText(word[1]);
+            TextView tv_russian       = (TextView) view.findViewById(R.id.tv_russian);
+            tv_russian.setText(word[2]);
+        } catch (NullPointerException nullPointerException) {
+            Log.d(LOG_TAG, "Ловим exception");
+            getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgMainMenu()).commit();
+            Toast.makeText(getActivity(), "В базе больше нет слов", Toast.LENGTH_LONG).show();
+        }
 
         Button btn_know         = (Button) view.findViewById(R.id.btn_know);
         btn_know.setOnClickListener(this);
