@@ -27,7 +27,7 @@ public class DayLibrary {
      */
     public String[] getWord() throws NullPointerException {
         if (listUnknownWords == null || listUnknownWords.size() == 0) {
-            Log.d(LOG_TAG, "Поздравляем слова завершились");
+            Log.d(LOG_TAG, "слова завершились");
             throw new NullPointerException("Слова закончились");
         } else {
             Random random = new Random();
@@ -71,29 +71,6 @@ public class DayLibrary {
         return uploadDb.get(Integer.parseInt(date));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //    /**1. Естьли не известные слова?

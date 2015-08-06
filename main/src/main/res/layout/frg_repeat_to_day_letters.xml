@@ -3,10 +3,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+                android:background="@color/my_background"
+    >
     <FrameLayout
             android:layout_width="fill_parent"
-            android:layout_height="70dp">
+            android:layout_height="60dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="10/10"
+            android:id="@+id/tvSumWords"
+            android:layout_gravity="right|top"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="."
+            android:id="@+id/tvSumTry"
+            android:layout_gravity="right|center_vertical" />
     </FrameLayout>
     <TextView
             android:layout_width="wrap_content"
@@ -34,12 +53,24 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="150dp"
+        android:layout_weight="1"
+        android:layout_gravity="top">
         <LinearLayout
-                android:id="@+id/testLayout"
+                android:id="@+id/randomLettersLayout"
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ответ"
+        android:id="@+id/tvCheat"
+        android:layout_gravity="center_horizontal|top"
+        android:enabled="false"
+        android:textSize="25dp"
+        android:textColor="@color/my_background"/>
 </LinearLayout>

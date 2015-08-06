@@ -8,21 +8,23 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class DBHelper extends SQLiteOpenHelper {
     private final String LOG_TAG = "::::DBHelper::::";
 
     public static final String KEY_ROWID = "_id";
-    public static final String KEY_ENG   = "english";
-    public static final String KEY_RUS   = "russian";
+    public static final String KEY_ENG = "english";
+    public static final String KEY_RUS = "russian";
     public static final String KEY_TRANS = "transcription";
     public static final String KEY_VOICE = "voice";
-    public static final String KEY_DATE  = "date";
+    public static final String KEY_DATE = "date";
 
-    private static final String DATABASE_NAME   = "dictionary.sqlite";
-    private static final String DATABASE_TABLE  = "words";
-    private static final int DATABASE_VERSION   = 1;
+    private static final String DATABASE_NAME = "dictionary.sqlite";
+    private static final String DATABASE_TABLE = "words";
+    private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_CREATE = "create table words (_id integer primary key autoincrement, " +
             "english text not null, " +
             "russian text not null, " +
@@ -51,7 +53,9 @@ public class DBHelper extends SQLiteOpenHelper {
         dbHelper = this;
     }
 
-    /**Добавляет ваше слово в таблицу*/
+    /**
+     * Добавляет ваше слово в таблицу
+     */
     public void insertWords(String english, String russian, String transcription, String date) {
         contentValues = new ContentValues();
         sqLiteDatabase = dbHelper.getWritableDatabase();
@@ -64,7 +68,9 @@ public class DBHelper extends SQLiteOpenHelper {
         MainActivity.uploadDb = this.uploadDb();
     }
 
-    /**Обновляет дату изучения слова в таблице*/
+    /**
+     * Обновляет дату изучения слова в таблице
+     */
     public void updateWordDate(String date, String english) {
         contentValues = new ContentValues();
         sqLiteDatabase = dbHelper.getWritableDatabase();
@@ -72,7 +78,9 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ENG + "= ?", new String[]{english});
     }
 
-    /**Загружает таблибу и возвращает Map. Ключ дата изучения значение массив строк(значения слова)*/
+    /**
+     * Загружает таблибу и возвращает Map. Ключ дата изучения значение массив строк(значения слова)
+     */
     public TreeMap uploadDb() {
         TreeMap<Integer, ArrayList<String[]>> wordsDb = new TreeMap<>();
         sqLiteDatabase = this.getReadableDatabase();
@@ -93,28 +101,30 @@ public class DBHelper extends SQLiteOpenHelper {
                 wordsDb.get(date).add(new String[]{english, russian, transcription, voicePatch});
             }
         }
-//        Log.d(LOG_TAG, "words_size===============================================" + wordsDb.size());
-//
-//        for (Map.Entry<String, ArrayList<String[]>> el : wordsDb.entrySet()) {
-//            ArrayList<String[]> al = el.getValue();
-//            Log.d(LOG_TAG, ("Kay::::::::::::::::::::::::::::::::::::::::::::::: " + el.getKey()));
-//            for (int i = 0; i < al.size(); i++) {
-//                Log.d(LOG_TAG, "array:::::::::::::::::::::::::::::::::::::::::: " + Arrays.asList(al.get(i)) + ", ");
-//            }
-//        }
+
+        Log.d(LOG_TAG, "words_size===============================================" + wordsDb.size());
+
+        for (Map.Entry<Integer, ArrayList<String[]>> el : wordsDb.entrySet()) {
+            ArrayList<String[]> al = el.getValue();
+            Log.d(LOG_TAG, ("Kay::::::::::::::::::::::::::::::::::::::::::::::: " + el.getKey()));
+            for (int i = 0; i < al.size(); i++) {
+                Log.d(LOG_TAG, "array:::::::::::::::::::::::::::::::::::::::::: " + Arrays.asList(al.get(i)) + ", ");
+            }
+        }
+
         return wordsDb;
     }
 
     /*Уже не нужен*/
-    public ArrayList listUnknownWords(){
+    public ArrayList listUnknownWords() {
         ArrayList<String> listUnknownWords = new ArrayList<>();
         sqLiteDatabase = this.getReadableDatabase();
         cursor = sqLiteDatabase.query(DATABASE_TABLE, null, null, null, null, null, null);
         cursor.moveToFirst();
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             String english = cursor.getString(cursor.getColumnIndex(KEY_ENG));
             Integer date = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
-            if(date == 1) listUnknownWords.add(english);
+            if (date == 1) listUnknownWords.add(english);
         }
         return listUnknownWords;
     }

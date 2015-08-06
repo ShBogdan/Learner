@@ -3,9 +3,7 @@ package com.bogdan.learner;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -51,7 +49,7 @@ public class MainActivity extends Activity implements FragmentListener {
         setContentView(R.layout.activity_main);
 
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        uploadDb  = new DBHelper(this).uploadDb();
+        uploadDb = new DBHelper(this).uploadDb();
 
 //        studyDays = new DayLibrary(this);
 
@@ -64,12 +62,9 @@ public class MainActivity extends Activity implements FragmentListener {
         frgCalendar = new FrgCalendar();
 
 
-
         fTrans = getFragmentManager().beginTransaction();
         fTrans.add(R.id.fragment_container, frgMainMenu);
         fTrans.commit();
-
-
 
 
     }
@@ -77,7 +72,7 @@ public class MainActivity extends Activity implements FragmentListener {
     @Override
     public void onButtonSelected(View view) {
         fTrans = getFragmentManager().beginTransaction();
-        switch (view.getId()){
+        switch (view.getId()) {
             /*Кнопки активити*/
             case R.id.btn_toMain:
                 fTrans.replace(R.id.fragment_container, frgMainMenu);
@@ -85,7 +80,7 @@ public class MainActivity extends Activity implements FragmentListener {
                 hideKeyboard();
                 break;
             case R.id.btn_add:
-                frgAddMyWord    = new FrgAddMyWord();
+                frgAddMyWord = new FrgAddMyWord();
                 fTrans.replace(R.id.fragment_container, frgAddMyWord);
                 Log.i(LOG_TAG, "Activity: Добавить");
                 break;
@@ -93,13 +88,14 @@ public class MainActivity extends Activity implements FragmentListener {
             /*Кнопки фрагментов*/
             /*Фрагмент MainMenu*/
             case R.id.btn_addMoreWord:
-                fTrans.replace(R.id.fragment_container, frgAddWordForStudy);
+                fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
                 Log.i(LOG_TAG, "Fragment: Добавить еще слова");
                 break;
             case R.id.btn_learnToday:
-                if(new DayLibrary(this).getListWordsByDate(toDayDate)!=null){
-                    fTrans.replace(R.id.fragment_container, frgRepeatToDay, "TAG_FRG_REPEAT_TO_DAY");}
-                else Toast.makeText(this, "Сегодня вы не добавили ни одного слова", Toast.LENGTH_SHORT).show();
+                if (new DayLibrary(this).getListWordsByDate(toDayDate) != null) {
+                    fTrans.replace(R.id.fragment_container, frgRepeatToDay, "TAG_FRG_REPEAT_TO_DAY");
+                } else
+                    Toast.makeText(this, "Сегодня вы не добавили ни одного слова", Toast.LENGTH_SHORT).show();
                 Log.i(LOG_TAG, "Fragment: Учить сегоднешние");
                 break;
             case R.id.btn_repeat:
@@ -107,7 +103,7 @@ public class MainActivity extends Activity implements FragmentListener {
                 Log.i(LOG_TAG, "Fragment: Повторение изученого");
                 break;
 
-            /*Фрагмент Повторение изученогоо*/
+            /*Фрагмент Повторение изученого*/
             case R.id.btn_all_words:
                 fTrans.replace(R.id.fragment_container, frgListAllWord);
                 Log.i(LOG_TAG, "Fragment: Все слова");
@@ -120,7 +116,6 @@ public class MainActivity extends Activity implements FragmentListener {
     }
 
     private void hideKeyboard() {
-        // Check if no view has focus:
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -128,23 +123,22 @@ public class MainActivity extends Activity implements FragmentListener {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Выход")
-                .setMessage("Закрыть приложение?")
-                .setPositiveButton("Да", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-
-                })
-                .setNegativeButton("Нет", null)
-                .show();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        new AlertDialog.Builder(this)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .setTitle("Выход")
+//                .setMessage("Закрыть приложение?")
+//                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        finish();
+//                    }
+//
+//                })
+//                .setNegativeButton("Нет", null)
+//                .show();
+//    }
 
 }
 
