@@ -9,9 +9,17 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
 import android.widget.Toast;
-import com.bogdan.learner.fragments.*;
+
+import com.bogdan.learner.fragments.FragmentListener;
+import com.bogdan.learner.fragments.FrgAddMyWord;
+import com.bogdan.learner.fragments.FrgAddWordForStudy;
+import com.bogdan.learner.fragments.FrgCalendar;
+import com.bogdan.learner.fragments.FrgListAllWord;
+import com.bogdan.learner.fragments.FrgMainMenu;
+import com.bogdan.learner.fragments.FrgRepeatSelectively;
+import com.bogdan.learner.fragments.FrgRepeatToDay;
+import com.bogdan.learner.fragments.FrgStatistic;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,7 +32,7 @@ public class MainActivity extends Activity implements FragmentListener {
 
     public static TreeMap<Integer, ArrayList<String[]>> uploadDb;
     public static String toDayDate;
-
+    public static DayLibrary studyDays;
 
 
     FrgMainMenu frgMainMenu;
@@ -36,17 +44,16 @@ public class MainActivity extends Activity implements FragmentListener {
     FrgListAllWord frgListAllWord;
     FragmentTransaction fTrans;
     FrgCalendar frgCalendar;
-    Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toDayDate = "20150800"/*new SimpleDateFormat("yyyyMMdd").format(new Date())*/;
+        toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         uploadDb  = new DBHelper(this).uploadDb();
 
-
+//        studyDays = new DayLibrary(this);
 
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
@@ -92,7 +99,7 @@ public class MainActivity extends Activity implements FragmentListener {
             case R.id.btn_learnToday:
                 if(new DayLibrary(this).getListWordsByDate(toDayDate)!=null){
                     fTrans.replace(R.id.fragment_container, frgRepeatToDay, "TAG_FRG_REPEAT_TO_DAY");}
-                else toast.makeText(this, "Сегодня вы не добавили ни одного слова", Toast.LENGTH_SHORT).show();
+                else Toast.makeText(this, "Сегодня вы не добавили ни одного слова", Toast.LENGTH_SHORT).show();
                 Log.i(LOG_TAG, "Fragment: Учить сегоднешние");
                 break;
             case R.id.btn_repeat:
@@ -100,7 +107,7 @@ public class MainActivity extends Activity implements FragmentListener {
                 Log.i(LOG_TAG, "Fragment: Повторение изученого");
                 break;
 
-            /*Фрагмент Повторение изученого*/
+            /*Фрагмент Повторение изученогоо*/
             case R.id.btn_all_words:
                 fTrans.replace(R.id.fragment_container, frgListAllWord);
                 Log.i(LOG_TAG, "Fragment: Все слова");
