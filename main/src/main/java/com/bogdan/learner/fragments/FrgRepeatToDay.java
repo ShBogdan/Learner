@@ -1,16 +1,24 @@
 package com.bogdan.learner.fragments;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.*;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -36,6 +44,7 @@ public class FrgRepeatToDay extends Fragment {
     String russianWord;
     String transWord;
     int countAttempt;
+    int count;
 
     Handler handler;
     boolean onCreate;
@@ -45,28 +54,57 @@ public class FrgRepeatToDay extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "OnCreate");
+        View view;
         toDayListWords = new DayLibrary(getActivity()).getListWordsByDate(MainActivity.toDayDate);
         onCreate = true;
         onResume = false;
 
+
         if (wordsForFrgLetters == null || wordsForFrgLetters.size() == 0) {
+            Collections.shuffle(toDayListWords);
             wordsForFrgLetters = new ArrayList<>(toDayListWords);
+            wordsForFrgRepeat = new ArrayList<>();
+            if (wordsForFrgLetters.size() >= 2) {
+                wordsForFrgRepeat.add(wordsForFrgLetters.get(0));
+                wordsForFrgRepeat.add(wordsForFrgLetters.get(1));
+                count = 2;
+            } else {
+                wordsForFrgRepeat.add(wordsForFrgLetters.get(0));
+                count = 2;
+            }
         }
+        if (count == 0) {
+            if (wordsForFrgLetters.size() >= 2) {
+                wordsForFrgRepeat.add(wordsForFrgLetters.get(0));
+                wordsForFrgRepeat.add(wordsForFrgLetters.get(1));
+                count = 2;
+            } else {
+                wordsForFrgRepeat.add(wordsForFrgLetters.get(0));
+                count = 1;
+            }
+            ;
 
+        }
+        Log.d(LOG_TAG, "wordsForFrgRepeat  " + wordsForFrgRepeat.size());
+
+        if (wordsForFrgRepeat.size() != 0) {
+            view = inflater.inflate(R.layout.frg_repeat_to_day_word, null);
+            returnRandomWord(wordsForFrgRepeat);
+        } else {
+            view = inflater.inflate(R.layout.frg_repeat_to_day_letters, null);
+            returnRandomWord(wordsForFrgLetters);
+        }
+        Log.d(LOG_TAG, "OnCreate " + wordsForFrgRepeat.size());
         Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.size());
-        returnRandomWord(wordsForFrgLetters);
-
-        View view = inflater.inflate(R.layout.frg_repeat_to_day_letters, null);
         return view;
     }
-
-
 
 
     /**
      * Рисует кнопки для ответа
      */
-    protected void drawTheWord() {
+    protected void drawTheLetters() {
         countAttempt = 3;
         int buttonSize = 100;
         handler = new Handler();
@@ -132,24 +170,28 @@ public class FrgRepeatToDay extends Fragment {
                             Toast.makeText(getActivity(), "Правильно", Toast.LENGTH_SHORT).show();
                             tvAnswer.setEnabled(false);
                             tvAnswer.setTextColor(Color.parseColor("#000000"));
+                            count--;
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (wordsForFrgLetters.size() > 0) {
                                         wordsForFrgLetters.remove(0);
                                     }
-                                    if (wordsForFrgLetters.size() == 0) {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo));
-                                        builder.setTitle("Вы повторили все слова. Вернитесь позже")
-                                                .setCancelable(true);
-                                        AlertDialog alert = builder.create();
-                                        alert.show();
+                                    if (wordsForFrgLetters.size() == 0 && !onDestroy && !onStop) {
+                                        Dialog dialog = new Dialog(getActivity());
+                                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                                        // layout to display
+                                        dialog.setContentView(R.layout.about_program_dialog_layout);
+                                        // set color transpartent
+                                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        dialog.show();
                                     }
                                     if (!onDestroy && !onStop) {
                                         reloadFragment();
                                     }
                                 }
-                            }, 150);
+                            }, 1000);
                         }
 
                         /*Если не правильн то пишем красным и даем три попытки*/
@@ -159,7 +201,7 @@ public class FrgRepeatToDay extends Fragment {
                             Log.d(LOG_TAG, "Попытки:  " + countAttempt);
                             if (countAttempt == 0) {
                                 ((TextView) getActivity().findViewById(R.id.tvCheat)).setTextColor(Color.RED);
-                                countAttempt =3;
+                                countAttempt = 3;
                             }
                         }
                     }
@@ -225,11 +267,27 @@ public class FrgRepeatToDay extends Fragment {
 
     }
 
+    protected void drawTheWord() {
+        TextView tvEnglishWord = (TextView) getActivity().findViewById(R.id.englishWord);
+        tvEnglishWord.setText(englishWord);
+        TextView tvTransWord = (TextView) getActivity().findViewById(R.id.transWord);
+        tvTransWord.setText(transWord);
+        TextView tvRussianWord = (TextView) getActivity().findViewById(R.id.russianWord);
+        tvRussianWord.setText(russianWord);
+        FrameLayout nextBtn = (FrameLayout) getActivity().findViewById(R.id.btn_next);
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (wordsForFrgRepeat.size() != 0) wordsForFrgRepeat.remove(0);
+                reloadFragment();
+            }
+        });
+    }
+
     /**
      * Перемешивает!!! и возвращает случайное слово из сегоднешнего списка
      */
     protected void returnRandomWord(ArrayList<String[]> arrayWords) {
-        Collections.shuffle(arrayWords);
         word = arrayWords.get(0);
         englishWord = word[0];
         russianWord = word[2];
@@ -255,7 +313,12 @@ public class FrgRepeatToDay extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (onCreate) {
+        Log.d(LOG_TAG, "onStart");
+        if (onCreate && wordsForFrgRepeat.size() == 0) {
+            drawTheLetters();
+        } else if (!onCreate && wordsForFrgRepeat.size() == 0) {
+            reloadFragment();
+        } else {
             drawTheWord();
         }
         if (onResume) {
@@ -270,21 +333,24 @@ public class FrgRepeatToDay extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(LOG_TAG, "onResume");
         onResume = true;
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        Log.d(LOG_TAG, "onStop");
         onStop = true;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.d(LOG_TAG, "onDestroyView");
         onDestroy = true;
         lettersEngWord = null;
-
     }
 }
 

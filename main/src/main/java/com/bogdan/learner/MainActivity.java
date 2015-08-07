@@ -66,8 +66,7 @@ public class MainActivity extends Activity implements FragmentListener {
         fTrans.add(R.id.fragment_container, frgMainMenu);
         fTrans.commit();
 
-
-    }
+       }
 
     @Override
     public void onButtonSelected(View view) {
