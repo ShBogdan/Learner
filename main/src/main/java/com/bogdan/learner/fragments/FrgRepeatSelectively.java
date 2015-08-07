@@ -7,16 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
 import com.bogdan.learner.R;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class FrgRepeatSelectively extends Fragment implements View.OnClickListener{
+public class FrgRepeatSelectively extends Fragment implements View.OnClickListener {
     FragmentListener mCallback;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frg_repeat_selectively,null);
+        View view = inflater.inflate(R.layout.frg_repeat_selectively, null);
         Button btn_repeat_day1 = (Button) view.findViewById(R.id.btn_repeat_day1);
         btn_repeat_day1.setOnClickListener(this);
         Button btn_repeat_day2 = (Button) view.findViewById(R.id.btn_repeat_day2);
@@ -32,11 +34,11 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
         Button btn_all_words = (Button) view.findViewById(R.id.btn_all_words);
         btn_all_words.setOnClickListener(this);
 
-/*выбрать 91 день*/
+
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
-        calendar.add(Calendar.DATE,-91);
+        calendar.add(Calendar.DATE, -91);
         System.out.println(calendar.getTime());
 
 
@@ -46,15 +48,15 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-                mCallback.onButtonSelected(v);
+        mCallback.onButtonSelected(v);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try{
+        try {
             mCallback = (FragmentListener) activity;
-        }catch (ClassCastException cce){
+        } catch (ClassCastException cce) {
             throw new ClassCastException(activity.toString());
         }
 

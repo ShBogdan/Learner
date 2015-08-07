@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class FrgRepeatToDay extends Fragment {
-    private final String LOG_TAG = ":::::FrgLearnToDay:::::";
+    public final String LOG_TAG = ":::::FrgLearnToDay:::::";
 
     ArrayList<String[]> wordsForFrgLetters;
     ArrayList<String[]> toDayListWords;
@@ -35,6 +35,7 @@ public class FrgRepeatToDay extends Fragment {
     String englishWord;
     String russianWord;
     String transWord;
+    int countAttempt;
 
     Handler handler;
     boolean onCreate;
@@ -59,10 +60,14 @@ public class FrgRepeatToDay extends Fragment {
         return view;
     }
 
+
+
+
     /**
      * Рисует кнопки для ответа
      */
     protected void drawTheWord() {
+        countAttempt = 3;
         int buttonSize = 100;
         handler = new Handler();
         /*Создаем Макет*/
@@ -101,7 +106,6 @@ public class FrgRepeatToDay extends Fragment {
 
 //        final TextView tvSumTry = (TextView) getActivity().findViewById(R.id.tvSumTry);
 
-
         int countLetter = 0;
         final ArrayList<String[]> deletedBtn = new ArrayList<>();
         for (String x : lettersEngWord) {
@@ -111,7 +115,7 @@ public class FrgRepeatToDay extends Fragment {
             btnLater.setText(x);
             btnLater.setTag(x);
             View.OnClickListener onClickListener = new View.OnClickListener() {
-                int countAttempt = 3;
+
                 @Override
                 public void onClick(final View v) {
                     String letter = v.getTag().toString();
@@ -151,9 +155,11 @@ public class FrgRepeatToDay extends Fragment {
                         /*Если не правильн то пишем красным и даем три попытки*/
                         if (englishWord.length() == answer.length() && !englishWord.equals(answer.toString())) {
                             tvAnswer.setTextColor(Color.parseColor("#E63434"));
-                            countAttempt = countAttempt - 1;
+                            countAttempt--;
+                            Log.d(LOG_TAG, "Попытки:  " + countAttempt);
                             if (countAttempt == 0) {
                                 ((TextView) getActivity().findViewById(R.id.tvCheat)).setTextColor(Color.RED);
+                                countAttempt =3;
                             }
                         }
                     }
