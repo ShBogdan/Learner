@@ -33,6 +33,8 @@ public class MainActivity extends Activity implements FragmentListener {
     public static DayLibrary studyDays;
 
 
+    DBHelper dbHelper;
+
     FrgMainMenu frgMainMenu;
     FrgAddWordForStudy frgAddWordForStudy;
     FrgAddMyWord frgAddMyWord;
@@ -47,11 +49,10 @@ public class MainActivity extends Activity implements FragmentListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        dbHelper = new DBHelper(this);
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        uploadDb = new DBHelper(this).uploadDb();
+        uploadDb = dbHelper.uploadDb();
 
-//        studyDays = new DayLibrary(this);
 
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
