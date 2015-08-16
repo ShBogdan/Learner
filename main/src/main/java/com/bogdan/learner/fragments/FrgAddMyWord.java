@@ -3,6 +3,7 @@ package com.bogdan.learner.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import android.widget.Toast;
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
@@ -18,7 +20,7 @@ import com.bogdan.learner.R;
 public class FrgAddMyWord extends Fragment implements View.OnClickListener{
     private final  String LOG_TAG = ":::::FrgAddMyWord::::";
     private DBHelper dbHelper;
-    private EditText englishWord, transWord, russianWord;
+    private EditText englishWord, russianWord;
     private Button btn_addToBase;
 
     @Override
@@ -26,7 +28,6 @@ public class FrgAddMyWord extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.frg_add_my_word, null);
 
         englishWord   = (EditText) view.findViewById(R.id.originTextV);
-        transWord     = (EditText) view.findViewById(R.id.transcriptionTextV);
         russianWord   = (EditText) view.findViewById(R.id.russianTextV);
 
         btn_addToBase = (Button)   view.findViewById(R.id.btn_add_to_base);
@@ -36,22 +37,29 @@ public class FrgAddMyWord extends Fragment implements View.OnClickListener{
     }
 
     public void onClick(View v){
-        dbHelper = new DBHelper(getActivity());
+        dbHelper = DBHelper.getDbHelper(getActivity());
         switch (v.getId()){
 
             case R.id.btn_add_to_base:
-                dbHelper.insertWords(
-                        englishWord.getText().toString(),
-                        transWord.getText().toString(),
-                        russianWord.getText().toString(),
-                        MainActivity.toDayDate);
+                if (TextUtils.isEmpty(englishWord.getText())) {
+                    englishWord.setError("Your message");
+                    Toast.makeText(getActivity(), "Поля не могут быть пустыми", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(russianWord.getText()))    {
+                    russianWord.setError("Your message");
+                    Toast.makeText(getActivity(), "Поля не могут быть пустыми", Toast.LENGTH_SHORT).show();
+                } else {
+                    dbHelper.insertWords(
+                            englishWord.getText().toString(),
+                            russianWord.getText().toString(),
+                            MainActivity.toDayDate);
 
-                hideKeyboard();
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgAddMyWord()).commit();
-                Log.i(LOG_TAG, "Add to base: " + englishWord.getText().toString()+ "." + MainActivity.toDayDate);
-                break;
+                    hideKeyboard();
+                    getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgAddMyWord()).commit();
+                    Toast.makeText(getActivity(), "Вы добавили: " + englishWord.getText().toString(), Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                dbHelper.close();
         }
-        dbHelper.close();
     }
 
     private void hideKeyboard() {

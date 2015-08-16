@@ -49,9 +49,9 @@ public class MainActivity extends Activity implements FragmentListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dbHelper = new DBHelper(this);
+        dbHelper = DBHelper.getDbHelper(this);
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        uploadDb = dbHelper.uploadDb();
+        uploadDb = DBHelper.uploadDb;
 
 
         frgMainMenu = new FrgMainMenu();

@@ -5,22 +5,21 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.DropBoxManager;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class DBHelper extends SQLiteOpenHelper {
     private final String LOG_TAG = "::::DBHelper::::";
+    private static DBHelper dbHelper;
 
-    public static final String KEY_ROWID = "_id";
-    public static final String KEY_ENG = "english";
-    public static final String KEY_RUS = "russian";
-    public static final String KEY_TRANS = "transcription";
-    public static final String KEY_VOICE = "voice";
-    public static final String KEY_DATE = "date";
+    private static final String KEY_ROWID = "_id";
+    private static final String KEY_ENG = "english";
+    private static final String KEY_RUS = "russian";
+    private static final String KEY_TRANS = "transcription";
+    private static final String KEY_VOICE = "voice";
+    private static final String KEY_DATE = "date";
 
     private static final String DATABASE_NAME = "dictionary.sqlite";
     private static final String DATABASE_TABLE = "words";
@@ -32,7 +31,8 @@ public class DBHelper extends SQLiteOpenHelper {
             "voice text, " +
             "date text not null);";
 
-    DBHelper dbHelper;
+
+    protected static TreeMap<Integer, ArrayList<String[]>> uploadDb;
     SQLiteDatabase sqLiteDatabase;
     ContentValues contentValues;
     Cursor cursor;
@@ -48,24 +48,35 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    public DBHelper(Context context) {
+    private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         dbHelper = this;
+        uploadDb = uploadDb();
     }
+
+    public static DBHelper getDbHelper(Context context){
+        if(dbHelper == null){
+            dbHelper = new DBHelper(context);
+        }
+        return dbHelper;
+
+    }
+
 
     /**
      * Добавляет ваше слово в таблицу
      */
-    public void insertWords(String english, String russian, String transcription, String date) {
+    public void insertWords(String english, String russian, String date) {
         contentValues = new ContentValues();
         sqLiteDatabase = dbHelper.getWritableDatabase();
         contentValues.put(KEY_ENG, english);
         contentValues.put(KEY_RUS, russian);
-        contentValues.put(KEY_TRANS, transcription);
         contentValues.put(KEY_DATE, date);
         sqLiteDatabase.insert(DATABASE_TABLE, null, contentValues);
         sqLiteDatabase.close();
         MainActivity.uploadDb = this.uploadDb();
+        Log.d(LOG_TAG, "DbHelper_insertWords");
+        sqLiteDatabase.close();
     }
 
     /**
@@ -79,9 +90,18 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Удаляет слово с базы
+     */
+    public void removeWordFromDb(String english) {
+        sqLiteDatabase = dbHelper.getWritableDatabase();
+        sqLiteDatabase.execSQL("DELETE FROM " + DATABASE_TABLE + " WHERE " + KEY_ENG + " = " + "\"" + english + "\"");
+    }
+
+
+    /**
      * Загружает таблибу и возвращает Map. Ключ дата изучения значение массив строк(значения слова)
      */
-    public TreeMap uploadDb() {
+    private TreeMap uploadDb() {
         TreeMap<Integer, ArrayList<String[]>> wordsDb = new TreeMap<>();
         sqLiteDatabase = this.getReadableDatabase();
         cursor = sqLiteDatabase.query(DATABASE_TABLE, null, null, null, null, null, null);
@@ -114,6 +134,23 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return wordsDb;
     }
+    public void removeWordFromUploadDb(){
+//        for (Map.Entry<Integer, ArrayList<String[]>> el : uploadDb.entrySet()) {
+//            ArrayList<String[]> al = el.getValue();
+//            for (String[] st : al){
+//                if(st[0].equals(english))
+//                    al.remove(st);
+//            }
+//        }
+//        Iterator<Map.Entry<Integer, ArrayList<String[]>>> it = uploadDb.entrySet().iterator();
+//        while (it.hasNext()){
+//            Map.Entry<Integer, ArrayList<String[]>> item = it.next();
+//
+//        }
+        uploadDb = uploadDb();
+
+    }
+
 
     /*Уже не нужен*/
     public ArrayList listUnknownWords() {

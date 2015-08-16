@@ -54,11 +54,11 @@ public class DayLibrary {
                 uploadDb.get(date)
                         .add(word);
             }
-            new DBHelper(context).updateWordDate(date.toString(), listUnknownWords.get(rdWord)[0]);
+            DBHelper.getDbHelper(context).updateWordDate(date.toString(), listUnknownWords.get(rdWord)[0]);
             listUnknownWords.remove(rdWord);
             Toast.makeText(context, "Учим", Toast.LENGTH_SHORT).show();
         } else {/*Не учить*/
-            new DBHelper(context).updateWordDate("0", listUnknownWords.get(rdWord)[0]);
+            DBHelper.getDbHelper(context).updateWordDate("0", listUnknownWords.get(rdWord)[0]);
             listUnknownWords.remove(rdWord);
             Toast.makeText(context, "Не учим", Toast.LENGTH_SHORT).show();
         }
