@@ -17,7 +17,9 @@
             android:text="10/10"
             android:id="@+id/tvSumWords"
             android:layout_gravity="right|top"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="18dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,20 +36,23 @@
             android:text="Русское слово"
             android:id="@+id/russianWord"
             android:layout_gravity="center_horizontal" android:textSize="40dp"/>
+
+
     <FrameLayout
+            android:id="@+id/answerBtnFl"
             android:layout_width="fill_parent"
-            android:layout_height="35dp">
-    </FrameLayout>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Английски ответ"
-            android:id="@+id/answerBtn"
-            android:layout_gravity="center_horizontal"/>
-    <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="60dp">
+            android:layout_height="60dp"
+            android:layout_weight="0.3">
+
+        <TextView
+                android:id="@+id/answerBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Английски ответ"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="35dp"
+                android:textSize="25dp" />
     </FrameLayout>
 
     <LinearLayout
@@ -72,5 +77,6 @@
         android:layout_gravity="center_horizontal|top"
         android:enabled="false"
         android:textSize="25dp"
-        android:textColor="@color/my_background"/>
+        android:textColor="@color/my_background"
+        android:layout_marginBottom="18dp" />
 </LinearLayout>

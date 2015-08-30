@@ -137,6 +137,9 @@ public class FrgRepeatToDay extends Fragment {
         tvAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()));
         tvAnswer.setTag("com.bogdan.learner.fragments.answer");
 
+        final FrameLayout flAnswer = (FrameLayout) getActivity().findViewById(R.id.answerBtnFl);
+        flAnswer.setTag("com.bogdan.learner.fragments.flAnswer");
+
         final TextView tvCheat = (TextView) getActivity().findViewById(R.id.tvCheat);
         tvCheat.setText(englishWord);
         tvCheat.setEnabled(false);
@@ -156,7 +159,6 @@ public class FrgRepeatToDay extends Fragment {
             btnLater.setText(x);
             btnLater.setTag(x);
             View.OnClickListener onClickListener = new View.OnClickListener() {
-
                 @Override
                 public void onClick(final View v) {
                     String letter = v.getTag().toString();
@@ -210,7 +212,7 @@ public class FrgRepeatToDay extends Fragment {
                     }
 
                     /*вернуть кнопку*/
-                    if (v.getTag() == "com.bogdan.learner.fragments.answer" && answer.length() >= 1) {
+                    if (v.getTag() == "com.bogdan.learner.fragments.flAnswer" || v.getTag() == "com.bogdan.learner.fragments.answer" && answer.length() >= 1) {
                         if (englishWord.length() == answer.length()) {
                             tvAnswer.setTextColor(Color.parseColor("#000000"));
                         }
@@ -246,6 +248,7 @@ public class FrgRepeatToDay extends Fragment {
             };
             tvCheat.setOnClickListener(onClickListener);
             tvAnswer.setOnClickListener(onClickListener);
+            flAnswer.setOnClickListener(onClickListener);
             btnLater.setOnClickListener(onClickListener);
 
             /*Проверяет ширину экрана и возращает количество кнопок на строчку*/
@@ -278,6 +281,8 @@ public class FrgRepeatToDay extends Fragment {
         TextView tvRussianWord = (TextView) getActivity().findViewById(R.id.russianWord);
         tvRussianWord.setText(russianWord);
         FrameLayout nextBtn = (FrameLayout) getActivity().findViewById(R.id.btn_next);
+        final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
+        tvSumWords.setText(toDayListWords.size() + "/" + wordsForFrgLetters.size());
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -285,6 +290,7 @@ public class FrgRepeatToDay extends Fragment {
                 reloadFragment();
             }
         });
+
     }
 
     /**
