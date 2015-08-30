@@ -4,15 +4,14 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.Toast;
+
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
@@ -41,12 +40,12 @@ public class FrgAddMyWord extends Fragment implements View.OnClickListener{
         switch (v.getId()){
 
             case R.id.btn_add_to_base:
-                if (TextUtils.isEmpty(englishWord.getText())) {
+                if (TextUtils.isEmpty(englishWord.getText()) || englishWord.getText().toString().contains(" ")) {
                     englishWord.setError("Your message");
-                    Toast.makeText(getActivity(), "Поля не могут быть пустыми", Toast.LENGTH_SHORT).show();
-                } else if (TextUtils.isEmpty(russianWord.getText()))    {
+                    Toast.makeText(getActivity(), "Поля не могут быть пустыми или содержать пробел", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ")== 0)    {
                     russianWord.setError("Your message");
-                    Toast.makeText(getActivity(), "Поля не могут быть пустыми", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Поля не могут быть пустыми или содержать пробел", Toast.LENGTH_SHORT).show();
                 } else {
                     dbHelper.insertWords(
                             englishWord.getText().toString(),

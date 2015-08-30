@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.DropBoxManager;
 import android.util.Log;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class DBHelper extends SQLiteOpenHelper {
     private final String LOG_TAG = "::::DBHelper::::";
@@ -103,7 +105,7 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     private TreeMap uploadDb() {
         TreeMap<Integer, ArrayList<String[]>> wordsDb = new TreeMap<>();
-        sqLiteDatabase = this.getReadableDatabase();
+        sqLiteDatabase = dbHelper.getReadableDatabase();
         cursor = sqLiteDatabase.query(DATABASE_TABLE, null, null, null, null, null, null);
         cursor.moveToFirst();
         while (cursor.moveToNext()) {

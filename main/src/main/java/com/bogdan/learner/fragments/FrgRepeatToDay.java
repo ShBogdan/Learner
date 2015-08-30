@@ -97,6 +97,9 @@ public class FrgRepeatToDay extends Fragment {
         }
         Log.d(LOG_TAG, "OnCreate " + wordsForFrgRepeat.size());
         Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.size());
+        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[0]);
+        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[1]);
+        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[2]);
         return view;
     }
 
@@ -290,8 +293,8 @@ public class FrgRepeatToDay extends Fragment {
     protected void returnRandomWord(ArrayList<String[]> arrayWords) {
         word = arrayWords.get(0);
         englishWord = word[0];
-        russianWord = word[2];
-        transWord = word[1];
+        russianWord = word[1];
+        transWord = word[2];
         answer = new StringBuilder();
         if (lettersEngWord == null) {
             lettersEngWord = new ArrayList<>();
