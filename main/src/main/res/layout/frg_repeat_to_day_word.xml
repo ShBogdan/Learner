@@ -7,9 +7,11 @@
     android:layout_height="match_parent"
     android:weightSum="1"
     android:background="@color/my_background">
-    <FrameLayout
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:gravity="right">
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +31,7 @@
             android:text="."
             android:id="@+id/tvSumTry"
             android:layout_gravity="right|center_vertical" />
-    </FrameLayout>
+    </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,11 +39,11 @@
         android:text="Английское слово"
         android:id="@+id/englishWord"
         android:layout_gravity="center_horizontal"
-        android:textSize="40dp"/>
-    <FrameLayout
+        android:textSize="40sp"/>
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="30dp">
-    </FrameLayout>
+    </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,10 +51,10 @@
         android:text="Транскрипция"
         android:id="@+id/transWord"
         android:layout_gravity="center_horizontal"/>
-    <FrameLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="30dp">
-    </FrameLayout>
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"

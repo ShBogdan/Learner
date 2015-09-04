@@ -47,6 +47,7 @@ public class MainActivity extends Activity implements FragmentListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "Main: onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbHelper = DBHelper.getDbHelper(this);

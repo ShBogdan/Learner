@@ -109,7 +109,7 @@ public class FrgRepeatToDay extends Fragment {
      */
     protected void drawTheLetters() {
         countAttempt = 3;
-        int buttonSize = 100;
+        int buttonSize = dpToPx(48);
         handler = new Handler();
         /*Создаем Макет*/
         LinearLayout linearLayoutMain = (LinearLayout) getActivity().findViewById(R.id.randomLettersLayout);
@@ -137,7 +137,7 @@ public class FrgRepeatToDay extends Fragment {
         tvAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()));
         tvAnswer.setTag("com.bogdan.learner.fragments.answer");
 
-        final FrameLayout flAnswer = (FrameLayout) getActivity().findViewById(R.id.answerBtnFl);
+        final LinearLayout flAnswer = (LinearLayout) getActivity().findViewById(R.id.answerBtnFl);
         flAnswer.setTag("com.bogdan.learner.fragments.flAnswer");
 
         final TextView tvCheat = (TextView) getActivity().findViewById(R.id.tvCheat);
@@ -360,6 +360,11 @@ public class FrgRepeatToDay extends Fragment {
         Log.d(LOG_TAG, "onDestroyView");
         onDestroy = true;
         lettersEngWord = null;
+    }
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
 }
 
