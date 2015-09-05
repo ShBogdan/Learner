@@ -13,7 +13,7 @@ import com.bogdan.learner.fragments.FragmentListener;
 import com.bogdan.learner.fragments.FrgAddMyWord;
 import com.bogdan.learner.fragments.FrgAddWordForStudy;
 import com.bogdan.learner.fragments.FrgCalendar;
-import com.bogdan.learner.fragments.FrgListAllWord;
+import com.bogdan.learner.fragments.FrgCardOrList;
 import com.bogdan.learner.fragments.FrgMainMenu;
 import com.bogdan.learner.fragments.FrgRepeatSelectively;
 import com.bogdan.learner.fragments.FrgRepeatToDay;
@@ -41,9 +41,11 @@ public class MainActivity extends Activity implements FragmentListener {
     FrgRepeatSelectively frgRepeatSelectively;
     FrgRepeatToDay frgRepeatToDay;
     FrgStatistic frgStatistic;
-    FrgListAllWord frgListAllWord;
+
     FragmentTransaction fTrans;
     FrgCalendar frgCalendar;
+    FrgCardOrList frgCardOrList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +62,8 @@ public class MainActivity extends Activity implements FragmentListener {
         frgRepeatSelectively = new FrgRepeatSelectively();
         frgRepeatToDay = new FrgRepeatToDay();
         frgStatistic = new FrgStatistic();
-        frgListAllWord = new FrgListAllWord();
         frgCalendar = new FrgCalendar();
-
+        frgCardOrList = new FrgCardOrList();
 
         fTrans = getFragmentManager().beginTransaction();
         fTrans.add(R.id.fragment_container, frgMainMenu);
@@ -106,12 +107,13 @@ public class MainActivity extends Activity implements FragmentListener {
 
             /*Фрагмент Повторение изученого*/
             case R.id.btn_all_words:
-                fTrans.replace(R.id.fragment_container, frgListAllWord);
-                Log.i(LOG_TAG, "Fragment: Все слова");
+                fTrans.replace(R.id.fragment_container, frgCardOrList);
+                Log.i(LOG_TAG, "Fragment: Как повторить");
                 break;
 
             case R.id.btn_calendar:
                 fTrans.replace(R.id.fragment_container, frgCalendar);
+                break;
         }
         fTrans.commit();
     }
