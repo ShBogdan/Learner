@@ -18,7 +18,7 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frg_repeat_selectively, null);
+        View view = inflater.inflate(R.layout.frg_m_repeat_selectively, null);
         Button btn_repeat_day1 = (Button) view.findViewById(R.id.btn_repeat_day1);
         btn_repeat_day1.setOnClickListener(this);
         Button btn_repeat_day2 = (Button) view.findViewById(R.id.btn_repeat_day2);

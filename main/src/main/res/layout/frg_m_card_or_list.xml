@@ -10,7 +10,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Карточки"
+        android:text="Весь список"
         android:id="@+id/btn_cards"
         android:layout_marginTop="35dp"
         android:layout_alignParentTop="true"
@@ -22,7 +22,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Весь список"
+        android:text="Карточки"
         android:id="@+id/btn_list"
         android:layout_below="@+id/btn_cards"
         android:layout_alignParentRight="true"

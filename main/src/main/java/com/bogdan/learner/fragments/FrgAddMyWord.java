@@ -47,17 +47,16 @@ public class FrgAddMyWord extends Fragment implements View.OnClickListener{
                     russianWord.setError("Your message");
                     Toast.makeText(getActivity(), "Поля не могут быть пустыми или содержать пробел", Toast.LENGTH_SHORT).show();
                 } else {
-                    dbHelper.insertWords(
+                    dbHelper.insertWord(
                             englishWord.getText().toString(),
                             russianWord.getText().toString(),
                             MainActivity.toDayDate);
-
                     hideKeyboard();
-                    getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgAddMyWord()).commit();
+                    englishWord.setText("");
+                    russianWord.setText("");
                     Toast.makeText(getActivity(), "Вы добавили: " + englishWord.getText().toString(), Toast.LENGTH_SHORT).show();
                     break;
                 }
-                dbHelper.close();
         }
     }
 

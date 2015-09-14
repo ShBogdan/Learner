@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bogdan.learner.DBHelper;
-import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 
 import java.util.ArrayList;
@@ -29,14 +29,14 @@ public class FrgListAllWord extends ListFragment {
         String[] strings = (String[])getListAdapter().getItem(position);
         Toast.makeText(getActivity(), strings[0], Toast.LENGTH_LONG).show();
         DBHelper.getDbHelper(getActivity()).removeWordFromDb(strings[0]);
-        DBHelper.getDbHelper(getActivity()).removeWordFromUploadDb();
+//        DBHelper.getDbHelper(getActivity()).removeWordFromUploadDb();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         data = new ArrayList<>();
-        for (Map.Entry<Integer, ArrayList<String[]>> el : MainActivity.uploadDb.entrySet()) {
+        for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.uploadDb.entrySet()) {
             for(String[] word : el.getValue()){
                 data.add(word);
                 Log.d(LOG_TAG, word[0]);
@@ -46,7 +46,6 @@ public class FrgListAllWord extends ListFragment {
         setListAdapter(adapter);
     }
     class MyAdapter extends ArrayAdapter<String[]>{
-
         public MyAdapter(Context context, int resource, ArrayList<String[]> objects) {
             super(context, resource, objects);
         }

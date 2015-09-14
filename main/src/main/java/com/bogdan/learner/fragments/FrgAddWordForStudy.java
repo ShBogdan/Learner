@@ -12,18 +12,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.bogdan.learner.DayLibrary;
+import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.R;
 
 public class FrgAddWordForStudy extends Fragment implements View.OnClickListener {
     private final String LOG_TAG = "::::FrgAddWordToDay::::";
-    private DayLibrary dayLibrary;
+    private DBHelper dayLibrary;
     private String[] word;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_add_word_for_study, null);
-        dayLibrary = new DayLibrary(getActivity());
+        dayLibrary = DBHelper.getDbHelper(getActivity());
         try {
             word = dayLibrary.getWord();
             TextView tv_english = (TextView) view.findViewById(R.id.tv_english);

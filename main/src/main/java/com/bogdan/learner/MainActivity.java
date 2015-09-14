@@ -20,28 +20,22 @@ import com.bogdan.learner.fragments.FrgRepeatToDay;
 import com.bogdan.learner.fragments.FrgStatistic;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.TreeMap;
 
 
 public class MainActivity extends Activity implements FragmentListener {
     private final String LOG_TAG = "MainActivity";
-
-    public static TreeMap<Integer, ArrayList<String[]>> uploadDb;
     public static String toDayDate;
-    public static DayLibrary studyDays;
 
 
     DBHelper dbHelper;
 
     FrgMainMenu frgMainMenu;
-    FrgAddWordForStudy frgAddWordForStudy;
     FrgAddMyWord frgAddMyWord;
+    FrgAddWordForStudy frgAddWordForStudy;
     FrgRepeatSelectively frgRepeatSelectively;
     FrgRepeatToDay frgRepeatToDay;
     FrgStatistic frgStatistic;
-
     FragmentTransaction fTrans;
     FrgCalendar frgCalendar;
     FrgCardOrList frgCardOrList;
@@ -52,9 +46,9 @@ public class MainActivity extends Activity implements FragmentListener {
         Log.d(LOG_TAG, "Main: onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dbHelper = DBHelper.getDbHelper(this);
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        uploadDb = DBHelper.uploadDb;
+        dbHelper = DBHelper.getDbHelper(this);
+
 
 
         frgMainMenu = new FrgMainMenu();
@@ -94,7 +88,7 @@ public class MainActivity extends Activity implements FragmentListener {
                 Log.i(LOG_TAG, "Fragment: Добавить еще слова");
                 break;
             case R.id.btn_learnToday:
-                if (new DayLibrary(this).getListWordsByDate(toDayDate) != null) {
+                if (DBHelper.getDbHelper(this).getListWordsByDate(toDayDate) != null) {
                     fTrans.replace(R.id.fragment_container, frgRepeatToDay, "TAG_FRG_REPEAT_TO_DAY");
                 } else
                     Toast.makeText(this, "Сегодня вы не добавили ни одного слова", Toast.LENGTH_SHORT).show();

@@ -16,7 +16,7 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frg_card_or_list, null);
+        View view = inflater.inflate(R.layout.frg_m_card_or_list, null);
         btnCards = (Button) view.findViewById(R.id.btn_cards);
         btnList  = (Button) view.findViewById(R.id.btn_list);
         btnCards.setOnClickListener(this);

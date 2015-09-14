@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.Toast;
 
-import com.bogdan.learner.DayLibrary;
+import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.R;
 
 public class FrgCalendar extends Fragment{
@@ -35,7 +35,7 @@ public class FrgCalendar extends Fragment{
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                if (new DayLibrary(getActivity()).getListWordsByDate(year + month + dayOfMonth + "") != null) {
+                if (DBHelper.getDbHelper(getActivity()).getListWordsByDate(year + month + dayOfMonth + "") != null) {
                     getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgRepeatToDay()).commit();
                 } else showToast();
             }

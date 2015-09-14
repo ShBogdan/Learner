@@ -24,7 +24,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bogdan.learner.DayLibrary;
+import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 
@@ -56,7 +56,7 @@ public class FrgRepeatToDay extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "OnCreate");
         View view;
-        toDayListWords = new DayLibrary(getActivity()).getListWordsByDate(MainActivity.toDayDate);
+        toDayListWords = DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate);
         onCreate = true;
         onResume = false;
 
