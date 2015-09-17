@@ -16,7 +16,7 @@ import com.bogdan.learner.fragments.FrgCalendar;
 import com.bogdan.learner.fragments.FrgCardOrList;
 import com.bogdan.learner.fragments.FrgMainMenu;
 import com.bogdan.learner.fragments.FrgRepeatSelectively;
-import com.bogdan.learner.fragments.FrgRepeatToDay;
+import com.bogdan.learner.fragments.FrgLearnToDay;
 import com.bogdan.learner.fragments.FrgStatistic;
 
 import java.text.SimpleDateFormat;
@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements FragmentListener {
     FrgAddMyWord frgAddMyWord;
     FrgAddWordForStudy frgAddWordForStudy;
     FrgRepeatSelectively frgRepeatSelectively;
-    FrgRepeatToDay frgRepeatToDay;
+    FrgLearnToDay frgLearnToDay;
     FrgStatistic frgStatistic;
     FragmentTransaction fTrans;
     FrgCalendar frgCalendar;
@@ -54,7 +54,7 @@ public class MainActivity extends Activity implements FragmentListener {
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
         frgRepeatSelectively = new FrgRepeatSelectively();
-        frgRepeatToDay = new FrgRepeatToDay();
+        frgLearnToDay = new FrgLearnToDay();
         frgStatistic = new FrgStatistic();
         frgCalendar = new FrgCalendar();
         frgCardOrList = new FrgCardOrList();
@@ -89,7 +89,7 @@ public class MainActivity extends Activity implements FragmentListener {
                 break;
             case R.id.btn_learnToday:
                 if (DBHelper.getDbHelper(this).getListWordsByDate(toDayDate) != null) {
-                    fTrans.replace(R.id.fragment_container, frgRepeatToDay, "TAG_FRG_REPEAT_TO_DAY");
+                    fTrans.replace(R.id.fragment_container, frgLearnToDay, "TAG_FRG_REPEAT_TO_DAY");
                 } else
                     Toast.makeText(this, "Сегодня вы не добавили ни одного слова", Toast.LENGTH_SHORT).show();
                 Log.i(LOG_TAG, "Fragment: Учить сегоднешние");

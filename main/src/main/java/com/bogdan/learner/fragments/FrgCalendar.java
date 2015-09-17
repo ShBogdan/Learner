@@ -36,7 +36,7 @@ public class FrgCalendar extends Fragment{
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 if (DBHelper.getDbHelper(getActivity()).getListWordsByDate(year + month + dayOfMonth + "") != null) {
-                    getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgRepeatToDay()).commit();
+                    getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgLearnToDay()).commit();
                 } else showToast();
             }
         });

@@ -31,7 +31,7 @@ import com.bogdan.learner.R;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FrgRepeatToDay extends Fragment {
+public class FrgLearnToDay extends Fragment {
     public final String LOG_TAG = ":::::FrgLearnToDay:::::";
 
     ArrayList<String[]> wordsForFrgLetters;

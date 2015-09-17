@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frg_repeat_to_day_word"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="@color/my_background">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:gravity="right">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="10/10"
+            android:id="@+id/tvSumWords"
+            android:layout_gravity="right|top"
+            android:textSize="20dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginTop="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="."
+            android:id="@+id/tvSumTry"
+            android:layout_gravity="right|center_vertical" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Английское слово"
+        android:id="@+id/englishWord"
+        android:layout_gravity="center_horizontal"
+        android:textSize="40sp"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="30dp">
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Транскрипция"
+        android:id="@+id/transWord"
+        android:layout_gravity="center_horizontal"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="30dp">
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Русское слово"
+        android:id="@+id/russianWord"
+        android:layout_gravity="center_horizontal"
+        android:textSize="25dp"/>
+
+    <FrameLayout
+        android:id="@+id/btn_next"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1" >
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Далее"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="18dp"
+            android:textColor="#ff56ff51"
+            android:textSize="18dp" />
+    </FrameLayout>
+
+</LinearLayout>

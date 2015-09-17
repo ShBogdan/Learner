@@ -3,6 +3,7 @@ package com.bogdan.learner.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,13 @@ import android.widget.Button;
 
 import com.bogdan.learner.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class FrgRepeatSelectively extends Fragment implements View.OnClickListener {
     FragmentListener mCallback;
+    Bundle bundleDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,14 +36,7 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
         btn_calendar.setOnClickListener(this);
         Button btn_all_words = (Button) view.findViewById(R.id.btn_all_words);
         btn_all_words.setOnClickListener(this);
-
-
-        Date currentDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.DATE, -91);
-        System.out.println(calendar.getTime());
-
+        bundleDate = new Bundle();
 
         return view;
     }
@@ -48,7 +44,11 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        mCallback.onButtonSelected(v);
+//        mCallback.onButtonSelected(v);
+        Fragment fr = new FrgListAllWord();
+        fr.setArguments(bundleDate);
+        bundleDate.putString("day_date", getOldDate(1));
+        getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, fr).commit();
     }
 
     @Override
@@ -59,8 +59,19 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
         } catch (ClassCastException cce) {
             throw new ClassCastException(activity.toString());
         }
-
     }
+
+    /**
+     * для получения конкретного дня по дате(метод принимает отрицательные значения)
+     */
+    private String getOldDate(int days){
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DATE, days);
+       return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
+       }
+
 }
 
 
