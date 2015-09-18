@@ -56,8 +56,7 @@ public class MainActivity extends Activity implements FragmentListener {
         frgRepeatSelectively = new FrgRepeatSelectively();
         frgLearnToDay = new FrgLearnToDay();
         frgStatistic = new FrgStatistic();
-        frgCalendar = new FrgCalendar();
-        frgCardOrList = new FrgCardOrList();
+
 
         fTrans = getFragmentManager().beginTransaction();
         fTrans.add(R.id.fragment_container, frgMainMenu);
@@ -100,14 +99,7 @@ public class MainActivity extends Activity implements FragmentListener {
                 break;
 
             /*Фрагмент Повторение изученого*/
-            case R.id.btn_all_words:
-                fTrans.replace(R.id.fragment_container, frgCardOrList);
-                Log.i(LOG_TAG, "Fragment: Как повторить");
-                break;
 
-            case R.id.btn_calendar:
-                fTrans.replace(R.id.fragment_container, frgCalendar);
-                break;
         }
         fTrans.commit();
     }

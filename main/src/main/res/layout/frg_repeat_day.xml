@@ -17,20 +17,13 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="10/10"
+            android:text="0"
             android:id="@+id/tvSumWords"
             android:layout_gravity="right|top"
             android:textSize="20dp"
             android:layout_marginRight="18dp"
             android:layout_marginTop="18dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="."
-            android:id="@+id/tvSumTry"
-            android:layout_gravity="right|center_vertical" />
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
@@ -60,27 +53,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Русское слово"
+        android:text=""
         android:id="@+id/russianWord"
         android:layout_gravity="center_horizontal"
         android:textSize="25dp"/>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/btn_next"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1" >
 
         <TextView
-
-            android:layout_width="wrap_content"
+            android:id="@+id/btn_nextTv"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Далее"
-            android:layout_gravity="bottom|right"
             android:layout_marginRight="18dp"
             android:layout_marginBottom="18dp"
             android:textColor="#ff56ff51"
-            android:textSize="18dp" />
-    </FrameLayout>
+            android:textSize="18dp"
+            android:layout_gravity="bottom"
+            android:gravity="right" />
+    </LinearLayout>
 
 </LinearLayout>

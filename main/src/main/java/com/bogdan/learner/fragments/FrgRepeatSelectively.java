@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.R;
 
 import java.text.SimpleDateFormat;
@@ -16,12 +18,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class FrgRepeatSelectively extends Fragment implements View.OnClickListener {
-    FragmentListener mCallback;
     Bundle bundleDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_m_repeat_selectively, null);
+
         Button btn_repeat_day1 = (Button) view.findViewById(R.id.btn_repeat_day1);
         btn_repeat_day1.setOnClickListener(this);
         Button btn_repeat_day2 = (Button) view.findViewById(R.id.btn_repeat_day2);
@@ -36,6 +38,7 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
         btn_calendar.setOnClickListener(this);
         Button btn_all_words = (Button) view.findViewById(R.id.btn_all_words);
         btn_all_words.setOnClickListener(this);
+
         bundleDate = new Bundle();
 
         return view;
@@ -44,20 +47,28 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-//        mCallback.onButtonSelected(v);
-        Fragment fr = new FrgListAllWord();
-        fr.setArguments(bundleDate);
-        bundleDate.putString("day_date", getOldDate(1));
-        getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, fr).commit();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallback = (FragmentListener) activity;
-        } catch (ClassCastException cce) {
-            throw new ClassCastException(activity.toString());
+        switch (v.getId()) {
+            case R.id.btn_repeat_day1:
+                printFragment(getOldDate(0));
+                break;
+            case R.id.btn_repeat_day2:
+                printFragment(getOldDate(-1));
+                break;
+            case R.id.btn_repeat_day3:
+                printFragment(getOldDate(-2));
+                break;
+            case R.id.btn_repeat_day21:
+                printFragment(getOldDate(-20));
+                break;
+            case R.id.btn_repeat_day90:
+                printFragment(getOldDate(-89));
+                break;
+            case R.id.btn_calendar:
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgCalendar()).commit();
+                break;
+            case R.id.btn_all_words:
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgCardOrList()).commit();
+                break;
         }
     }
 
@@ -69,9 +80,18 @@ public class FrgRepeatSelectively extends Fragment implements View.OnClickListen
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         calendar.add(Calendar.DATE, days);
-       return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
-       }
-
+        return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
+    }
+    private void printFragment(String dayDate){
+        if(DBHelper.getDbHelper(getActivity()).getListWordsByDate(dayDate) == null){
+            Toast.makeText(getActivity(), dayDate, Toast.LENGTH_SHORT).show();
+        } else {
+            Fragment fr = new FrgRepeatDay();
+            fr.setArguments(bundleDate);
+            bundleDate.putString("day_date", dayDate);
+            getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, fr).commit();
+        }
+    }
 }
 
 
