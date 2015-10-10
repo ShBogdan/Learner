@@ -16,8 +16,8 @@ import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 
-public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListener{
-    private final  String LOG_TAG = ":::::FrgAddOwnWordToBase::::";
+public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListener {
+    private final String LOG_TAG = ":::::FrgAddOwnWordToBase::::";
     private DBHelper dbHelper;
     private EditText englishWord, russianWord;
     private Button btn_addToBase;
@@ -26,39 +26,38 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_add_my_word, null);
 
-        englishWord   = (EditText) view.findViewById(R.id.originTextV);
-        russianWord   = (EditText) view.findViewById(R.id.russianTextV);
+        englishWord = (EditText) view.findViewById(R.id.originTextV);
+        russianWord = (EditText) view.findViewById(R.id.russianTextV);
 
-        btn_addToBase = (Button)   view.findViewById(R.id.btn_add_to_base);
+        btn_addToBase = (Button) view.findViewById(R.id.btn_add_to_base);
         btn_addToBase.setOnClickListener(this);
 
         return view;
     }
 
-    public void onClick(View v){
+    public void onClick(View v) {
         dbHelper = DBHelper.getDbHelper(getActivity());
-        switch (v.getId()){
-
+        switch (v.getId()) {
             case R.id.btn_add_to_base:
                 if (TextUtils.isEmpty(englishWord.getText()) || englishWord.getText().toString().contains(" ")) {
-                    englishWord.setError("Your message");
-                    Toast.makeText(getActivity(), "Поля не могут быть пустыми или содержать пробел", Toast.LENGTH_SHORT).show();
-                } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ")== 0)    {
-                    russianWord.setError("Your message");
-                    Toast.makeText(getActivity(), "Поля не могут быть пустыми или содержать пробел", Toast.LENGTH_SHORT).show();
+                    englishWord.setError(getResources().getString(R.string.cant_have_space));
+
+                } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ") == 0) {
+                    russianWord.setError(getResources().getString(R.string.cant_have_space));
+
                 } else {
-                    if(!dbHelper.isWordInBase(englishWord.getText().toString())){
+                    if (!dbHelper.isWordInBase(englishWord.getText().toString())) {
                         dbHelper.insertWord(
                                 englishWord.getText().toString(),
                                 russianWord.getText().toString(),
                                 MainActivity.toDayDate);
                         hideKeyboard();
-                        Toast.makeText(getActivity(), englishWord.getText().toString() + " успешно добавлено", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "\"" + englishWord.getText().toString() + "\" " + getResources().getString(R.string.added_successfully), Toast.LENGTH_SHORT).show();
                         englishWord.setText("");
                         russianWord.setText("");
                         break;
                     } else
-                        Toast.makeText(getActivity(), "Слово есть в базе", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.word_in_the_base, Toast.LENGTH_SHORT).show();
                 }
         }
     }

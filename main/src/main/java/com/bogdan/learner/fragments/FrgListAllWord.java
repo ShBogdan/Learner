@@ -26,10 +26,9 @@ public class FrgListAllWord extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        String[] strings = (String[])getListAdapter().getItem(position);
+        String[] strings = (String[]) getListAdapter().getItem(position);
         Toast.makeText(getActivity(), strings[0], Toast.LENGTH_LONG).show();
         DBHelper.getDbHelper(getActivity()).removeWordFromDb(strings[0]);
-//        DBHelper.getDbHelper(getActivity()).removeWordFromUploadDb();
     }
 
     @Override
@@ -37,8 +36,8 @@ public class FrgListAllWord extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         data = new ArrayList<>();
         for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
-            if(el.getKey()!=0 && el.getKey()!=1){
-                for(String[] word : el.getValue()){
+            if (el.getKey() != 0 && el.getKey() != 1) {
+                for (String[] word : el.getValue()) {
                     data.add(word);
                     Log.d(LOG_TAG, el.getKey().toString());
                     Log.d(LOG_TAG, word[0]);
@@ -48,18 +47,20 @@ public class FrgListAllWord extends ListFragment {
         ArrayAdapter<String[]> adapter = new MyAdapter(getActivity(), R.layout.frg_list_words, data);
         setListAdapter(adapter);
     }
-    class MyAdapter extends ArrayAdapter<String[]>{
+
+    class MyAdapter extends ArrayAdapter<String[]> {
         public MyAdapter(Context context, int resource, ArrayList<String[]> objects) {
             super(context, resource, objects);
         }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             String[] data = getItem(position);
-            if(convertView == null){
+            if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.frg_list_words, null);
             }
-            ((TextView)convertView.findViewById(R.id.englishWord)).setText(data[0]);
-            ((TextView)convertView.findViewById(R.id.russianWord)).setText(data[1]);
+            ((TextView) convertView.findViewById(R.id.englishWord)).setText(data[0]);
+            ((TextView) convertView.findViewById(R.id.russianWord)).setText(data[1]);
             return convertView;
         }
     }
@@ -67,6 +68,6 @@ public class FrgListAllWord extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MyAdapter)getListAdapter()).notifyDataSetChanged();
+        ((MyAdapter) getListAdapter()).notifyDataSetChanged();
     }
 }

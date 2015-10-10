@@ -5,5 +5,16 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="load">"ЗАГРУЗИЛ"</string>
+    <string name="no_words_today">Сегодня вы не добавили ни одного слова</string>
+    <string name="no_words">Вы не изучили ни одного слова</string>
+    <string name="no_words_for_study">Больше нет слов для изучения</string>
+    <string name="exit">Хотите закончить обучение?</string>
+    <string name="yas">Да</string>
+    <string name="no">Нет</string>
+    <string name="added_successfully">успешно добавлено</string>
+    <string name="word_in_the_base">Слово уже добавлено</string>
+    <string name="cant_have_space">Поля не могут быть пустыми или содержать пробел</string>
+    <string name="answer">Ответ</string>
+    <string name="next">Далее</string>
 
 </resources>

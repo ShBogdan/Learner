@@ -32,8 +32,6 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
         btn_repeat_day21.setOnClickListener(this);
         Button btn_repeat_day90 = (Button) view.findViewById(R.id.btn_repeat_day90);
         btn_repeat_day90.setOnClickListener(this);
-        Button btn_calendar = (Button) view.findViewById(R.id.btn_calendar);
-        btn_calendar.setOnClickListener(this);
         Button btn_all_words = (Button) view.findViewById(R.id.btn_all_words);
         btn_all_words.setOnClickListener(this);
 
@@ -47,22 +45,19 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_repeat_day1:
-                printFragment(getOldDate(0));
+                startFragment(getOldDate(0));
                 break;
             case R.id.btn_repeat_day2:
-                printFragment(getOldDate(-1));
+                startFragment(getOldDate(-1));
                 break;
             case R.id.btn_repeat_day3:
-                printFragment(getOldDate(-2));
+                startFragment(getOldDate(-2));
                 break;
             case R.id.btn_repeat_day21:
-                printFragment(getOldDate(-20));
+                startFragment(getOldDate(-20));
                 break;
             case R.id.btn_repeat_day90:
-                printFragment(getOldDate(-89));
-                break;
-            case R.id.btn_calendar:
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgCalendar()).commit();
+                startFragment(getOldDate(-89));
                 break;
             case R.id.btn_all_words:
                 getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgCardOrList()).commit();
@@ -80,13 +75,14 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
         calendar.add(Calendar.DATE, days);
         return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
     }
-    private void printFragment(String dayDate){
+
+    private void startFragment(String dayDate){
         if(DBHelper.getDbHelper(getActivity()).getListWordsByDate(dayDate) == null){
             Toast.makeText(getActivity(), dayDate, Toast.LENGTH_SHORT).show();
         } else {
             Fragment fr = new FrgRepeatDay();
             fr.setArguments(bundleDate);
-            bundleDate.putString("day_date", dayDate);
+            bundleDate.putString("com.bogdan.learner.fragments.day_date", dayDate);
             getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, fr).commit();
         }
     }

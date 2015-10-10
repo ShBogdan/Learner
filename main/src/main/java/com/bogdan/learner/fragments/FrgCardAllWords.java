@@ -55,10 +55,10 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
         tv_english = (TextView) view.findViewById(R.id.tv_english);
         tv_russian = (TextView) view.findViewById(R.id.tv_russian);
 
-        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener(){
+        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status != TextToSpeech.ERROR)
+                if (status != TextToSpeech.ERROR)
                     toSpeech.setLanguage(Locale.ENGLISH);
             }
         });
@@ -71,7 +71,7 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
         inflateView();
         return view;
     }
-    /*Заполняем wordsInToFile известными словами из базы*/
+
     void createFile() {
         wordsInToFile = new HashSet<>();
         for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
@@ -89,12 +89,11 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
         editor.apply();
     }
 
-    /*Читаем файл. Если нет то return если есть то инициализируем arrayWords*/
     void readFile() {
         arrayWords = new ArrayList<>();
         if (sp.contains(FILE_NAME_WORDS)) {
             wordsFromFile = sp.getStringSet(FILE_NAME_WORDS, null);
-            if (wordsFromFile==null || wordsFromFile.size() == 0)
+            if (wordsFromFile == null || wordsFromFile.size() == 0)
                 return;
         } else
             return;
@@ -147,7 +146,7 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
     @Override
     public void onStop() {
         super.onStop();
-        if (wordsFromFile==null)
+        if (wordsFromFile == null)
             writeFile();
     }
 

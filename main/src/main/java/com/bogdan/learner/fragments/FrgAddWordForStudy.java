@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +15,23 @@ import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.R;
 
 public class FrgAddWordForStudy extends Fragment implements View.OnClickListener {
-    private final String LOG_TAG = "::FrgAddWordForStudy::";
+    private final String LOG_TAG = "FrgAddWordForStudy";
     private DBHelper dayLibrary;
     private String[] word;
+    Button btn_know, btn_unknown, btn_audio;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_add_word_for_study, null);
         dayLibrary = DBHelper.getDbHelper(getActivity());
+
+        btn_know = (Button) view.findViewById(R.id.btn_know);
+        btn_know.setOnClickListener(this);
+        btn_unknown = (Button) view.findViewById(R.id.btn_unknown);
+        btn_unknown.setOnClickListener(this);
+        btn_audio = (Button) view.findViewById(R.id.btn_audio);
+        btn_audio.setOnClickListener(this);
+
         try {
             word = dayLibrary.getWord();
             TextView tv_english = (TextView) view.findViewById(R.id.tv_english);
@@ -32,17 +40,10 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
             tv_transcription.setText(word[1]);
             TextView tv_russian = (TextView) view.findViewById(R.id.tv_russian);
             tv_russian.setText(word[2]);
-
-            Button btn_know = (Button) view.findViewById(R.id.btn_know);
-            btn_know.setOnClickListener(this);
-            Button btn_unknown = (Button) view.findViewById(R.id.btn_unknown);
-            btn_unknown.setOnClickListener(this);
-            Button btn_audio = (Button) view.findViewById(R.id.btn_audio);
-            btn_audio.setOnClickListener(this);
         } catch (NullPointerException nullPointerException) {
             getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgMainMenu()).commit();
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo));
-            builder.setTitle("Нет слов для изучения")
+            builder.setTitle(R.string.no_words_for_study)
                     .setCancelable(true);
             AlertDialog alert = builder.create();
             alert.show();
@@ -57,13 +58,11 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.btn_know:
                 dayLibrary.isLearnWord(false);
-                Log.d(LOG_TAG, "знаю");
                 reloadFragment();
                 break;
 
             case R.id.btn_unknown:
                 dayLibrary.isLearnWord(true);
-                Log.d(LOG_TAG, "учить");
                 reloadFragment();
                 break;
 

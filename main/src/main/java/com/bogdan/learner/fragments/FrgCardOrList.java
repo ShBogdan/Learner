@@ -10,15 +10,16 @@ import android.widget.Button;
 import com.bogdan.learner.R;
 
 
-public class FrgCardOrList extends Fragment implements View.OnClickListener{
+public class FrgCardOrList extends Fragment implements View.OnClickListener {
 
     Button btnCards, btnList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_m_card_or_list, null);
+
         btnCards = (Button) view.findViewById(R.id.btn_cards);
-        btnList  = (Button) view.findViewById(R.id.btn_list);
+        btnList = (Button) view.findViewById(R.id.btn_list);
         btnCards.setOnClickListener(this);
         btnList.setOnClickListener(this);
 
@@ -28,7 +29,7 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_cards:
                 getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgCardAllWords()).commit();
                 break;

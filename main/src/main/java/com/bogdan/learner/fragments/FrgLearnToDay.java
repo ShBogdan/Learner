@@ -189,7 +189,7 @@ public class FrgLearnToDay extends Fragment {
                                         // layout to display
                                         dialog.setContentView(R.layout.about_program_dialog_layout);
                                         // set color transpartent
-                                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                                         dialog.show();
                                     }
                                     if (!onDestroy && !onStop) {
@@ -312,7 +312,7 @@ public class FrgLearnToDay extends Fragment {
     }
 
     public void reloadFragment() {
-        Fragment thisFrg = getActivity().getFragmentManager().findFragmentByTag("TAG_FRG_REPEAT_TO_DAY");
+        Fragment thisFrg = getActivity().getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.TAG_FRG_REPEAT_TO_DAY");
         final FragmentTransaction fTrans = getFragmentManager().beginTransaction();
         fTrans.detach(thisFrg);
         fTrans.attach(thisFrg);
@@ -361,6 +361,7 @@ public class FrgLearnToDay extends Fragment {
         onDestroy = true;
         lettersEngWord = null;
     }
+
     public int dpToPx(int dp) {
         DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
