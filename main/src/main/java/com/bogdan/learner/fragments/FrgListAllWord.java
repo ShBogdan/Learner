@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class FrgListAllWord extends ListFragment {
-    private final String LOG_TAG = "::::FrgList::::";
+    private final String LOG_TAG = "::::FrgListAllWord::::";
     ArrayList<String[]> data;
 
 
@@ -36,10 +36,13 @@ public class FrgListAllWord extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         data = new ArrayList<>();
-        for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.uploadDb.entrySet()) {
-            for(String[] word : el.getValue()){
-                data.add(word);
-                Log.d(LOG_TAG, word[0]);
+        for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
+            if(el.getKey()!=0 && el.getKey()!=1){
+                for(String[] word : el.getValue()){
+                    data.add(word);
+                    Log.d(LOG_TAG, el.getKey().toString());
+                    Log.d(LOG_TAG, word[0]);
+                }
             }
         }
         ArrayAdapter<String[]> adapter = new MyAdapter(getActivity(), R.layout.frg_list_words, data);

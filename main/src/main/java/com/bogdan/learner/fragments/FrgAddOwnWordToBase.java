@@ -16,8 +16,8 @@ import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 
-public class FrgAddMyWord extends Fragment implements View.OnClickListener{
-    private final  String LOG_TAG = ":::::FrgAddMyWord::::";
+public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListener{
+    private final  String LOG_TAG = ":::::FrgAddOwnWordToBase::::";
     private DBHelper dbHelper;
     private EditText englishWord, russianWord;
     private Button btn_addToBase;
@@ -47,15 +47,18 @@ public class FrgAddMyWord extends Fragment implements View.OnClickListener{
                     russianWord.setError("Your message");
                     Toast.makeText(getActivity(), "Поля не могут быть пустыми или содержать пробел", Toast.LENGTH_SHORT).show();
                 } else {
-                    dbHelper.insertWord(
-                            englishWord.getText().toString(),
-                            russianWord.getText().toString(),
-                            MainActivity.toDayDate);
-                    hideKeyboard();
-                    englishWord.setText("");
-                    russianWord.setText("");
-                    Toast.makeText(getActivity(), "Вы добавили: " + englishWord.getText().toString(), Toast.LENGTH_SHORT).show();
-                    break;
+                    if(!dbHelper.isWordInBase(englishWord.getText().toString())){
+                        dbHelper.insertWord(
+                                englishWord.getText().toString(),
+                                russianWord.getText().toString(),
+                                MainActivity.toDayDate);
+                        hideKeyboard();
+                        Toast.makeText(getActivity(), englishWord.getText().toString() + " успешно добавлено", Toast.LENGTH_SHORT).show();
+                        englishWord.setText("");
+                        russianWord.setText("");
+                        break;
+                    } else
+                        Toast.makeText(getActivity(), "Слово есть в базе", Toast.LENGTH_SHORT).show();
                 }
         }
     }

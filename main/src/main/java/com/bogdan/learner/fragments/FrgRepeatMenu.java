@@ -1,9 +1,7 @@
 package com.bogdan.learner.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class FrgRepeatSelectively extends Fragment implements View.OnClickListener {
+public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
     Bundle bundleDate;
 
     @Override

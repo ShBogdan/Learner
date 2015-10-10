@@ -16,7 +16,7 @@ import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.R;
 
 public class FrgAddWordForStudy extends Fragment implements View.OnClickListener {
-    private final String LOG_TAG = "::::FrgAddWordToDay::::";
+    private final String LOG_TAG = "::FrgAddWordForStudy::";
     private DBHelper dayLibrary;
     private String[] word;
 
@@ -56,13 +56,13 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_know:
-                dayLibrary.setWord(false);
+                dayLibrary.isLearnWord(false);
                 Log.d(LOG_TAG, "знаю");
                 reloadFragment();
                 break;
 
             case R.id.btn_unknown:
-                dayLibrary.setWord(true);
+                dayLibrary.isLearnWord(true);
                 Log.d(LOG_TAG, "учить");
                 reloadFragment();
                 break;

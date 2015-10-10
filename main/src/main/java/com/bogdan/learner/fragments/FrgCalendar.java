@@ -25,8 +25,8 @@ public class FrgCalendar extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-        showToast();
-//        initializeCalendar();
+//        showToast();
+        initializeCalendar();
     }
 
     public void initializeCalendar(){
@@ -35,9 +35,21 @@ public class FrgCalendar extends Fragment{
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                if (DBHelper.getDbHelper(getActivity()).getListWordsByDate(year + month + dayOfMonth + "") != null) {
+                int _month = month+1;
+                String monthString;
+                String dayString;
+                String date;
+                if(_month <= 9){
+                    monthString = "0" + _month;
+                } else monthString = String.valueOf(month);
+                if(dayOfMonth <= 9){
+                    dayString = "0"+dayOfMonth;
+                } else dayString = String.valueOf(dayOfMonth);
+                date = String.valueOf(year)+monthString+dayString;
+
+                if (DBHelper.getDbHelper(getActivity()).getListWordsByDate(date) != null) {
                     getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgLearnToDay()).commit();
-                } else showToast();
+                } else Toast.makeText(getActivity().getApplication(), date, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -44,9 +44,9 @@ public class DBHelper extends SQLiteOpenHelper {
             "date text not null);";
 
 
-    public static TreeMap<Integer, ArrayList<String[]>> uploadDb;
+    public TreeMap<Integer, ArrayList<String[]>> uploadDb;
     public ArrayList<String[]> listUnknownWords;       /*под ключем 1 не изученные слова*/
-    public ArrayList<String[]> listKnownWords;
+    public ArrayList<String[]> listKnownWords;         /*под ключем 0 слова известные ранее*/
     private SQLiteDatabase sqLiteDatabase;
     private ContentValues contentValues;
     private Cursor cursor;
@@ -85,7 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.d(LOG_TAG, "DATABASE_CREATE");
         }
         uploadDb = uploadDb();
-        listUnknownWords = uploadDb.get(1);       /*под ключем 1 не изученные слова*/
+        listUnknownWords = uploadDb.get(1);
         listKnownWords = uploadDb.get(0);
     }
 
@@ -209,6 +209,23 @@ public class DBHelper extends SQLiteOpenHelper {
         uploadDb = uploadDb();
     }
 
+    public boolean isWordInBase(String english) {
+        sqLiteDatabase = dbHelper.getReadableDatabase();
+        cursor = sqLiteDatabase.query(DATABASE_TABLE, null, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (cursor.moveToNext()) {
+            String eng = cursor.getString(cursor.getColumnIndex(KEY_ENG));
+            if (english.equals(eng)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
     /**
      * Проверяем на наличие не известных слов в базе. Если есть то выбираем случайное
      */
@@ -231,7 +248,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * (false) не учить.
      * Вносим измениния в памяти и в файле
      */
-    public void setWord(boolean bln) {
+    public void isLearnWord(boolean bln) {
         if (bln) {/*Учить*/
             if (uploadDb.containsKey(date)) {
                 uploadDb.get(date)
@@ -257,11 +274,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<String[]> getListWordsByDate(String date) {
         return uploadDb.get(Integer.parseInt(date));
     }
-
-
-
-
-
 
 
     public ArrayList listUnknownWords() {

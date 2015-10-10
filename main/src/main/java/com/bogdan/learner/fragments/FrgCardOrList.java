@@ -30,10 +30,10 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_cards:
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgListAllWord()).commit();
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgCardAllWords()).commit();
                 break;
             case R.id.btn_list:
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgCardAllWords()).commit();
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgListAllWord()).commit();
                 break;
         }
     }

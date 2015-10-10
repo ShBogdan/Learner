@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/frgAddWord"
+    android:background="@color/my_background">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Знаю"
+        android:id="@+id/btn_know"
+        android:layout_marginBottom="170dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Не знаю"
+        android:id="@+id/btn_unknown"
+        android:layout_alignTop="@+id/btn_know"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Оригина"
+        android:id="@+id/tv_english"
+        android:layout_above="@+id/tv_transcription"
+        android:layout_alignLeft="@+id/tv_russian"
+        android:layout_alignStart="@+id/tv_russian"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Транскрипция"
+        android:id="@+id/tv_transcription"
+        android:layout_above="@+id/tv_russian"
+        android:layout_alignLeft="@+id/tv_russian"
+        android:layout_alignStart="@+id/tv_russian"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Первод"
+        android:id="@+id/tv_russian"
+        android:layout_above="@+id/btn_audio"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="29dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Озвучить"
+        android:id="@+id/btn_audio"
+        android:layout_above="@+id/btn_unknown"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="52dp"/>
+</RelativeLayout>

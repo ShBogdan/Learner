@@ -10,17 +10,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.bogdan.learner.fragments.FragmentListener;
-import com.bogdan.learner.fragments.FrgAddMyWord;
+import com.bogdan.learner.fragments.FrgAddOwnWordToBase;
 import com.bogdan.learner.fragments.FrgAddWordForStudy;
 import com.bogdan.learner.fragments.FrgCalendar;
 import com.bogdan.learner.fragments.FrgCardOrList;
-import com.bogdan.learner.fragments.FrgMainMenu;
-import com.bogdan.learner.fragments.FrgRepeatSelectively;
 import com.bogdan.learner.fragments.FrgLearnToDay;
+import com.bogdan.learner.fragments.FrgMainMenu;
+import com.bogdan.learner.fragments.FrgRepeatMenu;
 import com.bogdan.learner.fragments.FrgStatistic;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 public class MainActivity extends Activity implements FragmentListener {
@@ -29,11 +32,11 @@ public class MainActivity extends Activity implements FragmentListener {
 
 
     DBHelper dbHelper;
-
+    TreeMap<Integer, ArrayList<String[]>> uploadDb;
     FrgMainMenu frgMainMenu;
-    FrgAddMyWord frgAddMyWord;
+    FrgAddOwnWordToBase frgAddOwnWordToBase;
     FrgAddWordForStudy frgAddWordForStudy;
-    FrgRepeatSelectively frgRepeatSelectively;
+    FrgRepeatMenu frgRepeatMenu;
     FrgLearnToDay frgLearnToDay;
     FrgStatistic frgStatistic;
     FragmentTransaction fTrans;
@@ -48,12 +51,11 @@ public class MainActivity extends Activity implements FragmentListener {
         setContentView(R.layout.activity_main);
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         dbHelper = DBHelper.getDbHelper(this);
-
-
+        uploadDb = dbHelper.uploadDb;
 
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
-        frgRepeatSelectively = new FrgRepeatSelectively();
+        frgRepeatMenu = new FrgRepeatMenu();
         frgLearnToDay = new FrgLearnToDay();
         frgStatistic = new FrgStatistic();
 
@@ -62,7 +64,7 @@ public class MainActivity extends Activity implements FragmentListener {
         fTrans.add(R.id.fragment_container, frgMainMenu);
         fTrans.commit();
 
-       }
+    }
 
     @Override
     public void onButtonSelected(View view) {
@@ -75,8 +77,8 @@ public class MainActivity extends Activity implements FragmentListener {
                 hideKeyboard();
                 break;
             case R.id.btn_add:
-                frgAddMyWord = new FrgAddMyWord();
-                fTrans.replace(R.id.fragment_container, frgAddMyWord);
+                frgAddOwnWordToBase = new FrgAddOwnWordToBase();
+                fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase);
                 Log.i(LOG_TAG, "Activity: Добавить");
                 break;
 
@@ -87,14 +89,25 @@ public class MainActivity extends Activity implements FragmentListener {
                 Log.i(LOG_TAG, "Fragment: Добавить еще слова");
                 break;
             case R.id.btn_learnToday:
-                if (DBHelper.getDbHelper(this).getListWordsByDate(toDayDate) != null) {
+                if (dbHelper.getListWordsByDate(toDayDate) != null) {
                     fTrans.replace(R.id.fragment_container, frgLearnToDay, "TAG_FRG_REPEAT_TO_DAY");
                 } else
                     Toast.makeText(this, "Сегодня вы не добавили ни одного слова", Toast.LENGTH_SHORT).show();
                 Log.i(LOG_TAG, "Fragment: Учить сегоднешние");
                 break;
             case R.id.btn_repeat:
-                fTrans.replace(R.id.fragment_container, frgRepeatSelectively);
+                Log.i(LOG_TAG, dbHelper.uploadDb.size() +"");               /*ПОЧЕМУ НЕ РАБОТАЕТ локальный uploadDb ??????????*/
+                boolean isData = false;
+                for (Map.Entry<Integer, ArrayList<String[]>> el : dbHelper.uploadDb.entrySet()) {
+                    if (el.getKey() > 1) {
+                        fTrans.replace(R.id.fragment_container, frgRepeatMenu);
+                        isData = true;
+                        break;
+                    }
+                }
+                if (!isData){
+                    Toast.makeText(this, "Вы не добавили ни одного слова", Toast.LENGTH_SHORT).show();
+                }
                 Log.i(LOG_TAG, "Fragment: Повторение изученого");
                 break;
 
@@ -103,6 +116,7 @@ public class MainActivity extends Activity implements FragmentListener {
         }
         fTrans.commit();
     }
+
 
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
