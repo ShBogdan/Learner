@@ -1,6 +1,7 @@
 package com.bogdan.learner.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,12 +30,15 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        FragmentTransaction fTrans = getActivity().getFragmentManager().beginTransaction();
         switch (v.getId()) {
             case R.id.btn_cards:
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgCardAllWords()).commit();
+                fTrans.replace(R.id.fragment_container, new FrgCardAllWords());
+                fTrans.addToBackStack(null).commit();
                 break;
             case R.id.btn_list:
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgListAllWord()).commit();
+                fTrans.replace(R.id.fragment_container, new FrgListAllWord());
+                fTrans.addToBackStack(null).commit();
                 break;
         }
     }

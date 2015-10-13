@@ -1,10 +1,10 @@
 package com.bogdan.learner;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +17,6 @@ import com.bogdan.learner.fragments.FrgAddWordForStudy;
 import com.bogdan.learner.fragments.FrgLearnToDay;
 import com.bogdan.learner.fragments.FrgMainMenu;
 import com.bogdan.learner.fragments.FrgRepeatMenu;
-import com.bogdan.learner.fragments.FrgStatistic;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,12 +37,13 @@ public class MainActivity extends Activity implements FragmentListener {
     FrgAddWordForStudy frgAddWordForStudy;
     FrgRepeatMenu frgRepeatMenu;
     FrgLearnToDay frgLearnToDay;
-    FrgStatistic frgStatistic;
     FragmentTransaction fTrans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        savedInstanceState = null;
         super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate");
         setContentView(R.layout.activity_main);
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         dbHelper = DBHelper.getDbHelper(this);
@@ -53,12 +53,13 @@ public class MainActivity extends Activity implements FragmentListener {
         frgAddWordForStudy = new FrgAddWordForStudy();
         frgRepeatMenu = new FrgRepeatMenu();
         frgLearnToDay = new FrgLearnToDay();
-        frgStatistic = new FrgStatistic();
-        frgAddOwnWordToBase = new FrgAddOwnWordToBase();      /*Перенесено из case R.id.btn_add:. ЗАчем там было не понятно.*/
+        frgAddOwnWordToBase = new FrgAddOwnWordToBase();
 
         fTrans = getFragmentManager().beginTransaction();
-        fTrans.add(R.id.fragment_container, frgMainMenu);
+        fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
         fTrans.commit();
+
+
 
     }
 
@@ -68,23 +69,33 @@ public class MainActivity extends Activity implements FragmentListener {
         switch (view.getId()) {
             /*Кнопки активити*/
             case R.id.btn_toMain:
-                fTrans.replace(R.id.fragment_container, frgMainMenu);
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
+                fTrans.addToBackStack("frgMainMenu");
                 hideKeyboard();
                 break;
 
             case R.id.btn_add:
-                fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase);
+                FrgAddOwnWordToBase f = (FrgAddOwnWordToBase)getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
+                if( f !=null && f.isVisible()){
+                    //do nothing
+                }else {
+                    fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase, "com.bogdan.learner.fragments.frgAddOwnWordToBase");
+                    fTrans.addToBackStack("frgAddOwnWordToBase");
+                }
                 break;
 
 
             /*Кнопки фрагментов*/
             case R.id.btn_addMoreWord:
                 fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
+                fTrans.addToBackStack("frgAddWordForStudy");
                 break;
 
             case R.id.btn_learnToday:
                 if (dbHelper.getListWordsByDate(toDayDate) != null) {
                     fTrans.replace(R.id.fragment_container, frgLearnToDay, "com.bogdan.learner.fragments.TAG_FRG_REPEAT_TO_DAY");
+                    fTrans.addToBackStack("frgLearnToDay");
                 } else
                     Toast.makeText(this, R.string.no_words_today, Toast.LENGTH_SHORT).show();
                 break;
@@ -95,6 +106,7 @@ public class MainActivity extends Activity implements FragmentListener {
                 for (Map.Entry<Integer, ArrayList<String[]>> el : dbHelper.uploadDb.entrySet()) {
                     if (el.getKey() > 1) {
                         fTrans.replace(R.id.fragment_container, frgRepeatMenu);
+                        fTrans.addToBackStack("frgRepeatMenu");
                         isData = true;
                         break;
                     }
@@ -109,6 +121,7 @@ public class MainActivity extends Activity implements FragmentListener {
     }
 
 
+
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -117,19 +130,53 @@ public class MainActivity extends Activity implements FragmentListener {
         }
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        new AlertDialog.Builder(this)
+//                .setIcon(android.R.drawable.ic_dialog_info)
+//                .setTitle(null)
+//                .setMessage(R.string.exit)
+//                .setPositiveButton(R.string.no, null)
+//                .setNegativeButton(R.string.yas, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        finish();
+//                    }
+//                }).show();
+//
+//    }
+
+
+
     @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setTitle(null)
-                .setMessage(R.string.exit)
-                .setPositiveButton(R.string.no, null)
-                .setNegativeButton(R.string.yas, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                }).show();
+    protected void onStart() {
+        super.onStart();
+        Log.d(LOG_TAG, "onStart");
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        String flag = preferences.getString("kill", null);
+        if(flag!=null && flag.equals("yes")){
+            Log.d(LOG_TAG, "was onDestroy()");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy");
+        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+        editor.putString("kill", "yes");
 
     }
 }

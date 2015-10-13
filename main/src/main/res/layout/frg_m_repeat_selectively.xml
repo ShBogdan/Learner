@@ -43,13 +43,13 @@
             android:id="@+id/btn_repeat_day90"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/buttonstyle"/>
-    <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Календарь"
-            android:id="@+id/btn_calendar"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/buttonstyle"/>
+    <!--<Button-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Календарь"-->
+            <!--android:id="@+id/btn_calendar"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:background="@drawable/buttonstyle"/>-->
     <Button
 
             android:layout_width="fill_parent"

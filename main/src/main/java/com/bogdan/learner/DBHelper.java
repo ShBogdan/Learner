@@ -20,7 +20,7 @@ import java.util.Random;
 import java.util.TreeMap;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final String LOG_TAG = "::::DBHelper::::";
+    private static final String LOG_TAG = "DBHelper";
     private Integer date = Integer.parseInt(MainActivity.toDayDate);
     private static DBHelper dbHelper;
     private Context mContext;
@@ -65,7 +65,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        Log.d(LOG_TAG, "DBHelper");
         dbHelper = this;
         this.mContext = context;
         if(android.os.Build.VERSION.SDK_INT >= 4.2){
@@ -78,9 +77,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }else{
             try {
                 copyDataBase(mContext);
-                Log.d(LOG_TAG, "DBHelper+copyDataBase try");
             } catch (IOException e) {
-                Log.d(LOG_TAG, "DBHelper+copyDataBase catch");
+                Log.e(LOG_TAG, "DBHelper+copyDataBase catch");
             }
             Log.d(LOG_TAG, "DATABASE_CREATE");
         }
@@ -90,7 +88,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public static DBHelper getDbHelper(Context context){
-        Log.d(LOG_TAG, "getDbHelper");
         if(dbHelper == null){
             dbHelper = new DBHelper(context);
         }
@@ -98,7 +95,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private boolean checkDataBase(){
-        Log.d(LOG_TAG, "checkDataBase");
         sqLiteDatabase = null;
         try{
             String myPath = DB_PATH + DATABASE_NAME;
@@ -113,7 +109,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private void copyDataBase(Context context) throws IOException {
-        Log.d(LOG_TAG, "copyDataBase");
         sqLiteDatabase = dbHelper.getWritableDatabase();
         //Открываем локальную БД как входящий поток
         InputStream myInput = context.getAssets().open(DATABASE_NAME);
@@ -127,7 +122,6 @@ public class DBHelper extends SQLiteOpenHelper {
         int length;
         while ((length = myInput.read(buffer))>0){
             myOutput.write(buffer, 0, length);
-            Log.d(LOG_TAG, "copyDataBase while" + length);
         }
         //закрываем потоки
         myOutput.flush();
@@ -184,7 +178,6 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(DATABASE_TABLE, null, contentValues);
         sqLiteDatabase.close();
         uploadDb = uploadDb();
-        Log.d(LOG_TAG, "DbHelper_insertWords");
     }
 
     /**
@@ -221,9 +214,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return false;
     }
-
-
-
 
 
     /**

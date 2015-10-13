@@ -1,6 +1,7 @@
 package com.bogdan.learner.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,9 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
                 startFragment(getOldDate(-89));
                 break;
             case R.id.btn_all_words:
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FrgCardOrList()).commit();
+                FragmentTransaction fTrans = getActivity().getFragmentManager().beginTransaction();
+                fTrans.replace(R.id.fragment_container, new FrgCardOrList());
+                fTrans.addToBackStack(null).commit();
                 break;
         }
     }
@@ -83,7 +86,9 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
             Fragment fr = new FrgRepeatDay();
             fr.setArguments(bundleDate);
             bundleDate.putString("com.bogdan.learner.fragments.day_date", dayDate);
-            getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, fr).commit();
+            FragmentTransaction fTrans = getActivity().getFragmentManager().beginTransaction();
+            fTrans.replace(R.id.fragment_container, fr);
+            fTrans.addToBackStack(null).commit();
         }
     }
 }

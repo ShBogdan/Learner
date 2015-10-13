@@ -2,6 +2,7 @@ package com.bogdan.learner.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener {
         btn_addNewWord.setOnClickListener(this);
         Button btn_repeat = (Button) view.findViewById(R.id.btn_repeat);
         btn_repeat.setOnClickListener(this);
-
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         return view;
     }
 
