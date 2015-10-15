@@ -1,8 +1,10 @@
 package com.bogdan.learner.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,12 +45,12 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
                     replace(R.id.fragment_container, new FrgMainMenu()).
                     addToBackStack(null).commit();
 
-//            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo));
-//            builder.setTitle(R.string.no_words_for_study)
-//                    .setCancelable(true);
-//
-//            AlertDialog alert = builder.create();
-//            alert.show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo));
+            builder.setTitle(R.string.no_words_for_study)
+                    .setCancelable(true);
+
+            AlertDialog alert = builder.create();
+            alert.show();
         }
 
         return view;

@@ -85,14 +85,14 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
 
     void writeFile() {
         SharedPreferences.Editor editor = sp.edit();
-        editor.putStringSet(FILE_NAME_WORDS, wordsInToFile);
+        editor.putStringSet("words", wordsInToFile);
         editor.apply();
     }
 
     void readFile() {
         arrayWords = new ArrayList<>();
-        if (sp.contains(FILE_NAME_WORDS)) {
-            wordsFromFile = sp.getStringSet(FILE_NAME_WORDS, null);
+        if (sp.contains("words")) {
+            wordsFromFile = sp.getStringSet("words", null);
             if (wordsFromFile == null || wordsFromFile.size() == 0)
                 return;
         } else
@@ -149,13 +149,4 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
         if (wordsFromFile == null)
             writeFile();
     }
-
-    int checkLastUpdate() {
-        SharedPreferences sp = getActivity().getSharedPreferences(FILE_NAME_LAST_UPDATE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(FILE_NAME_LAST_UPDATE, 1);
-        editor.apply();
-        return 1;
-    }
-
 }

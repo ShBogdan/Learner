@@ -11,7 +11,7 @@ import android.widget.Button;
 
 import com.bogdan.learner.R;
 
-public class FrgMainMenu extends Fragment implements View.OnClickListener {
+public class FrgMainMenu extends Fragment implements View.OnClickListener{
     private final String TAG = "onClick";
     FragmentListener mCallback;
 

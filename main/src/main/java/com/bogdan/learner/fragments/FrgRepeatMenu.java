@@ -2,11 +2,15 @@ package com.bogdan.learner.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.bogdan.learner.DBHelper;
@@ -17,26 +21,58 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
+    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     Bundle bundleDate;
+    Button btn_repeat_day1, btn_repeat_day2, btn_repeat_day3, btn_repeat_day21, btn_repeat_day90, btn_all_words;
+    CheckBox changeWordPlace; // выводим слова в порядке rus-eng;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_m_repeat_selectively, null);
 
-        Button btn_repeat_day1 = (Button) view.findViewById(R.id.btn_repeat_day1);
+        btn_repeat_day1 = (Button) view.findViewById(R.id.btn_repeat_day1);
         btn_repeat_day1.setOnClickListener(this);
-        Button btn_repeat_day2 = (Button) view.findViewById(R.id.btn_repeat_day2);
+        btn_repeat_day2 = (Button) view.findViewById(R.id.btn_repeat_day2);
         btn_repeat_day2.setOnClickListener(this);
-        Button btn_repeat_day3 = (Button) view.findViewById(R.id.btn_repeat_day3);
+        btn_repeat_day3 = (Button) view.findViewById(R.id.btn_repeat_day3);
         btn_repeat_day3.setOnClickListener(this);
-        Button btn_repeat_day21 = (Button) view.findViewById(R.id.btn_repeat_day21);
+        btn_repeat_day21 = (Button) view.findViewById(R.id.btn_repeat_day21);
         btn_repeat_day21.setOnClickListener(this);
-        Button btn_repeat_day90 = (Button) view.findViewById(R.id.btn_repeat_day90);
+        btn_repeat_day90 = (Button) view.findViewById(R.id.btn_repeat_day90);
         btn_repeat_day90.setOnClickListener(this);
-        Button btn_all_words = (Button) view.findViewById(R.id.btn_all_words);
+        btn_all_words = (Button) view.findViewById(R.id.btn_all_words);
         btn_all_words.setOnClickListener(this);
+        changeWordPlace = (CheckBox) view.findViewById(R.id.changeWordPlace);
 
         bundleDate = new Bundle();
+
+        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
+        if(!sp.contains("changeWordPlace")) {
+            editor.putBoolean("changeWordPlace", false).apply();
+        }
+        if(sp.getBoolean("changeWordPlace", false)){
+             }
+        if(sp.getBoolean("changeWordPlace", true)){
+            changeWordPlace.toggle();
+        }
+
+
+        changeWordPlace.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(changeWordPlace.isChecked()){
+                    editor.putBoolean("changeWordPlace", true).apply();
+                } else
+                    editor.putBoolean("changeWordPlace", false).apply();
+            }
+        });
+
+
 
         return view;
     }
