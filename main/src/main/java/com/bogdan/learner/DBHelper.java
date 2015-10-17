@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -29,7 +28,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_ENG = "english";
     private static final String KEY_RUS = "russian";
     private static final String KEY_TRANS = "transcription";
-    private static final String KEY_VOICE = "voice";
+    private static final String KEY_TRANSLATIONS = "translations";
     private static final String KEY_DATE = "date";
 
     private static String DB_PATH;
@@ -40,13 +39,14 @@ public class DBHelper extends SQLiteOpenHelper {
             "english text not null, " +
             "russian text not null, " +
             "transcription text, " +
-            "voice text, " +
+            "translations text, " +
             "date text not null);";
 
 
     public TreeMap<Integer, ArrayList<String[]>> uploadDb;
-    public ArrayList<String[]> listUnknownWords;       /*под ключем 1 не изученные слова*/
-    public ArrayList<String[]> listKnownWords;         /*под ключем 0 слова известные ранее*/
+    public ArrayList<String[]> listUnknownWords;       //под ключем 1 не изученные слова
+    public ArrayList<String[]> listKnownWords;         //под ключем 0 слова известные ранее
+    public ArrayList<String[]> learnedWords;           //изученные имеют дату
     private SQLiteDatabase sqLiteDatabase;
     private ContentValues contentValues;
     private Cursor cursor;
@@ -82,9 +82,20 @@ public class DBHelper extends SQLiteOpenHelper {
             }
             Log.d(LOG_TAG, "DATABASE_CREATE");
         }
+//заполняем списки
         uploadDb = uploadDb();
         listUnknownWords = uploadDb.get(1);
         listKnownWords = uploadDb.get(0);
+        learnedWords = new ArrayList<String[]>();
+//        Log.d(LOG_TAG, "learnedWords=" + learnedWords.size());
+        for (Map.Entry<Integer, ArrayList<String[]>> el : uploadDb.entrySet()) {
+            if (el.getKey() != 0 && el.getKey() != 1) {
+                for (String[] word : el.getValue())
+                    learnedWords.add(word);
+            }
+        }
+
+
     }
 
     public static DBHelper getDbHelper(Context context){
@@ -130,7 +141,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Загружает таблибу и возвращает Map. Ключ дата изучения значение массив строк(значения слова)
+     * Загружает таблицу и возвращает Map. Ключ это дата изучения, значение это массив строк(значения слова)
      */
     private TreeMap uploadDb() {
         Log.d(LOG_TAG, "uploadDb");
@@ -142,7 +153,7 @@ public class DBHelper extends SQLiteOpenHelper {
             String english = cursor.getString(cursor.getColumnIndex(KEY_ENG));
             String russian = cursor.getString(cursor.getColumnIndex(KEY_RUS));
             String transcription = cursor.getString(cursor.getColumnIndex(KEY_TRANS));
-            String voicePatch = cursor.getString(cursor.getColumnIndex(KEY_VOICE));
+            String voicePatch = cursor.getString(cursor.getColumnIndex(KEY_TRANSLATIONS));
             Integer date = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
 
             if (wordsDb.containsKey(date)) {
@@ -154,14 +165,14 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
 
-        Log.d(LOG_TAG, "words_size===============================================" + wordsDb.size());
-        for (Map.Entry<Integer, ArrayList<String[]>> el : wordsDb.entrySet()) {
-            ArrayList<String[]> al = el.getValue();
-            Log.d(LOG_TAG, ("Kay::::::::::::::::::::::::::::::::::::::::::::::: " + el.getKey()));
-            for (int i = 0; i < al.size(); i++) {
-                Log.d(LOG_TAG, "array:::::::::::::::::::::::::::::::::::::::::: " + Arrays.asList(al.get(i)) + ", ");
-            }
-        }
+//        Log.d(LOG_TAG, "words_size===============================================" + wordsDb.size());
+//        for (Map.Entry<Integer, ArrayList<String[]>> el : wordsDb.entrySet()) {
+//            ArrayList<String[]> al = el.getValue();
+//            Log.d(LOG_TAG, ("Kay::::::::::::::::::::::::::::::::::::::::::::::: " + el.getKey()));
+//            for (int i = 0; i < al.size(); i++) {
+//                Log.d(LOG_TAG, "array:::::::::::::::::::::::::::::::::::::::::: " + Arrays.asList(al.get(i)) + ", ");
+//            }
+//        }
         sqLiteDatabase.close();
         return wordsDb;
     }

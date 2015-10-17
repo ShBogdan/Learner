@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -24,92 +24,111 @@ import java.util.Map;
 public class FrgListAllWord extends ListFragment {
     private final String LOG_TAG = "::::FrgListAllWord::::";
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
-    ArrayList<MyListItem> data;
-    ArrayAdapter<MyListItem> adapter;
+    ArrayList<Word> data1;
+    MyAdapter adapter;
     SharedPreferences sp;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
-        data = new ArrayList<>();
+        data1 = new ArrayList<>();
 
         fillDate();
 
-        adapter = new MyAdapter(getActivity(), R.layout.frg_list_words, data);
+        adapter = new MyAdapter(getActivity(), data1);
         setListAdapter(adapter);
     }
 
-    class MyAdapter extends ArrayAdapter<MyListItem> {
-        public MyAdapter(Context context, int resource, ArrayList<MyListItem> objects) {
-            super(context, resource, objects);
+    class MyAdapter extends BaseAdapter implements CompoundButton.OnCheckedChangeListener{
+        Context context;
+        ArrayList<Word> object;
+        CheckBox cbRemove;
+        CheckBox cbReLearn;
+        Word word;
+
+        MyAdapter(Context context, ArrayList<Word> words){
+            this.context = context;
+            this.object = words;
+        }
+
+        @Override
+        public int getCount() {
+            return object.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return object.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            final MyListItem data = getItem(position);
             if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.frg_list_words, null);
+                convertView = LayoutInflater.from(context).inflate(R.layout.frg_list_words, parent, false);
             }
+            word = (Word)getItem(position);
 
-            ((TextView) convertView.findViewById(R.id.englishWord)).setText(data.eng);
-            ((TextView) convertView.findViewById(R.id.russianWord)).setText(data.rus);
+            ((TextView) convertView.findViewById(R.id.englishWord)).setText(word.eng);
+            ((TextView) convertView.findViewById(R.id.russianWord)).setText(word.rus);
 
-            final CheckBox cbRemove = (CheckBox) convertView.findViewById(R.id.cbRemove);
-            final CheckBox cbReLearn = (CheckBox) convertView.findViewById(R.id.cbReLearn);
-
-//            Обрабатываем CheckBox. Либо удалить слово либо учить заново.
-            CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (buttonView.getId() == R.id.cbRemove) {
-                        if (isChecked) {
-                            data.boxRemove = true;
-                            data.boxReLearn = false;
-                            cbReLearn.setEnabled(false);
-                        } else {
-                            data.boxRemove = false;
-                            cbReLearn.setEnabled(true);
-                        }
-                    }
-                    if (buttonView.getId() == R.id.cbReLearn) {
-                        if (isChecked) {
-                            data.boxReLearn = true;
-                            data.boxRemove = false;
-                            cbRemove.setEnabled(false);
-                        } else {
-                            data.boxReLearn = false;
-                            cbRemove.setEnabled(true);
-                        }
-                    }
-
-                }
-            };
+            cbRemove = (CheckBox) convertView.findViewById(R.id.cbRemove);
+            cbReLearn = (CheckBox) convertView.findViewById(R.id.cbReLearn);
 
             cbRemove.setTag(position);
-            cbRemove.setOnCheckedChangeListener(onCheckedChangeListener);
+            cbRemove.setChecked(word.boxRemove);
+            cbRemove.setOnCheckedChangeListener(this);
             cbReLearn.setTag(position);
-            cbReLearn.setOnCheckedChangeListener(onCheckedChangeListener);
-
+            cbReLearn.setChecked(word.boxReLearn);
+            cbReLearn.setOnCheckedChangeListener(this);
 
             return convertView;
         }
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (buttonView.getId() == R.id.cbRemove) {
+                if (isChecked) {
+                    word.boxRemove = true;
+                    word.boxReLearn = false;
+                    cbReLearn.setEnabled(false);
+                } else {
+                    word.boxRemove = false;
+                    cbReLearn.setEnabled(true);
+                }
+            }
+            if (buttonView.getId() == R.id.cbReLearn) {
+                if (isChecked) {
+                    word.boxReLearn = true;
+                    word.boxRemove = false;
+                    cbRemove.setEnabled(false);
+                } else {
+                    word.boxReLearn = false;
+                    cbRemove.setEnabled(true);
+                }
+            }
+        }
     }
 
-    class MyListItem implements Comparable<MyListItem>{
+    class Word implements Comparable<Word>{
         String eng;
         String rus;
         boolean boxRemove;
         boolean boxReLearn;
 
-        public MyListItem(String eng, String rus, boolean boxRemove, boolean boxReLearn) {
+        public Word(String eng, String rus, boolean boxRemove, boolean boxReLearn) {
             this.eng = eng;
             this.rus = rus;
             this.boxRemove = boxRemove;
             this.boxReLearn = boxReLearn;
         }
         @Override
-        public int compareTo(MyListItem another) {
+        public int compareTo(Word another) {
             return this.eng.toUpperCase()
                     .compareTo(another.eng.toUpperCase());
         }
@@ -122,7 +141,7 @@ public class FrgListAllWord extends ListFragment {
         for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
             if (el.getKey() != 0 && el.getKey() != 1) {
                 for (String[] word : el.getValue()) {
-                    data.add(new MyListItem(word[0], word[1], false, false));
+                    data1.add(new Word(word[0], word[1], false, false));
                     Log.d(LOG_TAG, el.getKey().toString());
                     Log.d(LOG_TAG, word[0]);
                 }
@@ -130,11 +149,11 @@ public class FrgListAllWord extends ListFragment {
         }
 //        В сулчайнов порядке "random"
         if(setting.equals("random")) {
-            Collections.shuffle(data);
+            Collections.shuffle(data1);
         }
 //        В алфавитном порядке "alphabet"
         if(setting.equals("alphabet")){
-            Collections.sort(data);
+            Collections.sort(data1);
         }
     }
 
@@ -147,13 +166,13 @@ public class FrgListAllWord extends ListFragment {
     @Override
     public void onPause() {
         super.onPause();
-        for (int i = 0; i < data.size(); i++) {
+        for (int i = 0; i < data1.size(); i++) {
 //            удаляем слово из бащы
-            if (data.get(i).boxRemove)
-                DBHelper.getDbHelper(getActivity()).removeWordFromDb(data.get(i).eng);
+            if (data1.get(i).boxRemove)
+                DBHelper.getDbHelper(getActivity()).removeWordFromDb(data1.get(i).eng);
 //            учим слово заново
-            if(data.get(i).boxReLearn){
-                DBHelper.getDbHelper(getActivity()).updateWordDate(MainActivity.toDayDate , data.get(i).eng);
+            if(data1.get(i).boxReLearn){
+                DBHelper.getDbHelper(getActivity()).updateWordDate(MainActivity.toDayDate , data1.get(i).eng);
             }
         }
     }

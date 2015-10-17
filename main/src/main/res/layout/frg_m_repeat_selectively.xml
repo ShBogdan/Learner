@@ -5,7 +5,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:weightSum="1"
-              android:background="@color/my_background">
+              android:background="@color/my_background"
+    android:baselineAligned="false">
 
     <Button
             android:layout_marginTop="35dp"
@@ -70,5 +71,40 @@
             android:text="Учить слова в порядке русский-ангийский"
             android:id="@+id/changeWordPlace"
             android:checked="false"
-        android:textSize="10dp"/>
+            android:textSize="12sp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="изучено"
+                android:id="@+id/tv_learned"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="известно ранее"
+                android:id="@+id/tv_known"
+                android:layout_gravity="bottom"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>

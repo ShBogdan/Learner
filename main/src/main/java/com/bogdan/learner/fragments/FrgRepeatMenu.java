@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bogdan.learner.DBHelper;
@@ -24,6 +25,7 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     Bundle bundleDate;
     Button btn_repeat_day1, btn_repeat_day2, btn_repeat_day3, btn_repeat_day21, btn_repeat_day90, btn_all_words;
+    TextView tv_learned, tv_know;
     CheckBox changeWordPlace; // выводим слова в порядке rus-eng;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
@@ -32,6 +34,11 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_m_repeat_selectively, null);
+
+        tv_learned = (TextView)view.findViewById(R.id.tv_learned);
+        tv_learned.setText("Вы изучили: " + DBHelper.getDbHelper(getActivity()).learnedWords.size() + " новых слов");
+        tv_know = (TextView)view.findViewById(R.id.tv_known);
+        tv_know.setText("Вы уже знали: " + DBHelper.getDbHelper(getActivity()).listKnownWords.size() + " слов");
 
         btn_repeat_day1 = (Button) view.findViewById(R.id.btn_repeat_day1);
         btn_repeat_day1.setOnClickListener(this);

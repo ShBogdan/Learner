@@ -21,7 +21,7 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     SharedPreferences sp;
     String date;
-    boolean changeWord; //меняем местами eng и rus
+    boolean changeWord;
     ArrayList<String[]> toDayListWords;
     TextView englishWord, transWord, russianWord, tvSumWords, btn_nextTV;
     LinearLayout btnNext;
@@ -32,18 +32,17 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_repeat_day, null);
+
+//      счет кликов 1.показывает ответ 2.переход к следующему слову
         countBtnClick = 2;
 
+//      получаем дату ранее изученных слов
         date = getArguments().getString("com.bogdan.learner.fragments.day_date");
         toDayListWords = new ArrayList<>(DBHelper.getDbHelper(getActivity()).getListWordsByDate(date));
 
-
+//      установлен ли пункт менять местами перевод
         sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         changeWord = sp.getBoolean("changeWordPlace", false);
-
-
-
-
 
 
         englishWord = (TextView) view.findViewById(R.id.englishWord);
@@ -54,11 +53,10 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
         btnNext = (LinearLayout) view.findViewById(R.id.btn_next);
         btnNext.setOnClickListener(this);
         reloadFragment();
-        countBtnClick = 2;
-
         return view;
     }
 
+    /*заполняет view фрагмента*/
     private void reloadFragment() {
         if (toDayListWords.size() != 0) {
             Collections.shuffle(toDayListWords);
@@ -66,7 +64,7 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
             btn_nextTV.setText(R.string.answer);
             eng = toDayListWords.get(0)[0];
             rus = toDayListWords.get(0)[1];
-            if(changeWord){
+            if (changeWord) {
                 String temp = eng;
                 eng = rus;
                 rus = temp;
