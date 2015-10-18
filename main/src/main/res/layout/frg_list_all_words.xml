@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <ListView
+        android:id="@+id/lvMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:stackFromBottom="false"
+        android:smoothScrollbar="false"
+        android:scrollingCache="false"
+        android:textFilterEnabled="false"
+        android:touchscreenBlocksFocus="false"
+        android:transitionGroup="false"
+        android:nestedScrollingEnabled="false"
+        android:longClickable="false"
+        android:headerDividersEnabled="false"
+        android:footerDividersEnabled="false"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        android:fastScrollEnabled="false"
+        android:fastScrollAlwaysVisible="false"
+        android:drawSelectorOnTop="false"
+        android:clickable="false">
+    </ListView>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:onClick="showResult"
+        android:text="box">
+    </Button>
+</LinearLayout>

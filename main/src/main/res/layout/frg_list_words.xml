@@ -1,60 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:id="@+id/myLay"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginLeft="16dp">
+        android:checked="false"
+        >
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="englishWord"
+                    android:id="@+id/englishWord"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_vertical|top"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="russianWord"
+                    android:id="@+id/russianWord"
+                android:layout_marginBottom="8dp"
+                android:layout_gravity="bottom"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp">
+
+            CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="englishWord"
-                android:id="@+id/englishWord"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_vertical|top"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp" />
+                android:text="Учить заново"
+                android:id="@+id/box"
+                android:layout_gravity="left|top"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp" />
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="russianWord"
-                android:id="@+id/russianWord"
-            android:layout_marginBottom="8dp"
-            android:layout_gravity="bottom"
-            android:textSize="18sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginRight="16dp">
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="#ff4a5160"></LinearLayout>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Учить заново"
-            android:id="@+id/cbReLearn"
-            android:layout_gravity="left|top"
-            android:textSize="12sp"
-            android:layout_marginTop="4dp" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Удалить"
-            android:id="@+id/cbRemove"
-            android:layout_gravity="bottom|left"
-            android:textSize="12sp" />
-    </LinearLayout>
 
 </LinearLayout>
