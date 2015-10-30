@@ -143,7 +143,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Загружает таблицу и возвращает Map. Ключ это дата изучения, значение это массив строк(значения слова)
      */
-    private TreeMap uploadDb() {
+    public TreeMap uploadDb() {
         Log.d(LOG_TAG, "uploadDb");
         TreeMap<Integer, ArrayList<String[]>> wordsDb = new TreeMap<>();
         sqLiteDatabase = dbHelper.getReadableDatabase();
@@ -165,15 +165,8 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
 
-//        Log.d(LOG_TAG, "words_size===============================================" + wordsDb.size());
-//        for (Map.Entry<Integer, ArrayList<String[]>> el : wordsDb.entrySet()) {
-//            ArrayList<String[]> al = el.getValue();
-//            Log.d(LOG_TAG, ("Kay::::::::::::::::::::::::::::::::::::::::::::::: " + el.getKey()));
-//            for (int i = 0; i < al.size(); i++) {
-//                Log.d(LOG_TAG, "array:::::::::::::::::::::::::::::::::::::::::: " + Arrays.asList(al.get(i)) + ", ");
-//            }
-//        }
         sqLiteDatabase.close();
+
         return wordsDb;
     }
 
@@ -192,7 +185,10 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Обновляет дату изучения слова в таблице
+     * Обновляет дату изучения слова в таблице.
+     *
+     *
+     * ИСПОЛЬЗОВАТЬ uploadDb(); после данного метода
      */
     public void updateWordDate(String date, String english) {
         contentValues = new ContentValues();
@@ -204,7 +200,10 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Удаляет слово с базы
+     * Удаляет слово с базы.
+     *
+     *
+     * ИСПОЛЬЗОВАТЬ uploadDb(); после данного метода
      */
     public void removeWordFromDb(String english) {
         sqLiteDatabase = dbHelper.getWritableDatabase();

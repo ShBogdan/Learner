@@ -9,8 +9,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:checked="false"
-        >
+        android:checked="false">
 
         <LinearLayout
             android:orientation="vertical"
@@ -19,16 +18,38 @@
             android:layout_weight="1"
             android:layout_marginLeft="16dp">
 
-            <TextView
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="englishWord"
+                        android:id="@+id/englishWord"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center_vertical|top"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="8dp"
+                    android:textStyle="bold"
+                    android:shadowColor="#ff1c2736"
+                    android:phoneNumber="false" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="englishWord"
-                    android:id="@+id/englishWord"
-                android:layout_marginTop="8dp"
-                android:layout_gravity="center_vertical|top"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="trans"
+                    android:id="@+id/tv_trans"
+                    android:layout_gravity="center_vertical|top"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="20sp"
+                    android:textColor="#ff282889" />
+            </LinearLayout>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -38,7 +59,9 @@
                     android:id="@+id/russianWord"
                 android:layout_marginBottom="8dp"
                 android:layout_gravity="bottom"
-                android:textSize="18sp" />
+                android:textSize="14sp"
+                android:textColor="#ff3c3c3c" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +86,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="#ff4a5160"></LinearLayout>
+        android:background="#FFE0DCDD"></LinearLayout>
 
 
 </LinearLayout>

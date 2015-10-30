@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#ffe0dcdd">
     <ListView
         android:id="@+id/lvMain"
         android:layout_width="match_parent"
@@ -24,14 +25,32 @@
         android:fastScrollEnabled="false"
         android:fastScrollAlwaysVisible="false"
         android:drawSelectorOnTop="false"
-        android:clickable="false">
+        android:choiceMode="multipleChoice"
+        android:clickable="false"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
     </ListView>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp"
-        android:onClick="showResult"
-        android:text="box">
-    </Button>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Удалить"
+            android:id="@+id/btn_remove"
+            android:layout_gravity="bottom"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Учить заново"
+            android:id="@+id/btn_relearn"
+            android:layout_gravity="bottom"
+            android:layout_weight="1" />
+    </LinearLayout>
+
 </LinearLayout>
