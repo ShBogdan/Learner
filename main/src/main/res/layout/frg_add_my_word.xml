@@ -10,33 +10,30 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_centerHorizontal="true">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Оригинал"
-                android:id="@+id/textView" android:layout_gravity="center_horizontal" android:textSize="18dp"
-                android:layout_marginTop="16dp"/>
-        <EditText
+
+        <AutoCompleteTextView
+                android:layout_marginTop="16dp"
+                android:hint="Английский"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/originTextV" android:layout_marginLeft="5dp" android:layout_marginRight="5dp"/>
-         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Перевод"
-                android:id="@+id/textView3" android:layout_gravity="center_horizontal" android:textSize="18dp"/>
+                android:id="@+id/originTextV" android:layout_marginLeft="18dp" android:layout_marginRight="18dp"/>
+
         <EditText
+            android:layout_marginTop="16dp"
+                android:hint="Русский"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/russianTextV" android:layout_marginLeft="5dp" android:layout_marginRight="5dp"/>
-        <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/russianTextV" android:layout_marginLeft="18dp" android:layout_marginRight="18dp"/>
+
+
+            <Button
+                android:layout_marginTop="16dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="ADD"
+                android:text="Добавить"
                 android:id="@+id/btn_add_to_base"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/buttonstyle"
                 />
-
     </LinearLayout>
 </RelativeLayout>

@@ -5,6 +5,12 @@
               android:layout_height="wrap_content">
 
     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="#FFE0DCDD"></LinearLayout>
+
+    <LinearLayout
         android:id="@+id/myLay"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -81,12 +87,6 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="#FFE0DCDD"></LinearLayout>
 
 
 </LinearLayout>

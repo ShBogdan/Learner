@@ -33,7 +33,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
         btn_audio.setOnClickListener(this);
 
         try {
-            word = dayLibrary.getWord();
+            word = dayLibrary.getRandomWord();
             TextView tv_english = (TextView) view.findViewById(R.id.tv_english);
             tv_english.setText(word[0]);
             TextView tv_transcription = (TextView) view.findViewById(R.id.tv_transcription);

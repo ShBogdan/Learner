@@ -48,12 +48,13 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         adapter = new MyAdapter(getActivity(), arrayList);
         listView = (ListView) view.findViewById(R.id.lvMain);
         listView.setAdapter(adapter);
+        listView.setFastScrollEnabled(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Word word = (Word) parent.getAdapter().getItem(position);
-//                меняем состояние Word и кравим view
+//                меняем состояние Word и красим view
                 if (word.box) {
                     word.box = false;
                 } else {
