@@ -9,7 +9,8 @@ import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bogdan.learner.DBHelper;
@@ -36,24 +37,27 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
     String[] randomWord;
     int randomIndexWord;
 
-    Button btn_know, btn_unknown, btn_audio;
-    TextView tv_english, tv_russian;
+    ImageButton btn_audio;
+    TextView tv_english, tv_russian, tv_transcription;
+    LinearLayout lay_known, lay_unknown;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_card_all_words, null);
         sp = getActivity().getSharedPreferences(FILE_NAME_WORDS, Context.MODE_PRIVATE);
 
-        btn_know = (Button) view.findViewById(R.id.btn_know);
-        btn_unknown = (Button) view.findViewById(R.id.btn_unknown);
-        btn_audio = (Button) view.findViewById(R.id.btn_audio);
+        lay_known = (LinearLayout) view.findViewById(R.id.lay_known);
+        lay_known.setClickable(true);
+        lay_unknown = (LinearLayout) view.findViewById(R.id.lay_unknown);
+        btn_audio = (ImageButton) view.findViewById(R.id.btn_audio);
 
-        btn_know.setOnClickListener(this);
-        btn_unknown.setOnClickListener(this);
+        lay_known.setOnClickListener(this);
+        lay_unknown.setOnClickListener(this);
         btn_audio.setOnClickListener(this);
 
         tv_english = (TextView) view.findViewById(R.id.tv_english);
         tv_russian = (TextView) view.findViewById(R.id.tv_russian);
+        tv_transcription = (TextView) view.findViewById(R.id.tv_transcription);
 
         toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
             @Override
@@ -115,11 +119,11 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_know:
+            case R.id.lay_known:
                 removeWordFromFile();
                 inflateView();
                 break;
-            case R.id.btn_unknown:
+            case R.id.lay_unknown:
                 inflateView();
                 break;
             case R.id.btn_audio:
@@ -139,6 +143,7 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
         randomWord = arrayWords.get(randomIndexWord);
         tv_english.setText(randomWord[0]);
         tv_russian.setText(randomWord[1]);
+        tv_transcription.setText(randomWord[2]);
 
     }
 

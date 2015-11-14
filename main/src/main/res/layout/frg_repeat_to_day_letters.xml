@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-                android:background="@color/my_background"
-    >
+    android:id="@+id/frg_repeat_to_day_word"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="@color/my_background">
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-        android:orientation="vertical"
-        android:gravity="right">
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/btn_audio"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/volume"
+            android:layout_marginLeft="18dp"
+            android:layout_margin="12dp"
+            />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,63 +39,146 @@
             android:layout_marginTop="18dp"
             android:layout_marginRight="18dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="."
-            android:id="@+id/tvSumTry"
-            android:layout_gravity="right|center_vertical" />
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:text="."-->
+        <!--android:id="@+id/tvSumTry"-->
+        <!--android:layout_gravity="right|center_vertical" />-->
     </LinearLayout>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Русское слово"
-            android:id="@+id/russianWord"
-            android:layout_gravity="center_horizontal" android:textSize="40sp"/>
-
 
     <LinearLayout
-            android:id="@+id/answerBtnFl"
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:layout_weight="0.3"
-        android:orientation="vertical"
-        android:gravity="center|bottom">
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffffff"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="6dp">
 
-        <TextView
-                android:id="@+id/answerBtn"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Английски ответ"
+                android:text="Русское слово"
+                android:textStyle="bold"
+                android:id="@+id/russianWord"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="35dp"
-                android:textSize="25sp" />
+                android:textSize="28sp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center|center_horizontal" />
 
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/imageButton"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/button_delete_red"
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="15dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Ответ"
+                android:id="@+id/answerBtn"
+                android:textSize="22sp"
+                android:textColor="#ff3c3c3c"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:gravity="center|center_horizontal"
+                android:layout_marginBottom="18dp" />
 
-            />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/card_shadow2"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@color/my_background">
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:background="@color/card_shadow1"
+                android:layout_height="1dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@color/my_background" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/card_shadow2" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:background="@color/my_background" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/card_shadow2"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:background="@color/card_shadow1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/card_shadow1">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:background="@color/my_background"></LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
+
     <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_gravity="top">
+        android:layout_gravity="top"
+        android:layout_marginTop="18dp">
         <LinearLayout
-                android:id="@+id/randomLettersLayout"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+            android:id="@+id/randomLettersLayout"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
         </LinearLayout>
     </LinearLayout>
 

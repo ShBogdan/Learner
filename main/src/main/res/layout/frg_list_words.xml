@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="#FFE0DCDD"></LinearLayout>
+        android:background="@color/my_background"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/myLay"
@@ -30,15 +30,15 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="englishWord"
-                        android:id="@+id/englishWord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="englishWord"
+                    android:id="@+id/englishWord"
                     android:layout_marginTop="8dp"
                     android:layout_gravity="center_vertical|top"
-                    android:textSize="20sp"
                     android:layout_marginBottom="8dp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:shadowColor="#ff1c2736"
                     android:phoneNumber="false" />
@@ -58,11 +58,11 @@
             </LinearLayout>
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="russianWord"
-                    android:id="@+id/russianWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="russianWord"
+                android:id="@+id/russianWord"
                 android:layout_marginBottom="8dp"
                 android:layout_gravity="bottom"
                 android:textSize="14sp"
@@ -75,16 +75,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="16dp">
-
-            CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Учить заново"
-                android:id="@+id/box"
-                android:layout_gravity="left|top"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp" />
-
         </LinearLayout>
     </LinearLayout>
 

@@ -157,13 +157,14 @@ public class DBHelper extends SQLiteOpenHelper {
             String transcription = cursor.getString(cursor.getColumnIndex(KEY_TRANS));
             String voicePatch = cursor.getString(cursor.getColumnIndex(KEY_TRANSLATIONS));
             Integer date = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
+            String id = cursor.getString(cursor.getColumnIndex(KEY_ROWID));
             engWords.add(english);
             if (wordsDb.containsKey(date)) {
                     /*Put in TreeMap "wordsDB" an ArrayList new String[]*/
-                wordsDb.get(date).add(new String[]{english, russian, transcription, voicePatch});
+                wordsDb.get(date).add(new String[]{english, russian, transcription, id,voicePatch});
             } else {
                 wordsDb.put(date, new ArrayList<String[]>());
-                wordsDb.get(date).add(new String[]{english, russian, transcription, voicePatch});
+                wordsDb.get(date).add(new String[]{english, russian, transcription, id,voicePatch});
             }
         }
 
@@ -208,9 +209,9 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * ИСПОЛЬЗОВАТЬ uploadDb(); после данного метода
      */
-    public void removeWordFromDb(String english) {
+    public void removeWordFromDb(String id) {
         sqLiteDatabase = dbHelper.getWritableDatabase();
-        sqLiteDatabase.execSQL("DELETE FROM " + DATABASE_TABLE + " WHERE " + KEY_ENG + " = " + "\"" + english + "\"");
+        sqLiteDatabase.execSQL("DELETE FROM " + DATABASE_TABLE + " WHERE " + KEY_ROWID + " = " + "\"" + id + "\"");
         sqLiteDatabase.close();
         uploadDb = uploadDb();
     }

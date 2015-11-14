@@ -23,14 +23,12 @@
                 android:onClick="onButtonSelected"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="15dp"
+                android:textSize="18sp"
                 android:background="@drawable/buttonstyle"
                 android:shadowColor="#000000"
                 android:shadowDx="-2"
                 android:shadowDy="2"
                 android:shadowRadius="1"
-
-
                 />
         <Button
                 android:id="@+id/btn_add"
@@ -40,7 +38,7 @@
                 android:onClick="onButtonSelected"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="15dp"
+                android:textSize="18sp"
                 android:background="@drawable/buttonstyle"
 
 

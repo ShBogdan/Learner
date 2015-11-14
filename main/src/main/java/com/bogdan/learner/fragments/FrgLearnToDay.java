@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -129,16 +127,16 @@ public class FrgLearnToDay extends Fragment {
 
         final TextView txtAnswer = (TextView) getActivity().findViewById(R.id.russianWord);
         txtAnswer.setText(russianWord.toLowerCase());
-        txtAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics()));
-        txtAnswer.setTextColor(Color.parseColor("#000000"));
+//        txtAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, getResources().getDisplayMetrics()));
+//        txtAnswer.setTextColor(Color.parseColor("#000000"));
 
         final TextView tvAnswer = (TextView) getActivity().findViewById(R.id.answerBtn);
         tvAnswer.setText("");
-        tvAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()));
+//        tvAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()));
         tvAnswer.setTag("com.bogdan.learner.fragments.answer");
 
-        final LinearLayout flAnswer = (LinearLayout) getActivity().findViewById(R.id.answerBtnFl);
-        flAnswer.setTag("com.bogdan.learner.fragments.flAnswer");
+//        final LinearLayout flAnswer = (LinearLayout) getActivity().findViewById(R.id.answerBtnFl);
+//        flAnswer.setTag("com.bogdan.learner.fragments.flAnswer");
 
         final TextView tvCheat = (TextView) getActivity().findViewById(R.id.tvCheat);
         tvCheat.setText(englishWord);
@@ -248,7 +246,7 @@ public class FrgLearnToDay extends Fragment {
             };
             tvCheat.setOnClickListener(onClickListener);
             tvAnswer.setOnClickListener(onClickListener);
-            flAnswer.setOnClickListener(onClickListener);
+//            flAnswer.setOnClickListener(onClickListener);
             btnLater.setOnClickListener(onClickListener);
 
             /*Проверяет ширину экрана и возращает количество кнопок на строчку*/
@@ -280,7 +278,7 @@ public class FrgLearnToDay extends Fragment {
         tvTransWord.setText(transWord);
         TextView tvRussianWord = (TextView) getActivity().findViewById(R.id.russianWord);
         tvRussianWord.setText(russianWord);
-        FrameLayout nextBtn = (FrameLayout) getActivity().findViewById(R.id.btn_next);
+        LinearLayout nextBtn = (LinearLayout) getActivity().findViewById(R.id.btn_next);
         final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
         tvSumWords.setText(toDayListWords.size() + "/" + wordsForFrgLetters.size());
         nextBtn.setOnClickListener(new View.OnClickListener() {

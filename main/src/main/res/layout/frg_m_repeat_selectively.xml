@@ -71,7 +71,9 @@
             android:text="Учить слова в порядке русский-ангийский"
             android:id="@+id/changeWordPlace"
             android:checked="false"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+        android:layout_marginRight="18dp"
+        android:layout_marginLeft="18dp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -94,7 +96,8 @@
                 android:text="изучено"
                 android:id="@+id/tv_learned"
                 android:layout_gravity="center_vertical"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:layout_marginLeft="18dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -103,7 +106,8 @@
                 android:text="известно ранее"
                 android:id="@+id/tv_known"
                 android:layout_gravity="bottom"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:layout_marginLeft="18dp" />
         </LinearLayout>
     </LinearLayout>
 

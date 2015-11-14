@@ -23,17 +23,20 @@
                 android:hint="Русский"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/russianTextV" android:layout_marginLeft="18dp" android:layout_marginRight="18dp"/>
+                android:id="@+id/russianTextV"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"/>
 
 
             <Button
                 android:layout_marginTop="16dp"
-                android:layout_width="100dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Добавить"
                 android:id="@+id/btn_add_to_base"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/buttonstyle"
-                />
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
     </LinearLayout>
 </RelativeLayout>

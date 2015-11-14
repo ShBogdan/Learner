@@ -16,5 +16,7 @@
     <string name="cant_be_space">Поля не могут быть пустыми или содержать пробел</string>
     <string name="answer">Ответ</string>
     <string name="next">Далее</string>
+    <string name="wasDelete">Слова удалены</string>
+    <string name="wasUpdate">Слова обновлены</string>
 
 </resources>

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-public class FrgListAllWord extends Fragment implements View.OnClickListener{
+public class FrgListAllWord extends Fragment implements View.OnClickListener {
     private final String LOG_TAG = "::::FrgListAllWord::::";
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     ArrayList<Word> arrayList;
@@ -55,12 +55,12 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Word word = (Word) parent.getAdapter().getItem(position);
 //                меняем состояние Word и красим view
-                if (word.box) {
-                    word.box = false;
+                if (word.isSelect) {
+                    word.isSelect = false;
                 } else {
-                    word.box = true;
+                    word.isSelect = true;
                 }
-                if (word.box) {
+                if (word.isSelect) {
                     view.findViewById(R.id.myLay).setBackgroundColor(Color.parseColor("#818CD6"));
                 } else {
                     view.findViewById(R.id.myLay).setBackgroundColor(Color.parseColor("#ffffff"));
@@ -72,25 +72,31 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.btn_remove){
-            for (int i = 0; i < arrayList.size(); i++){
-                if (arrayList.get(i).box)
-                    DBHelper.getDbHelper(getActivity()).removeWordFromDb(arrayList.get(i).eng);
-                arrayList.remove(i);
+//        удаляем выделенные слова
+        if (v.getId() == R.id.btn_remove) {
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (arrayList.get(i).isSelect) {
+                    DBHelper.getDbHelper(getActivity()).removeWordFromDb(arrayList.get(i).id);
+                    arrayList.remove(i);
+                    i--;
+                }
             }
-            listView.invalidate();
-            adapter = new MyAdapter(getActivity(), arrayList);
-            listView.setAdapter(adapter);
-
+            Toast.makeText(getActivity(), R.string.wasDelete, Toast.LENGTH_SHORT).show();
         }
-        if(v.getId()==R.id.btn_relearn){
-            for (int i = 0; i < arrayList.size(); i++){
-                if (arrayList.get(i).box)
+//        обновляем дату у выделенных слов
+        if (v.getId() == R.id.btn_relearn) {
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (arrayList.get(i).isSelect){
                     DBHelper.getDbHelper(getActivity()).updateWordDate(MainActivity.toDayDate, arrayList.get(i).eng);
-                arrayList.remove(i);
+                    arrayList.get(i).isSelect = false;
+                }
             }
-            Toast.makeText(getActivity(),"Слова обновлены", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.wasUpdate, Toast.LENGTH_SHORT).show();
+//            Collections.sort(arrayList);
         }
+//        перегружаем view
+        adapter.notifyDataSetChanged();
+
         DBHelper.getDbHelper(getActivity()).uploadDb();
     }
 
@@ -126,7 +132,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
             }
             word = (Word) getItem(position);
 
-            if (word.box) {
+            if (word.isSelect) {
                 convertView.findViewById(R.id.myLay).setBackgroundColor(Color.parseColor("#818CD6"));
             } else {
                 convertView.findViewById(R.id.myLay).setBackgroundColor(Color.parseColor("#ffffff"));
@@ -145,14 +151,16 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         String eng;
         String rus;
         String trans;
-        boolean box;
+        String id;
+        boolean isSelect;
 
 
-        public Word(String eng, String rus, String trans, boolean box) {
+        public Word(String eng, String rus, String trans, boolean isSelect, String id) {
             this.eng = eng;
             this.rus = rus;
-            this.box = box;
+            this.isSelect = isSelect;
             this.trans = trans;
+            this.id = id;
 
         }
 
@@ -171,11 +179,12 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
             if (el.getKey() != 0 && el.getKey() != 1) {
                 for (String[] word : el.getValue()) {
-                    arrayList.add(new Word(word[0], word[1], word[2], false));
+                    arrayList.add(new Word(word[0], word[1], word[2], false, word[3]));
                     Log.d(LOG_TAG, el.getKey().toString());
                     Log.d(LOG_TAG, word[0]);
                 }
             }
+            Collections.reverse(arrayList);
         }
 //        В сулчайнов порядке "random"
         if (setting.equals("random")) {
