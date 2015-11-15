@@ -86,15 +86,22 @@ public class DBHelper extends SQLiteOpenHelper {
 //заполняем списки
         uploadDb = uploadDb();
         listUnknownWords = uploadDb.get(1);
-        listKnownWords = uploadDb.get(0);
+
+        if(uploadDb.get(0) == null){
+            listKnownWords = new ArrayList<>();
+        }else {
+            listKnownWords = uploadDb.get(0);
+        }
+
+
         learnedWords = new ArrayList<String[]>();
-//        Log.d(LOG_TAG, "learnedWords=" + learnedWords.size());
         for (Map.Entry<Integer, ArrayList<String[]>> el : uploadDb.entrySet()) {
             if (el.getKey() != 0 && el.getKey() != 1) {
                 for (String[] word : el.getValue())
                     learnedWords.add(word);
             }
         }
+        Log.d(LOG_TAG, "learnedWords=" + learnedWords.size());
 
 
     }

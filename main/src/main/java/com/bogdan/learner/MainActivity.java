@@ -28,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 import java.util.TreeMap;
 
 
@@ -70,7 +69,7 @@ public class MainActivity extends Activity implements FragmentListener {
         fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
         fTrans.commit();
 
-        startNotify();
+//        startNotify();
     }
 
     @Override
@@ -111,21 +110,15 @@ public class MainActivity extends Activity implements FragmentListener {
                 break;
 
             case R.id.btn_repeat:
-                Log.i(LOG_TAG, dbHelper.uploadDb.size() + "");               /*ПОЧЕМУ НЕ РАБОТАЕТ локальный uploadDb ??????????*/
-                boolean isData = false;
-                for (Map.Entry<Integer, ArrayList<String[]>> el : dbHelper.uploadDb.entrySet()) {
-                    if (el.getKey() > 1) {
-                        fTrans.replace(R.id.fragment_container, frgRepeatMenu);
-                        fTrans.addToBackStack("frgRepeatMenu");
-                        isData = true;
-                        break;
-                    }
-                }
-                if (!isData) {
+//                Log.i(LOG_TAG, dbHelper.uploadDb.size() + "");               /*ПОЧЕМУ НЕ РАБОТАЕТ локальный uploadDb ??????????*/
+//                Log.i(LOG_TAG, dbHelper.learnedWords.size() + "");               /*ПОЧЕМУ НЕ РАБОТАЕТ локальный uploadDb ??????????*/
+                if (dbHelper.learnedWords.size() >= 1) {
+                    fTrans.replace(R.id.fragment_container, frgRepeatMenu);
+                    fTrans.addToBackStack("frgRepeatMenu");
+                } else {
                     Toast.makeText(this, R.string.no_words, Toast.LENGTH_SHORT).show();
                 }
                 break;
-
         }
         fTrans.commit();
     }

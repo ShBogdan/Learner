@@ -12,43 +12,53 @@
         android:layout_height="60dp"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:id="@+id/btn_audio"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/volume"
-            android:layout_marginLeft="18dp"
-            android:layout_margin="12dp"
-            />
-
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"></LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="10/10"
-            android:id="@+id/tvSumWords"
-            android:layout_gravity="right|top"
-            android:textSize="20dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginRight="18dp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|center_vertical|center_horizontal"
+            android:layout_weight="0.5">
 
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
-        <!--android:text="."-->
-        <!--android:id="@+id/tvSumTry"-->
-        <!--android:layout_gravity="right|center_vertical" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="ответ"
+                android:id="@+id/tv_correct_answer"
+                android:tag="tv_correct_answer"
+                android:layout_gravity="center_horizontal|top"
+                android:textSize="20sp"
+                android:layout_marginTop="18dp"
+                android:textColor="@color/my_background"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:text="0"
+                android:id="@+id/tvSumWords"
+                android:textSize="20sp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="18dp"
+                android:gravity="right" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/btn_audio"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,8 +94,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Ответ"
-                android:id="@+id/answerBtn"
+                android:text=""
+                android:id="@+id/tv_input"
                 android:textSize="22sp"
                 android:textColor="#ff3c3c3c"
                 android:layout_gravity="center_horizontal"
@@ -168,9 +178,8 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_gravity="top"
         android:layout_marginTop="18dp">
         <LinearLayout
@@ -179,17 +188,65 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal">
+            <LinearLayout
+                android:id="@+id/linearLayoutInnerButtonLine_1"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal">
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayoutInnerButtonLine_2"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal">
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayoutInnerButtonLine_3"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal">
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayoutInnerButtonLine_4"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal">
+            </LinearLayout>
+
+
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ответ"
-        android:id="@+id/tvCheat"
-        android:layout_gravity="center_horizontal|top"
-        android:enabled="false"
-        android:textSize="25dp"
-        android:textColor="@color/my_background"
-        android:layout_marginBottom="18dp" />
+    <LinearLayout
+        android:id="@+id/lay_wipe"
+        android:tag="lay_wipe"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:enabled="false"
+            android:layout_marginBottom="18dp"
+            android:text="Стереть"
+            android:gravity="bottom|right"
+            android:textSize="26sp"
+            android:textColor="@drawable/tv_btn_style"
+            android:shadowColor="@color/text_shadow"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            />
+    </LinearLayout>
+
 </LinearLayout>

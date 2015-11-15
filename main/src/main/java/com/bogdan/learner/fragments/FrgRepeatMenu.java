@@ -37,8 +37,8 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
 
         tv_learned = (TextView)view.findViewById(R.id.tv_learned);
         tv_learned.setText("Вы изучили: " + DBHelper.getDbHelper(getActivity()).learnedWords.size() + " новых слов");
-        tv_know = (TextView)view.findViewById(R.id.tv_known);
-        tv_know.setText("Вы уже знали: " + DBHelper.getDbHelper(getActivity()).listKnownWords.size() + " слов");
+        tv_know    = (TextView)view.findViewById(R.id.tv_known);
+        tv_know.setText("Вы уже знали: " +  DBHelper.getDbHelper(getActivity()).listKnownWords.size() + " слов");
 
         btn_repeat_day1 = (Button) view.findViewById(R.id.btn_repeat_day1);
         btn_repeat_day1.setOnClickListener(this);

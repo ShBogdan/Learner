@@ -26,6 +26,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
     private DBHelper dbHelper;
     private EditText russianWord;
     private String transcription;
+    private String takenWord;
     private AutoCompleteTextView englishWord;
     private Button btn_addToBase;
 
@@ -40,45 +41,42 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
         btn_addToBase = (Button) view.findViewById(R.id.btn_add_to_base);
         btn_addToBase.setOnClickListener(this);
 
+        // авто заполнение полей если есть слово в базе
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, sample);
         englishWord.setAdapter(adapter);
         englishWord.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 russianWord.setText(dbHelper.getWord(parent.getItemAtPosition(position).toString())[1]);
+                takenWord = dbHelper.getWord(parent.getItemAtPosition(position).toString())[0];
                 transcription = dbHelper.getWord(parent.getItemAtPosition(position).toString())[2];
-                Toast.makeText(getActivity(), transcription, Toast.LENGTH_SHORT).show();
-
             }
         });
-
 
         return view;
     }
 
     public void onClick(View v) {
-        String[] word = dbHelper.getWord(englishWord.getText().toString());
-        switch (v.getId()) {
-            case R.id.btn_add_to_base:
-                if (TextUtils.isEmpty(englishWord.getText()) || englishWord.getText().toString().contains(" ")) {
-                    englishWord.setError(getResources().getString(R.string.cant_be_space));
-
-                } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ") == 0) {
-                    russianWord.setError(getResources().getString(R.string.cant_be_space));
-                } else {
-                    dbHelper.insertWord(
-                            englishWord.getText().toString(),
-                            russianWord.getText().toString(),
-                            transcription,
-                            MainActivity.toDayDate);
-                    hideKeyboard();
-                    Toast.makeText(getActivity(), "\"" + englishWord.getText().toString() + "\" " + getResources().getString(R.string.added_successfully), Toast.LENGTH_SHORT).show();
-                    englishWord.setText("");
-                    russianWord.setText("");
-                    transcription = "";
-
-                }
-                break;
+        // проверяем на наличе заволненых полей и отсутствие пробелов
+        if (TextUtils.isEmpty(englishWord.getText()) || englishWord.getText().toString().contains(" ")) {
+            englishWord.setError(getResources().getString(R.string.cant_be_space));
+        } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ") == 0) {
+            russianWord.setError(getResources().getString(R.string.cant_be_space));
+        } else {
+        // если слово пользователя или менялось то транскипции не будет
+            if(!(englishWord.getText().toString()).equals(takenWord)){
+                transcription = "";
+            }
+            dbHelper.insertWord(
+                    englishWord.getText().toString(),
+                    russianWord.getText().toString(),
+                    transcription,
+                    MainActivity.toDayDate);
+            hideKeyboard();
+            Toast.makeText(getActivity(), "\"" + englishWord.getText().toString() + "\" " + getResources().getString(R.string.added_successfully), Toast.LENGTH_SHORT).show();
+            englishWord.setText("");
+            russianWord.setText("");
+            transcription = "";
         }
     }
 

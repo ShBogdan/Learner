@@ -9,7 +9,6 @@ import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -37,8 +35,8 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
     String[] randomWord;
     int randomIndexWord;
 
-    ImageButton btn_audio;
-    TextView tv_english, tv_russian, tv_transcription;
+    LinearLayout btn_audio;
+    TextView tv_english, tv_russian, tv_transcription, tv_sumWords;
     LinearLayout lay_known, lay_unknown;
 
     @Override
@@ -49,7 +47,7 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
         lay_known = (LinearLayout) view.findViewById(R.id.lay_known);
         lay_known.setClickable(true);
         lay_unknown = (LinearLayout) view.findViewById(R.id.lay_unknown);
-        btn_audio = (ImageButton) view.findViewById(R.id.btn_audio);
+        btn_audio = (LinearLayout) view.findViewById(R.id.btn_audio);
 
         lay_known.setOnClickListener(this);
         lay_unknown.setOnClickListener(this);
@@ -58,6 +56,7 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
         tv_english = (TextView) view.findViewById(R.id.tv_english);
         tv_russian = (TextView) view.findViewById(R.id.tv_russian);
         tv_transcription = (TextView) view.findViewById(R.id.tv_transcription);
+        tv_sumWords = (TextView) view.findViewById(R.id.tv_sumWords);
 
         toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
             @Override
@@ -78,12 +77,8 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
 
     void createFile() {
         wordsInToFile = new HashSet<>();
-        for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
-            if (el.getKey() != 0 && el.getKey() != 1) {
-                for (String[] word : el.getValue()) {
-                    wordsInToFile.add(Arrays.toString(word));
-                }
-            }
+        for (String[] el : DBHelper.getDbHelper(getActivity()).learnedWords) {
+            wordsInToFile.add(Arrays.toString(el));
         }
     }
 
@@ -144,6 +139,7 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
         tv_english.setText(randomWord[0]);
         tv_russian.setText(randomWord[1]);
         tv_transcription.setText(randomWord[2]);
+        tv_sumWords.setText(arrayWords.size() + "/" + DBHelper.getDbHelper(getActivity()).learnedWords.size());
 
     }
 

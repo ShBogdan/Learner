@@ -7,10 +7,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.tts.TextToSpeech;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +18,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +27,7 @@ import com.bogdan.learner.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 public class FrgLearnToDay extends Fragment {
     public final String LOG_TAG = ":::::FrgLearnToDay:::::";
@@ -42,8 +42,9 @@ public class FrgLearnToDay extends Fragment {
     String russianWord;
     String transWord;
     int countAttempt;
-    int count;
-
+    int count; // для чередования фрагмента карточа - набор слова
+    TextToSpeech toSpeech;
+    LinearLayout btn_audio;
     Handler handler;
     boolean onCreate;
     boolean onResume;
@@ -57,7 +58,6 @@ public class FrgLearnToDay extends Fragment {
         toDayListWords = DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate);
         onCreate = true;
         onResume = false;
-
 
         if (wordsForFrgLetters == null || wordsForFrgLetters.size() == 0) {
             Collections.shuffle(toDayListWords);
@@ -81,8 +81,6 @@ public class FrgLearnToDay extends Fragment {
                 wordsForFrgRepeat.add(wordsForFrgLetters.get(0));
                 count = 1;
             }
-            ;
-
         }
         Log.d(LOG_TAG, "wordsForFrgRepeat  " + wordsForFrgRepeat.size());
 
@@ -93,6 +91,23 @@ public class FrgLearnToDay extends Fragment {
             view = inflater.inflate(R.layout.frg_repeat_to_day_letters, null);
             returnRandomWord(wordsForFrgLetters);
         }
+
+        btn_audio = (LinearLayout) view.findViewById(R.id.btn_audio);
+        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status!=TextToSpeech.ERROR){
+                    toSpeech.setLanguage(Locale.ENGLISH);
+                }
+            }
+        });
+        btn_audio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toSpeech.speak(englishWord, TextToSpeech.QUEUE_ADD, null);
+            }
+        });
+
         Log.d(LOG_TAG, "OnCreate " + wordsForFrgRepeat.size());
         Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.size());
         Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[0]);
@@ -111,42 +126,32 @@ public class FrgLearnToDay extends Fragment {
         handler = new Handler();
         /*Создаем Макет*/
         LinearLayout linearLayoutMain = (LinearLayout) getActivity().findViewById(R.id.randomLettersLayout);
-        LinearLayout linearLayoutInnerButtonLine_1 = new LinearLayout(getActivity());
-        linearLayoutInnerButtonLine_1.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout linearLayoutInnerButtonLine_2 = new LinearLayout(getActivity());
-        linearLayoutInnerButtonLine_2.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout linearLayoutInnerButtonLine_3 = new LinearLayout(getActivity());
-        linearLayoutInnerButtonLine_3.setOrientation(LinearLayout.HORIZONTAL);
-        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER;
+        LinearLayout linearLayoutInnerButtonLine_1 = (LinearLayout) getActivity().findViewById(R.id.linearLayoutInnerButtonLine_1);
+        LinearLayout linearLayoutInnerButtonLine_2 = (LinearLayout) getActivity().findViewById(R.id.linearLayoutInnerButtonLine_2);
+        LinearLayout linearLayoutInnerButtonLine_3 = (LinearLayout) getActivity().findViewById(R.id.linearLayoutInnerButtonLine_3);
+        LinearLayout linearLayoutInnerButtonLine_4 = (LinearLayout) getActivity().findViewById(R.id.linearLayoutInnerButtonLine_4);
 
         /*Создаем кнопки*/
         ViewGroup.LayoutParams btnViewParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         btnViewParams.width = buttonSize;
         btnViewParams.height = buttonSize;
 
-        final TextView txtAnswer = (TextView) getActivity().findViewById(R.id.russianWord);
-        txtAnswer.setText(russianWord.toLowerCase());
-//        txtAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, getResources().getDisplayMetrics()));
-//        txtAnswer.setTextColor(Color.parseColor("#000000"));
+        /*заполяем русское слово*/
+        final TextView tvRuss = (TextView) getActivity().findViewById(R.id.russianWord);
+        tvRuss.setText(russianWord.toLowerCase());
 
-        final TextView tvAnswer = (TextView) getActivity().findViewById(R.id.answerBtn);
-        tvAnswer.setText("");
-//        tvAnswer.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()));
-        tvAnswer.setTag("com.bogdan.learner.fragments.answer");
+        final TextView tvInput = (TextView) getActivity().findViewById(R.id.tv_input);
 
-//        final LinearLayout flAnswer = (LinearLayout) getActivity().findViewById(R.id.answerBtnFl);
-//        flAnswer.setTag("com.bogdan.learner.fragments.flAnswer");
+        final LinearLayout layWipe = (LinearLayout) getActivity().findViewById(R.id.lay_wipe);
 
-        final TextView tvCheat = (TextView) getActivity().findViewById(R.id.tvCheat);
-        tvCheat.setText(englishWord);
-        tvCheat.setEnabled(false);
-        tvCheat.setTag("tvCheat");
+        final TextView tvCorrectAnswer = (TextView) getActivity().findViewById(R.id.tv_correct_answer);
+        tvCorrectAnswer.setText(englishWord);
+//        tvCorrectAnswer.setEnabled(false);
+//        tvCorrectAnswer.setTag("tvCheat");
 
         final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
-        tvSumWords.setText(toDayListWords.size() + "/" + wordsForFrgLetters.size());
+        tvSumWords.setText(wordsForFrgLetters.size() + "/" + toDayListWords.size());
 
-//        final TextView tvSumTry = (TextView) getActivity().findViewById(R.id.tvSumTry);
 
         int countLetter = 0;
         final ArrayList<String[]> deletedBtn = new ArrayList<>();
@@ -166,13 +171,11 @@ public class FrgLearnToDay extends Fragment {
                         btnLater.setEnabled(false);
                         deletedBtn.add(new String[]{letter, String.valueOf((int) btnLater.getId())});
                         answer.append(letter);
-                        tvAnswer.setText(answer);
+                        tvInput.setText(answer);
 
-                        /*Если написано верно сросаем следующее слово*/
+                        /*Если написано верно бросаем следующее слово*/
                         if (englishWord.equals(answer.toString())) {
                             Toast.makeText(getActivity(), "Правильно", Toast.LENGTH_SHORT).show();
-                            tvAnswer.setEnabled(false);
-                            tvAnswer.setTextColor(Color.parseColor("#000000"));
                             count--;
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -197,29 +200,28 @@ public class FrgLearnToDay extends Fragment {
                             }, 1000);
                         }
 
-                        /*Если не правильн то пишем красным и даем три попытки*/
+                        /*Если не правильно то пишем красным и даем три попытки*/
                         if (englishWord.length() == answer.length() && !englishWord.equals(answer.toString())) {
-                            tvAnswer.setTextColor(Color.parseColor("#E63434"));
+                            tvInput.setTextColor(Color.parseColor("#E63434"));
                             countAttempt--;
                             Log.d(LOG_TAG, "Попытки:  " + countAttempt);
                             if (countAttempt == 0) {
-                                ((TextView) getActivity().findViewById(R.id.tvCheat)).setTextColor(Color.RED);
+                                ((TextView) getActivity().findViewById(R.id.tv_correct_answer)).setTextColor(Color.RED);
                                 countAttempt = 3;
                             }
                         }
                     }
-
                     /*вернуть кнопку*/
-                    if (v.getTag() == "com.bogdan.learner.fragments.flAnswer" || v.getTag() == "com.bogdan.learner.fragments.answer" && answer.length() >= 1) {
+                    if (v.getId() == R.id.lay_wipe && answer.length() >= 1) {
                         if (englishWord.length() == answer.length()) {
-                            tvAnswer.setTextColor(Color.parseColor("#000000"));
+                            tvInput.setTextColor(Color.parseColor("#000000"));
                         }
                         if (answer.length() >= 2) {
                             String returnLetter = String.valueOf(answer.substring(answer.length() - 1));
                             lettersEngWord.add(returnLetter);
                             Log.d(LOG_TAG, "Вернули букву: " + returnLetter);
                             answer.delete(answer.length() - 1, answer.length());
-                            tvAnswer.setText(answer.toString());
+                            tvInput.setText(answer.toString());
                             for (String[] s : deletedBtn) {
                                 if (s[0].equals(returnLetter)) {
                                     getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1])).setEnabled(true);
@@ -237,16 +239,14 @@ public class FrgLearnToDay extends Fragment {
                                 }
                             }
                             answer.setLength(0);
-                            tvAnswer.setText(answer.toString());
+                            tvInput.setText(answer.toString());
                         }
                     }
 
                 }
-
             };
-            tvCheat.setOnClickListener(onClickListener);
-            tvAnswer.setOnClickListener(onClickListener);
-//            flAnswer.setOnClickListener(onClickListener);
+            tvCorrectAnswer.setOnClickListener(onClickListener);
+            layWipe.setOnClickListener(onClickListener);
             btnLater.setOnClickListener(onClickListener);
 
             /*Проверяет ширину экрана и возращает количество кнопок на строчку*/
@@ -261,17 +261,17 @@ public class FrgLearnToDay extends Fragment {
             if (countLetter >= buttonOnDisplayWidth && countLetter < buttonOnDisplayWidth * 2) {
                 linearLayoutInnerButtonLine_2.addView(btnLater, btnViewParams);
             }
-            if (countLetter >= buttonOnDisplayWidth * 2) {
+            if (countLetter >= buttonOnDisplayWidth * 2 && countLetter < buttonOnDisplayWidth * 3) {
                 linearLayoutInnerButtonLine_3.addView(btnLater, btnViewParams);
             }
+            if (countLetter >= buttonOnDisplayWidth * 3) {
+                linearLayoutInnerButtonLine_4.addView(btnLater, btnViewParams);
+            }
         }
-        linearLayoutMain.addView(linearLayoutInnerButtonLine_1, layoutParams);
-        linearLayoutMain.addView(linearLayoutInnerButtonLine_2, layoutParams);
-        linearLayoutMain.addView(linearLayoutInnerButtonLine_3, layoutParams);
-
     }
 
     protected void drawTheWord() {
+
         TextView tvEnglishWord = (TextView) getActivity().findViewById(R.id.englishWord);
         tvEnglishWord.setText(englishWord);
         TextView tvTransWord = (TextView) getActivity().findViewById(R.id.transWord);
@@ -280,7 +280,8 @@ public class FrgLearnToDay extends Fragment {
         tvRussianWord.setText(russianWord);
         LinearLayout nextBtn = (LinearLayout) getActivity().findViewById(R.id.btn_next);
         final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
-        tvSumWords.setText(toDayListWords.size() + "/" + wordsForFrgLetters.size());
+        tvSumWords.setText(wordsForFrgLetters.size() + "/" + toDayListWords.size());
+
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,8 +289,7 @@ public class FrgLearnToDay extends Fragment {
                 reloadFragment();
             }
         });
-
-    }
+   }
 
     /**
      * Перемешивает!!! и возвращает случайное слово из сегоднешнего списка
