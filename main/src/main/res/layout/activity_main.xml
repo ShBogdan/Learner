@@ -47,7 +47,15 @@
                 android:shadowDy="2"
                 android:shadowRadius="1"
                 />
+
     </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/drop_shadow"></LinearLayout>
 
     <FrameLayout
             android:id="@+id/fragment_container"
@@ -55,4 +63,5 @@
             android:layout_height="match_parent"
             android:background="#fffaf8ff">
     </FrameLayout>
+
 </LinearLayout>
