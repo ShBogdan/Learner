@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
 
+
 public class MainActivity extends Activity implements FragmentListener {
     private final String LOG_TAG = "MainActivity";
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";

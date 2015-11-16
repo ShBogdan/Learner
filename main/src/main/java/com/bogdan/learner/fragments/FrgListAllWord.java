@@ -76,7 +76,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         if (v.getId() == R.id.btn_remove) {
             for (int i = 0; i < arrayList.size(); i++) {
                 if (arrayList.get(i).isSelect) {
-                    DBHelper.getDbHelper(getActivity()).removeWordFromDb(arrayList.get(i).id);
+                    DBHelper.getDbHelper(getActivity()).removeWordFromDb(arrayList.get(i).id, arrayList.get(i).date, arrayList.get(i).eng, arrayList.get(i).rus);
                     arrayList.remove(i);
                     i--;
                 }
@@ -153,14 +153,16 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         String trans;
         String id;
         boolean isSelect;
+        Integer date;
 
 
-        public Word(String eng, String rus, String trans, boolean isSelect, String id) {
+        public Word(String eng, String rus, String trans, boolean isSelect, String id, Integer date) {
             this.eng = eng;
             this.rus = rus;
             this.isSelect = isSelect;
             this.trans = trans;
             this.id = id;
+            this.date = date;
 
         }
 
@@ -179,7 +181,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
             if (el.getKey() != 0 && el.getKey() != 1) {
                 for (String[] word : el.getValue()) {
-                    arrayList.add(new Word(word[0], word[1], word[2], false, word[3]));
+                    arrayList.add(new Word(word[0], word[1], word[2], false, word[3], el.getKey()));
                     Log.d(LOG_TAG, el.getKey().toString());
                     Log.d(LOG_TAG, word[0]);
                 }
@@ -199,7 +201,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
 //    @Override
 //    public void onResume() {
 //        super.onResume();
-//        ((MyAdapter) getListAdapter()).notifyDataSetChanged();
+//        fillDate();
 //    }
 
 }
