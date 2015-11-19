@@ -193,11 +193,13 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(DATABASE_TABLE, null, contentValues);
         sqLiteDatabase.close();
         //добавляем слово в Лист изученных
-        learnedWords.add(new String[]{english, russian, transcription});
+        learnedWords.add(new String[]{english, russian, transcription, String.valueOf(learnedWords.size() + 1)});
         //добавляем слово в загруженную базу
-        uploadDb.get(Integer.parseInt(date)).add(new String[]{english, russian, transcription});
+        uploadDb.get(Integer.parseInt(date)).add(new String[]{english, russian, transcription, String.valueOf(learnedWords.size() + 1)});
 //        uploadDb = uploadDb();
     }
+
+
 
     /**
      * Обновляет дату изучения слова в таблице.
