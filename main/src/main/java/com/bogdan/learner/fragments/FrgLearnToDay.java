@@ -152,7 +152,7 @@ public class FrgLearnToDay extends Fragment {
         final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
         tvSumWords.setText(wordsForFrgLetters.size() + "/" + toDayListWords.size());
 
-
+        int buttonOnDisplayWidth = 0;
         int countLetter = 0;
         final ArrayList<String[]> deletedBtn = new ArrayList<>();
         for (String x : lettersEngWord) {
@@ -253,7 +253,7 @@ public class FrgLearnToDay extends Fragment {
             Display display = getActivity().getWindowManager().getDefaultDisplay();
             DisplayMetrics metricsB = new DisplayMetrics();
             display.getMetrics(metricsB);
-            int buttonOnDisplayWidth = metricsB.widthPixels / buttonSize;
+            buttonOnDisplayWidth = metricsB.widthPixels / buttonSize;
 
             if (countLetter < buttonOnDisplayWidth) {
                 linearLayoutInnerButtonLine_1.addView(btnLater, btnViewParams);
@@ -268,6 +268,15 @@ public class FrgLearnToDay extends Fragment {
                 linearLayoutInnerButtonLine_4.addView(btnLater, btnViewParams);
             }
         }
+        /*если буквы не влазят то слово пропускаем*/
+        if(countLetter/buttonOnDisplayWidth>4){
+            count--;
+            if (wordsForFrgLetters.size() > 0) {
+                wordsForFrgLetters.remove(0);
+            }
+            reloadFragment();
+        }
+
     }
 
     protected void drawTheWord() {
@@ -289,7 +298,7 @@ public class FrgLearnToDay extends Fragment {
                 reloadFragment();
             }
         });
-   }
+    }
 
     /**
      * Перемешивает!!! и возвращает случайное слово из сегоднешнего списка

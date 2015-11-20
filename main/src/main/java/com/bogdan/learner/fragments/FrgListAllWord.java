@@ -65,6 +65,8 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
                 } else {
                     view.findViewById(R.id.myLay).setBackgroundColor(Color.parseColor("#ffffff"));
                 }
+                Log.d(LOG_TAG, "Нажато  с word " + word.id);
+
             }
         });
         return view;
@@ -72,16 +74,17 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        boolean isChange = false;
 //        удаляем выделенные слова
         if (v.getId() == R.id.btn_remove) {
             for (int i = 0; i < arrayList.size(); i++) {
                 if (arrayList.get(i).isSelect) {
-                    DBHelper.getDbHelper(getActivity()).removeWordFromDb(arrayList.get(i).id, arrayList.get(i).date, arrayList.get(i).eng, arrayList.get(i).rus);
+                    DBHelper.getDbHelper(getActivity()).removeWordFromDb(arrayList.get(i).id);
                     arrayList.remove(i);
                     i--;
+                    isChange = true;
                 }
             }
-            Toast.makeText(getActivity(), R.string.wasDelete, Toast.LENGTH_SHORT).show();
         }
 //        обновляем дату у выделенных слов
         if (v.getId() == R.id.btn_relearn) {
@@ -89,15 +92,20 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
                 if (arrayList.get(i).isSelect){
                     DBHelper.getDbHelper(getActivity()).updateWordDate(MainActivity.toDayDate, arrayList.get(i).eng);
                     arrayList.get(i).isSelect = false;
+                    isChange = true;
                 }
             }
-            Toast.makeText(getActivity(), R.string.wasUpdate, Toast.LENGTH_SHORT).show();
-//            Collections.sort(arrayList);
         }
-//        перегружаем view
-        adapter.notifyDataSetChanged();
 
-        DBHelper.getDbHelper(getActivity()).uploadDb();
+        if(isChange) {
+            Toast.makeText(getActivity(), R.string.wasUpdate, Toast.LENGTH_SHORT).show();
+            DBHelper.getDbHelper(getActivity()).uploadDb();
+            //        перегружаем view
+            adapter.notifyDataSetChanged();
+        }else
+            Toast.makeText(getActivity(), R.string.nothing_to_update, Toast.LENGTH_SHORT).show();
+
+
     }
 
     class MyAdapter extends BaseAdapter {
@@ -153,16 +161,14 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         String trans;
         String id;
         boolean isSelect;
-        Integer date;
 
 
-        public Word(String eng, String rus, String trans, boolean isSelect, String id, Integer date) {
+        public Word(String eng, String rus, String trans, boolean isSelect, String id) {
             this.eng = eng;
             this.rus = rus;
             this.isSelect = isSelect;
             this.trans = trans;
             this.id = id;
-            this.date = date;
 
         }
 
@@ -177,11 +183,12 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
     void fillDate() {
         arrayList = new ArrayList<>();
         String setting = sp.getString("how_to_repeat", null);
+        boolean add_know_words = sp.getBoolean("add_know_words", false);
 //        по дате изучения "date"
         for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
-            if (el.getKey() != 0 && el.getKey() != 1) {
+            if ((el.getKey() != 0 || add_know_words) && el.getKey() != 1) {
                 for (String[] word : el.getValue()) {
-                    arrayList.add(new Word(word[0], word[1], word[2], false, word[3], el.getKey()));
+                    arrayList.add(new Word(word[0], word[1], word[2], false, word[3]));
                     Log.d(LOG_TAG, el.getKey().toString());
                     Log.d(LOG_TAG, word[0]);
                 }
@@ -197,11 +204,4 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
             Collections.sort(arrayList);
         }
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        fillDate();
-//    }
-
 }

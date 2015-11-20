@@ -9,8 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.bogdan.learner.R;
 
@@ -20,8 +21,9 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     Button btnCards, btnList;
-    RadioGroup radioGroup;
+//    RadioGroup radioGroup;
     RadioButton radioRandom, radioDate, radioAlphabet;
+    CheckBox cbKnowWords;
     View.OnClickListener radioListener;
 
     @Override
@@ -40,6 +42,7 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
         radioRandom = (RadioButton) view.findViewById(R.id.radioRandom);
         radioDate = (RadioButton) view.findViewById(R.id.radioDate);
         radioAlphabet = (RadioButton) view.findViewById(R.id.radioAlphabet);
+        cbKnowWords = (CheckBox) view.findViewById(R.id.cb_know_word);
 
 //        при первом запуске приложения задаем рандом
         if(!sp.contains("how_to_repeat")){
@@ -54,9 +57,31 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
                 radioAlphabet.toggle();
         }
 
+
+
+        if(!sp.contains("add_know_words")) {
+            editor.putBoolean("add_know_words", false).apply();
+        }
+        if(sp.getBoolean("add_know_words", false)){
+        }
+        if(sp.getBoolean("add_know_words", true)){
+            cbKnowWords.toggle();
+        }
+
+        cbKnowWords.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(cbKnowWords.isChecked()){
+                    editor.putBoolean("add_know_words", true).apply();
+                } else
+                    editor.putBoolean("add_know_words", false).apply();
+            }
+        });
+
         radioRandom.setOnClickListener(onClickRadio());
         radioDate.setOnClickListener(onClickRadio());
         radioAlphabet.setOnClickListener(onClickRadio());
+
 
 
         return view;

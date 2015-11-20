@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.R;
@@ -133,14 +134,18 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
             writeFile();
             readFile();
         }
-        Random random = new Random();
-        randomIndexWord = random.nextInt((arrayWords.size()));
-        randomWord = arrayWords.get(randomIndexWord);
-        tv_english.setText(randomWord[0]);
-        tv_russian.setText(randomWord[1]);
-        tv_transcription.setText(randomWord[2]);
-        tv_sumWords.setText(arrayWords.size() + "/" + DBHelper.getDbHelper(getActivity()).learnedWords.size());
-
+        if (arrayWords.size() != 0){
+            Random random = new Random();
+            randomIndexWord = random.nextInt((arrayWords.size()));
+            randomWord = arrayWords.get(randomIndexWord);
+            tv_english.setText(randomWord[0]);
+            tv_russian.setText(randomWord[1]);
+            tv_transcription.setText(randomWord[2]);
+            tv_sumWords.setText(arrayWords.size() + "/" + DBHelper.getDbHelper(getActivity()).learnedWords.size());
+        } else {
+            getFragmentManager().popBackStack();
+            Toast.makeText(getActivity(), R.string.no_words, Toast.LENGTH_SHORT).show();
+        }
     }
 
 

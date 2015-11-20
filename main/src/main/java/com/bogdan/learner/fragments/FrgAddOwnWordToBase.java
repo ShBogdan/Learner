@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,14 @@ import com.bogdan.learner.R;
 import java.util.ArrayList;
 
 public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListener {
-    private final String LOG_TAG = ":::::FrgAddOwnWordToBase::::";
+    private final String LOG_TAG = "FrgAddOwnWordToBase";
     private DBHelper dbHelper;
     private EditText russianWord;
     private String transcription;
     private String takenWord;
     private AutoCompleteTextView englishWord;
     private Button btn_addToBase;
+    private boolean isChange;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
             englishWord.setText("");
             russianWord.setText("");
             transcription = "";
+            isChange = true;
         }
     }
 
@@ -87,5 +90,15 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(isChange){
+            DBHelper.getDbHelper(getActivity()).uploadDb();
+            Log.d(LOG_TAG, "База перегруженна");
+        }
+        isChange = false;
     }
 }
