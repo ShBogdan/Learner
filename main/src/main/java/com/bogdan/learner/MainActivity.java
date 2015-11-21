@@ -63,13 +63,11 @@ public class MainActivity extends Activity implements FragmentListener {
         frgAddOwnWordToBase = new FrgAddOwnWordToBase();
 
 
-
-
         fTrans = getFragmentManager().beginTransaction();
         fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
         fTrans.commit();
 
-//        startNotify();
+        restartNotify();
     }
 
     @Override
@@ -85,10 +83,10 @@ public class MainActivity extends Activity implements FragmentListener {
                 break;
 
             case R.id.btn_add:
-                FrgAddOwnWordToBase f = (FrgAddOwnWordToBase)getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
-                if( f !=null && f.isVisible()){
+                FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
+                if (f != null && f.isVisible()) {
                     //do nothing
-                }else {
+                } else {
                     fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase, "com.bogdan.learner.fragments.frgAddOwnWordToBase");
                     fTrans.addToBackStack("frgAddOwnWordToBase");
                 }
@@ -138,7 +136,7 @@ public class MainActivity extends Activity implements FragmentListener {
                             finish();
                         }
                     }).show();
-        }else {
+        } else {
             super.onBackPressed();
         }
 
@@ -152,53 +150,23 @@ public class MainActivity extends Activity implements FragmentListener {
         }
     }
 
-    protected  void startNotify(){
-        Intent nf = new Intent(this, NotifyService.class);
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 0, nf, 0);
 
+    private void restartNotify() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 00);
-        calendar.set(Calendar.SECOND, 00);
+        calendar.set(Calendar.HOUR_OF_DAY, 18); // For 1 PM or 2 PM
+        calendar.set(Calendar.MINUTE, 25);
+        calendar.set(Calendar.SECOND, 0);
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24*60*60*1000, pendingIntent);
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, MyBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
+// На случай, если мы ранее запускали активити, а потом поменяли время,
+// откажемся от уведомления
+        am.cancel(pendingIntent);
+// Устанавливаем разовое напоминание
+//        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(LOG_TAG, "onStart");
-        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-        editor.putString("kill", "yes");
-        editor.apply();
-
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        String flag = preferences.getString("kill", null);
-        if(flag!=null && flag.equals("yes")){
-            Log.d(LOG_TAG, "was onDestroy()");
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(LOG_TAG, "onResume");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(LOG_TAG, "onStop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy");
-        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-        editor.putString("kill", "yes");
-        editor.apply();
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }

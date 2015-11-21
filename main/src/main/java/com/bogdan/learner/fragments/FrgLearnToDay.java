@@ -121,6 +121,7 @@ public class FrgLearnToDay extends Fragment {
      * Рисует кнопки для ответа
      */
     protected void drawTheLetters() {
+        Handler handler1 = new Handler();
         countAttempt = 3;
         int buttonSize = dpToPx(48);
         handler = new Handler();
