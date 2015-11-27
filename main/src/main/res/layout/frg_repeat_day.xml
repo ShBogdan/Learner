@@ -186,10 +186,6 @@
             android:gravity="bottom|right"
             android:textSize="26sp"
             android:textColor="@drawable/tv_btn_style"
-            android:shadowColor="@color/text_shadow"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="1"
             />
     </LinearLayout>
 

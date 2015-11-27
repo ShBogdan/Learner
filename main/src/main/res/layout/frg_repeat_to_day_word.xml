@@ -177,7 +177,7 @@
         android:id="@+id/btn_next"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/btn_nextTv"
@@ -190,10 +190,6 @@
             android:gravity="bottom|right"
             android:textSize="26sp"
             android:textColor="@drawable/tv_btn_style"
-            android:shadowColor="@color/text_shadow"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="1"
             />
     </LinearLayout>
 

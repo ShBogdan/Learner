@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bogdan.learner.DBHelper;
+import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 
 import java.util.Locale;
@@ -22,7 +23,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     private DBHelper dayLibrary;
     private String[] word;
     LinearLayout btn_know, btn_unknown;
-    TextView tv_english, tv_transcription, tv_russian;
+    TextView tv_english, tv_transcription, tv_russian, tvSumWords;
     TextToSpeech toSpeech;
     LinearLayout btn_audio;
 
@@ -49,6 +50,12 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
 
 
         try {
+            int size;
+            if (dayLibrary.getListWordsByDate(MainActivity.toDayDate) == null){
+                size = 0;
+            } else {
+               size = dayLibrary.getListWordsByDate(MainActivity.toDayDate).size();
+            }
             word = dayLibrary.getRandomWord();
             tv_english = (TextView) view.findViewById(R.id.tv_english);
             tv_english.setText(word[0]);
@@ -56,6 +63,8 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
             tv_transcription.setText(word[2]);
             tv_russian = (TextView) view.findViewById(R.id.tv_russian);
             tv_russian.setText(word[1]);
+            tvSumWords = (TextView) view.findViewById(R.id.tvSumWords);
+            tvSumWords.setText(getResources().getText(R.string.add_to_study) + " " + size);
         } catch (NullPointerException nullPointerException) {
             getFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new FrgMainMenu()).

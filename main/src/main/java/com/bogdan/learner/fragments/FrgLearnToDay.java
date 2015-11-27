@@ -178,6 +178,7 @@ public class FrgLearnToDay extends Fragment {
                         if (englishWord.equals(answer.toString())) {
                             Toast.makeText(getActivity(), "Правильно", Toast.LENGTH_SHORT).show();
                             count--;
+                            layWipe.setClickable(false);
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {

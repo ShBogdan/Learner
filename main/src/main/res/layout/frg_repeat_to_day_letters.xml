@@ -184,47 +184,59 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:layout_marginTop="18dp">
-        <LinearLayout
-            android:id="@+id/randomLettersLayout"
-            android:orientation="vertical"
+
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:id="@+id/scrollView"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp">
+
             <LinearLayout
-                android:id="@+id/linearLayoutInnerButtonLine_1"
-                android:orientation="horizontal"
+                android:id="@+id/randomLettersLayout"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal">
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/linearLayoutInnerButtonLine_2"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal">
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/linearLayoutInnerButtonLine_3"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal">
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/linearLayoutInnerButtonLine_4"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal">
-            </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:gravity="center|center_vertical">
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_1"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_2"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_3"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_4"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
 
 
-        </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
     </LinearLayout>
 
     <LinearLayout
@@ -244,10 +256,6 @@
             android:gravity="bottom|right"
             android:textSize="26sp"
             android:textColor="@drawable/tv_btn_style"
-            android:shadowColor="@color/text_shadow"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="1"
             />
     </LinearLayout>
 

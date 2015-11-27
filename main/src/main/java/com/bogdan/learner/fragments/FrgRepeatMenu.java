@@ -124,7 +124,7 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
 
     private void startFragment(String dayDate){
         if(DBHelper.getDbHelper(getActivity()).getListWordsByDate(dayDate) == null){
-            Toast.makeText(getActivity(), dayDate, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.no_day, Toast.LENGTH_SHORT).show();
         } else {
             Fragment fr = new FrgRepeatDay();
             fr.setArguments(bundleDate);
