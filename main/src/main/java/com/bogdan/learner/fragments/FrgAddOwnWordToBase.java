@@ -28,6 +28,8 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
     private EditText russianWord;
     private String transcription;
     private String takenWord;
+    private String russWord;
+    private String word_id;
     private AutoCompleteTextView englishWord;
     private Button btn_addToBase;
     private boolean isChange;
@@ -49,9 +51,11 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
         englishWord.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                russianWord.setText(dbHelper.getWord(parent.getItemAtPosition(position).toString())[1]);
+                russWord = dbHelper.getWord(parent.getItemAtPosition(position).toString())[1];
+                russianWord.setText(russWord);
                 takenWord = dbHelper.getWord(parent.getItemAtPosition(position).toString())[0];
                 transcription = dbHelper.getWord(parent.getItemAtPosition(position).toString())[2];
+                word_id = dbHelper.getWord(parent.getItemAtPosition(position).toString())[3];
             }
         });
 
@@ -65,15 +69,27 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
         } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ") == 0) {
             russianWord.setError(getResources().getString(R.string.cant_be_space));
         } else {
-        // если слово пользователя менялось то транскипции не будет
+            // если слово пользователя менялось то транскипции не будет
             if(!(englishWord.getText().toString()).equals(takenWord)){
                 transcription = "";
+                dbHelper.insertWord(
+                        englishWord.getText().toString(),
+                        russianWord.getText().toString(),
+                        transcription,
+                        MainActivity.toDayDate);
+                // если менялся только перевод
+            } else if ((englishWord.getText().toString()).equals(takenWord) && !russWord.equals(russianWord.getText().toString())){
+                dbHelper.insertWord(
+                        englishWord.getText().toString(),
+                        russianWord.getText().toString(),
+                        transcription,
+                        MainActivity.toDayDate);
             }
-            dbHelper.insertWord(
-                    englishWord.getText().toString(),
-                    russianWord.getText().toString(),
-                    transcription,
-                    MainActivity.toDayDate);
+//            если слово уже в базе и не менялось
+            else {
+                dbHelper.updateWordDate(MainActivity.toDayDate, word_id);
+            }
+
             hideKeyboard();
             Toast.makeText(getActivity(), "\"" + englishWord.getText().toString() + "\" " + getResources().getString(R.string.added_successfully), Toast.LENGTH_SHORT).show();
             englishWord.setText("");

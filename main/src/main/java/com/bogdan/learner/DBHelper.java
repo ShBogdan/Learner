@@ -203,11 +203,11 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * ИСПОЛЬЗОВАТЬ uploadDb(); после данного метода
      */
-    public void updateWordDate(String date, String english) {
+    public void updateWordDate(String date, String id) {
         contentValues = new ContentValues();
         sqLiteDatabase = dbHelper.getWritableDatabase();
         contentValues.put(KEY_DATE, date);
-        sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ENG + "= ?", new String[]{english});
+        sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ROWID + "= ?", new String[]{id});
         sqLiteDatabase.close();
 //        uploadDb = uploadDb();
     }
