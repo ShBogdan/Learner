@@ -108,8 +108,6 @@ public class MainActivity extends Activity implements FragmentListener {
                 break;
 
             case R.id.btn_repeat:
-//                Log.i(LOG_TAG, dbHelper.uploadDb.size() + "");               /*ПОЧЕМУ НЕ РАБОТАЕТ локальный uploadDb ??????????*/
-//                Log.i(LOG_TAG, dbHelper.learnedWords.size() + "");               /*ПОЧЕМУ НЕ РАБОТАЕТ локальный uploadDb ??????????*/
                 if (dbHelper.learnedWords.size() >= 1) {
                     fTrans.replace(R.id.fragment_container, frgRepeatMenu);
                     fTrans.addToBackStack("frgRepeatMenu");
@@ -168,5 +166,11 @@ public class MainActivity extends Activity implements FragmentListener {
 //        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
 
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
     }
 }

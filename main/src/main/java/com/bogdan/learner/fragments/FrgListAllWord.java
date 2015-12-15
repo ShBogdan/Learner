@@ -195,7 +195,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
             }
             Collections.reverse(arrayList);
         }
-//        В сулчайнов порядке "random"
+//        В случайнов порядке "random"
         if (setting.equals("random")) {
             Collections.shuffle(arrayList);
         }

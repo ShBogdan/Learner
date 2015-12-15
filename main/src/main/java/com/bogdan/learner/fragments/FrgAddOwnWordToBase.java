@@ -65,7 +65,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
         } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ") == 0) {
             russianWord.setError(getResources().getString(R.string.cant_be_space));
         } else {
-        // если слово пользователя или менялось то транскипции не будет
+        // если слово пользователя менялось то транскипции не будет
             if(!(englishWord.getText().toString()).equals(takenWord)){
                 transcription = "";
             }
