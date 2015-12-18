@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -42,12 +43,11 @@ public class DBHelper extends SQLiteOpenHelper {
             "translations text, " +
             "date text not null);";
 
-
     public TreeMap<Integer, ArrayList<String[]>> uploadDb;
     public ArrayList<String[]> listUnknownWords;       //под ключем 1 не изученные слова
     public ArrayList<String[]> listKnownWords;         //под ключем 0 слова известные ранее
     public ArrayList<String[]> learnedWords;           //изученные имеют дату
-    public ArrayList<String> engWords;                          //перечень имеющихся слов
+    public ArrayList<String> engWords;                 //перечень имеющихся слов
     private String[] word;
     private SQLiteDatabase sqLiteDatabase;
     private ContentValues contentValues;
@@ -83,13 +83,9 @@ public class DBHelper extends SQLiteOpenHelper {
             }
             Log.d(LOG_TAG, "DATABASE_CREATE");
         }
-//заполняем списки
+        //заполняем списки
         uploadDb();
-
-
         Log.d(LOG_TAG, "learnedWords=" + learnedWords.size());
-
-
     }
 
     public static DBHelper getDbHelper(Context context){
@@ -194,35 +190,35 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_DATE, date);
         sqLiteDatabase.insert(DATABASE_TABLE, null, contentValues);
         sqLiteDatabase.close();
-//        uploadDb = uploadDb();
     }
 
     /**
      * Обновляет дату изучения слова в таблице.
-     *
-     *
-     * ИСПОЛЬЗОВАТЬ uploadDb(); после данного метода
      */
-    public void updateWordDate(String date, String id) {
+    public void updateWordDate(String date, int id) {
+        Integer _id = id;
         contentValues = new ContentValues();
         sqLiteDatabase = dbHelper.getWritableDatabase();
         contentValues.put(KEY_DATE, date);
-        sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ROWID + "= ?", new String[]{id});
+        sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ROWID + "= ?", new String[]{_id.toString()});
         sqLiteDatabase.close();
-//        uploadDb = uploadDb();
+    }
+
+    public void updateWordDate(String date, String english) {
+        contentValues = new ContentValues();
+        sqLiteDatabase = dbHelper.getWritableDatabase();
+        contentValues.put(KEY_DATE, date);
+        sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ENG + "= ?", new String[]{english});
+        sqLiteDatabase.close();
     }
 
     /**
      * Удаляет слово с базы.
-     *
-     *
-     * ИСПОЛЬЗОВАТЬ uploadDb(); после данного метода
      */
     public void removeWordFromDb(String id) {
         sqLiteDatabase = dbHelper.getWritableDatabase();
         sqLiteDatabase.execSQL("DELETE FROM " + DATABASE_TABLE + " WHERE " + KEY_ROWID + " = " + "\"" + id + "\"");
         sqLiteDatabase.close();
-//        uploadDb = uploadDb();
        }
 
     /**
@@ -264,7 +260,8 @@ public class DBHelper extends SQLiteOpenHelper {
         } else {/*Не учить*/
             updateWordDate("0", listUnknownWords.get(rdWord)[0]);
             listUnknownWords.remove(rdWord);
-            Toast.makeText(mContext, "Не учим", Toast.LENGTH_SHORT).show();
+            listKnownWords.add(word);
+            Toast.makeText(mContext, "Не учим"+ Arrays.toString(word), Toast.LENGTH_SHORT).show();
         }
     }
 

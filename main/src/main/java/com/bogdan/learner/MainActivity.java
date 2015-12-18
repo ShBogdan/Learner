@@ -10,7 +10,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,9 +32,9 @@ import java.util.TreeMap;
 
 public class MainActivity extends Activity implements FragmentListener {
     private final String LOG_TAG = "MainActivity";
-    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
+//    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     public static String toDayDate;
-    SharedPreferences sp;
+//    SharedPreferences sp;
 
     DBHelper dbHelper;
     TreeMap<Integer, ArrayList<String[]>> uploadDb;
@@ -67,7 +66,7 @@ public class MainActivity extends Activity implements FragmentListener {
         fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
         fTrans.commit();
 
-        restartNotify();
+//        restartNotify();
     }
 
     @Override

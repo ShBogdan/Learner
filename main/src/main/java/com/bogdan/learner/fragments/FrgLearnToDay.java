@@ -121,7 +121,7 @@ public class FrgLearnToDay extends Fragment {
      * Рисует кнопки для ответа
      */
     protected void drawTheLetters() {
-        Handler handler1 = new Handler();
+//        Handler handler1 = new Handler();
         countAttempt = 3;
         int buttonSize = dpToPx(48);
         handler = new Handler();
@@ -152,6 +152,7 @@ public class FrgLearnToDay extends Fragment {
 
         final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
         tvSumWords.setText(wordsForFrgLetters.size() + "/" + toDayListWords.size());
+        Log.d(LOG_TAG, wordsForFrgLetters.size() + "/" + toDayListWords.size());
 
         int buttonOnDisplayWidth = 0;
         int countLetter = 0;

@@ -29,7 +29,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
     private String transcription;
     private String takenWord;
     private String russWord;
-    private String word_id;
+    private int word_id;
     private AutoCompleteTextView englishWord;
     private Button btn_addToBase;
     private boolean isChange;
@@ -55,7 +55,8 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                 russianWord.setText(russWord);
                 takenWord = dbHelper.getWord(parent.getItemAtPosition(position).toString())[0];
                 transcription = dbHelper.getWord(parent.getItemAtPosition(position).toString())[2];
-                word_id = dbHelper.getWord(parent.getItemAtPosition(position).toString())[3];
+                word_id = Integer.parseInt(dbHelper.getWord(parent.getItemAtPosition(position).toString())[3]);
+
             }
         });
 
@@ -77,7 +78,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                         russianWord.getText().toString(),
                         transcription,
                         MainActivity.toDayDate);
-                // если менялся только перевод
+            //если менялся только перевод
             } else if ((englishWord.getText().toString()).equals(takenWord) && !russWord.equals(russianWord.getText().toString())){
                 dbHelper.insertWord(
                         englishWord.getText().toString(),
@@ -85,7 +86,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                         transcription,
                         MainActivity.toDayDate);
             }
-//            если слово уже в базе и не менялось
+            //если слово уже в базе и не менялось
             else {
                 dbHelper.updateWordDate(MainActivity.toDayDate, word_id);
             }

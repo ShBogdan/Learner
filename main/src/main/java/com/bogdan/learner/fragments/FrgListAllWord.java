@@ -35,7 +35,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.frg_list_all_words, null);
         sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
 
@@ -90,7 +90,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         if (v.getId() == R.id.btn_relearn) {
             for (int i = 0; i < arrayList.size(); i++) {
                 if (arrayList.get(i).isSelect){
-                    DBHelper.getDbHelper(getActivity()).updateWordDate(MainActivity.toDayDate, arrayList.get(i).id);
+                    DBHelper.getDbHelper(getActivity()).updateWordDate(MainActivity.toDayDate, Integer.parseInt(arrayList.get(i).id));
                     arrayList.get(i).isSelect = false;
                     isChange = true;
                 }

@@ -48,7 +48,6 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
             }
         });
 
-
         try {
             int size;
             if (dayLibrary.getListWordsByDate(MainActivity.toDayDate) == null){
@@ -80,7 +79,6 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
 
         return view;
     }
-
 
     @Override
     public void onClick(View v) {
