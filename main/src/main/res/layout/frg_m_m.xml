@@ -43,4 +43,46 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:background="@drawable/buttonstyle"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/btn_info"
+                    android:text="Info"
+                    android:textColor="#FFFFFF"
+                    android:layout_weight="1"
+                    android:onClick="onButtonSelected"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:background="@drawable/buttonstyle"
+                    android:shadowColor="#000000"
+                    android:shadowDx="-2"
+                    android:shadowDy="2"
+                    android:shadowRadius="1"
+                    />
+                <Button
+                    android:id="@+id/btn_like"
+                    android:text="Like!"
+                    android:textColor="#FFFFFF"
+                    android:layout_weight="1"
+                    android:onClick="onButtonSelected"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:background="@drawable/buttonstyle"
+                    android:shadowColor="#000000"
+                    android:shadowDx="-2"
+                    android:shadowDy="2"
+                    android:shadowRadius="1"
+                    />
+
+
+        </LinearLayout>
 </RelativeLayout>

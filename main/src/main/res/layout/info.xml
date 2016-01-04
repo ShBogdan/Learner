@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView2">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="18dp">
+
+            <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Приложение «Английские карточки» позволит вам быстро и качественно пополнять ваш словарный запас."
+        android:id="@+id/textView"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\n  Преимущества нашего приложения:"
+                    android:id="@+id/textView2"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\n  •	Добавляйте нужные именно вам английские слова, это позволит полностью контролировать процесс изучения.\n  •	Учите слова в порядке английский-русский и русский-английский, что намного эффективнее и в дальнейшем вам будет сложнее забыть выученные слова.\n  •	А также впервые подсчитайте количество слов, которые вы знаете и выучили, что повысит вашу мотивацию в изучении Английского языка. "
+                    android:id="@+id/textView3"
+                    android:layout_marginLeft="8dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\n  Вы можете добавлятьслова для изучения двумя способами. Первый, вы добавляете слова для изучения из нашего словаря, слова располагаются по частотному принципу. Второй, если вы читаете какой-то текст, и в нем вы встречаете незнакомое слово, вы можете сразу добавить его для изучения, для этого необходимо воспользоваться поиском «Найти слово», либо же записать и сохранить новое слово (если нужного нет в словаре) и перевод к нему."
+                    android:id="@+id/textView4"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\n  Рекомендуем добавлять для лучшего усвоения не более 10 слов в день. Счетчик добавленных слов вверху справа."
+                    android:id="@+id/textView5"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\n  После того как слова добавлены вернитесь в главное меню и нажмите «Учить сегодня». Здесь вам необходимо запоминать слова и потренироваться в написании.В последующие дни вам необходимо повторять слова на второй, третий, двадцать первый и девяностый день. Данный принцип повторения позволит надолго закрепить изученный материал. Все слова в приложении можно учить как с английского на русский, так и в обратном порядке, с русского на английский (галочка «учить слова в порядке русский-английский»). Также дотронувшись до слова на карточке вам будет озвучена транскрипция."
+                    android:id="@+id/textView6"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\n  В полном списке слов «Все слова» вы можете повторять все добавленные слова, как в виде карточек, так и в виде списка всех слов. Список можно сортировать тремя способами: в случайном порядке, по дате добавления и в алфавитном порядке."
+                    android:id="@+id/textView7"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\n  Реализован счетчик слов. Задавались ли вы когда-нибудь вопросом:«А сколько английских слов я знаю? Какой у меня словарный запас?». С этим приложением этот вопрос вы решите для себя раз и навсегда. Это приложение будет вести счет не только тем словам, которые вы изучите, но и тем словам которые вы уже знаете."
+                    android:id="@+id/textView8"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\n  Если у вас появятся замечания по работе приложения или способы улучшить его, обязательно пишите shulga.bogdan@gmail.com"
+                    android:id="@+id/textView9"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
