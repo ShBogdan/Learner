@@ -27,7 +27,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_m_m, null);
 
-        appPackageName = getActivity().getApplication().getPackageName();
+        appPackageName = "com.bogdan.english.card";
 
         Button btn_learnToday = (Button) view.findViewById(R.id.btn_learnToday);
         btn_learnToday.setOnClickListener(this);
