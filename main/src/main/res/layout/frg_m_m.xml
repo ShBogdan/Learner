@@ -22,7 +22,7 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Учить сегоднешнее"
+            android:text="Учить сегодня"
             android:id="@+id/btn_learnToday"
             android:layout_below="@+id/btn_addMoreWord"
             android:layout_alignParentRight="true"
@@ -35,7 +35,7 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Повторить изученое"
+            android:text="Повторить изученное"
             android:id="@+id/btn_repeat"
             android:layout_below="@+id/btn_learnToday"
             android:layout_alignLeft="@+id/btn_learnToday"

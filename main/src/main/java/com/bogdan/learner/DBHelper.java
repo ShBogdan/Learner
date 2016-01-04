@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -261,7 +260,7 @@ public class DBHelper extends SQLiteOpenHelper {
             updateWordDate("0", listUnknownWords.get(rdWord)[0]);
             listUnknownWords.remove(rdWord);
             listKnownWords.add(word);
-            Toast.makeText(mContext, "Не учим"+ Arrays.toString(word), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Не учим", Toast.LENGTH_SHORT).show();
         }
     }
 
