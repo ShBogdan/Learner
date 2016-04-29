@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,7 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
     int randomIndexWord;
     int clickCount = 0;
 
-    LinearLayout btn_audio;
+    CardView btn_audio;
     TextView tv_english, tv_russian, tv_transcription, tv_sumWords;
     LinearLayout lay_known, lay_unknown;
 
@@ -50,7 +51,7 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
         lay_known = (LinearLayout) view.findViewById(R.id.lay_known);
         lay_known.setClickable(true);
         lay_unknown = (LinearLayout) view.findViewById(R.id.lay_unknown);
-        btn_audio = (LinearLayout) view.findViewById(R.id.btn_audio);
+        btn_audio = (CardView) view.findViewById(R.id.btn_audio);
 
         lay_known.setOnClickListener(this);
         lay_unknown.setOnClickListener(this);

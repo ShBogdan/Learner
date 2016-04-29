@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -44,7 +45,7 @@ public class FrgLearnToDay extends Fragment {
     int countAttempt;
     int count; // для чередования фрагмента карточа - набор слова
     TextToSpeech toSpeech;
-    LinearLayout btn_audio;
+    CardView btn_audio;
     Handler handler;
     boolean onCreate;
     boolean onResume;
@@ -92,7 +93,7 @@ public class FrgLearnToDay extends Fragment {
             returnRandomWord(wordsForFrgLetters);
         }
 
-        btn_audio = (LinearLayout) view.findViewById(R.id.btn_audio);
+        btn_audio = (CardView) view.findViewById(R.id.btn_audio);
         toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {

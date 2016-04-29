@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.widget.CardView;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     LinearLayout btn_know, btn_unknown;
     TextView tv_english, tv_transcription, tv_russian, tvSumWords;
     TextToSpeech toSpeech;
-    LinearLayout btn_audio;
+    CardView btn_audio;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
         btn_know.setOnClickListener(this);
         btn_unknown = (LinearLayout) view.findViewById(R.id.btn_unknown);
         btn_unknown.setOnClickListener(this);
-        btn_audio = (LinearLayout) view.findViewById(R.id.btn_audio);
+        btn_audio = (CardView) view.findViewById(R.id.btn_audio);
         btn_audio.setOnClickListener(this);
 
         toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {

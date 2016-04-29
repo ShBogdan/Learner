@@ -5,31 +5,15 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="@color/my_background">
-    <ListView
-        android:id="@+id/lvMain"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/r_view"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:stackFromBottom="false"
-        android:smoothScrollbar="false"
-        android:scrollingCache="false"
-        android:textFilterEnabled="false"
-        android:touchscreenBlocksFocus="false"
-        android:transitionGroup="false"
-        android:nestedScrollingEnabled="false"
-        android:longClickable="false"
-        android:headerDividersEnabled="false"
-        android:footerDividersEnabled="false"
-        android:focusableInTouchMode="false"
-        android:focusable="false"
-        android:fastScrollEnabled="true"
-        android:fastScrollAlwaysVisible="false"
-        android:drawSelectorOnTop="false"
-        android:choiceMode="multipleChoice"
-        android:clickable="false"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp">
-    </ListView>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_weight="1">
+    </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:orientation="horizontal"

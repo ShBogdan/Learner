@@ -5,14 +5,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,21 +23,26 @@ import com.bogdan.learner.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class FrgListAllWord extends Fragment implements View.OnClickListener {
     private final String LOG_TAG = "::::FrgListAllWord::::";
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     ArrayList<Word> arrayList;
-    ListView listView;
+    RecyclerView mRecyclerView;
     MyAdapter adapter;
     SharedPreferences sp;
     Button btn_remove, btn_relearn;
 
+
+    private RecyclerView.Adapter mAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        setHasOptionsMenu(true);
+        //        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.frg_list_all_words, null);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.r_view);
         sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
 
         btn_remove = (Button) view.findViewById(R.id.btn_remove);
@@ -45,37 +51,18 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         btn_relearn.setOnClickListener(this);
 
         fillDate();
-        adapter = new MyAdapter(getActivity(), arrayList);
-        listView = (ListView) view.findViewById(R.id.lvMain);
-        listView.setAdapter(adapter);
-        listView.setFastScrollEnabled(true);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Word word = (Word) parent.getAdapter().getItem(position);
-//                меняем состояние Word и красим view
-                if (word.isSelect) {
-                    word.isSelect = false;
-                } else {
-                    word.isSelect = true;
-                }
-                if (word.isSelect) {
-                    view.findViewById(R.id.myLay).setBackgroundColor(Color.parseColor("#818CD6"));
-                } else {
-                    view.findViewById(R.id.myLay).setBackgroundColor(Color.parseColor("#ffffff"));
-                }
-                Log.d(LOG_TAG, "Нажато  с word " + word.id);
 
-            }
-        });
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new MyAdapter( arrayList);
+        mRecyclerView.setAdapter(adapter);
         return view;
     }
 
     @Override
     public void onClick(View v) {
         boolean isChange = false;
-//        удаляем выделенные слова
+        //        удаляем выделенные слова
         if (v.getId() == R.id.btn_remove) {
             for (int i = 0; i < arrayList.size(); i++) {
                 if (arrayList.get(i).isSelect) {
@@ -86,7 +73,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
                 }
             }
         }
-//        обновляем дату у выделенных слов
+        //        обновляем дату у выделенных слов
         if (v.getId() == R.id.btn_relearn) {
             for (int i = 0; i < arrayList.size(); i++) {
                 if (arrayList.get(i).isSelect){
@@ -108,52 +95,6 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
 
     }
 
-    class MyAdapter extends BaseAdapter {
-        Context context;
-        ArrayList<Word> object;
-        Word word;
-
-        MyAdapter(Context context, ArrayList<Word> words) {
-            this.context = context;
-            this.object = words;
-        }
-
-        @Override
-        public int getCount() {
-            return object.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return object.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.frg_list_words, parent, false);
-            }
-            word = (Word) getItem(position);
-
-            if (word.isSelect) {
-                convertView.findViewById(R.id.myLay).setBackgroundColor(Color.parseColor("#818CD6"));
-            } else {
-                convertView.findViewById(R.id.myLay).setBackgroundColor(Color.parseColor("#ffffff"));
-            }
-
-            ((TextView) convertView.findViewById(R.id.englishWord)).setText(word.eng);
-            ((TextView) convertView.findViewById(R.id.russianWord)).setText(word.rus);
-            ((TextView) convertView.findViewById(R.id.tv_trans)).setText(String.valueOf(word.trans));
-
-            return convertView;
-        }
-
-    }
 
     class Word implements Comparable<Word> {
         String eng;
@@ -184,7 +125,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         arrayList = new ArrayList<>();
         String setting = sp.getString("how_to_repeat", null);
         boolean add_know_words = sp.getBoolean("add_know_words", false);
-//        по дате изучения "date"
+        //        по дате изучения "date"
         for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
             if ((el.getKey() != 0 || add_know_words) && el.getKey() != 1) {
                 for (String[] word : el.getValue()) {
@@ -195,13 +136,98 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
             }
             Collections.reverse(arrayList);
         }
-//        В случайнов порядке "random"
+        //        В случайнов порядке "random"
         if (setting.equals("random")) {
             Collections.shuffle(arrayList);
         }
-//        В алфавитном порядке "alphabet"
+        //        В алфавитном порядке "alphabet"
         if (setting.equals("alphabet")) {
             Collections.sort(arrayList);
         }
     }
+
+    class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+        Context context;
+        ArrayList<Word> _object;
+        Word word;
+
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+            public TextView eng;
+            public TextView rus;
+            public TextView trans;
+            LinearLayout btn;
+            CardView thisCv;
+
+            public ViewHolder(View v) {
+                super(v);
+
+                eng   = (TextView) v.findViewById(R.id.englishWord);
+                rus   = (TextView) v.findViewById(R.id.russianWord);
+                trans = (TextView) v.findViewById(R.id.tv_trans);
+                btn = (LinearLayout) v.findViewById(R.id.btn_card);
+                thisCv = (CardView) v.findViewById(R.id.myLay);
+                btn.setOnClickListener(this);
+
+            }
+
+            @Override
+            public void onClick(View v) {
+                ((CardView)thisCv).setCardBackgroundColor(Color.parseColor("#818CD6"));
+                Word word = _object.get(getAdapterPosition());
+                //                меняем состояние Word и красим view
+                if (word.isSelect) {
+                    word.isSelect = false;
+                } else {
+                    word.isSelect = true;
+                }
+                if (word.isSelect) {
+                    ((CardView)thisCv).setCardBackgroundColor(Color.parseColor("#818CD6"));
+
+                } else {
+                    ((CardView)thisCv).setCardBackgroundColor(Color.parseColor("#ffffff"));
+
+                }
+            }
+        }
+
+        public MyAdapter(ArrayList<Word> object) {
+            _object = object;
+        }
+
+        @Override
+        public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.frg_list_words, parent, false);
+            ViewHolder vh = new ViewHolder(v);
+            return vh;
+        }
+
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            holder.eng.setText(_object.get(position).eng);
+            holder.rus.setText(_object.get(position).rus);
+            holder.trans.setText(_object.get(position).trans);
+            Word word = _object.get(position);
+            Log.d(LOG_TAG, word.eng);
+
+            //                меняем состояние Word и красим view
+            if (word.isSelect) {
+                ((CardView)holder.thisCv).setCardBackgroundColor(Color.parseColor("#818CD6"));
+            } else {
+                ((CardView)holder.thisCv).setCardBackgroundColor(Color.parseColor("#ffffff"));
+            }
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return _object.size();
+        }
+
+        public List<Word> getList() {
+            return this._object;
+        }
+
+    }
+
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,8 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
     boolean reversWord;
     ArrayList<String[]> toDayListWords;
     TextView englishWord, transWord, russianWord, tvSumWords, btn_nextTV;
-    LinearLayout btnNext, btn_audio;
+    LinearLayout btnNext;
+    CardView btn_audio;
     TextToSpeech toSpeech;
     int countBtnClick;
     String voice;
@@ -49,7 +51,7 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
         sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         reversWord = sp.getBoolean("changeWordPlace", false);
 
-        btn_audio = (LinearLayout) view.findViewById(R.id.btn_audio);
+        btn_audio = (CardView) view.findViewById(R.id.btn_audio);
         englishWord = (TextView) view.findViewById(R.id.englishWord);
         transWord = (TextView) view.findViewById(R.id.transWord);
         russianWord = (TextView) view.findViewById(R.id.russianWord);

@@ -13,10 +13,11 @@
         android:layout_height="60dp" >
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="left"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            >
 
             <TextView
                 android:layout_width="fill_parent"
@@ -24,24 +25,29 @@
                 android:text="Добавлено для изучения 0"
                 android:id="@+id/tvSumWords"
                 android:textSize="20sp"
-                android:layout_marginTop="18dp"
-                android:layout_marginRight="18dp"
-                android:gravity="right" />
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="right"/>
         </LinearLayout>
 
     </LinearLayout>
-    <LinearLayout
 
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/btn_audio"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffffff"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="6dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="6dp"
+        card_view:cardUseCompatPadding="true"
+        android:layout_marginTop="-16dp">
 
         <LinearLayout
-            android:orientation="vertical"
+           android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -60,7 +66,7 @@
                 android:textSize="28sp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="12dp" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -99,67 +105,11 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
                 android:gravity="center"
-                android:layout_marginBottom="18dp" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:background="@drawable/drop_shadow"
-                android:layout_height="3dp">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="2dp"
-                    android:layout_height="3dp"
-                    android:background="@color/my_background" />
-            </LinearLayout>
+                android:layout_marginBottom="12dp" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="3dp"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="3dp"
-                android:layout_height="2dp"
-                android:background="@color/my_background"
-                android:gravity="bottom">
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/drop_shadow_right"
-                android:layout_weight="1">
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="3dp"
-                android:layout_height="2dp"
-                android:background="@drawable/drop_shadow_rd"
-                android:gravity="bottom">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="1dp"
-                    android:layout_height="1dp"
-                    android:background="#ffa7a9b0"></LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="1dp"
-                    android:layout_height="1dp"
-                    android:background="#ffcbcdd9" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 
     <LinearLayout
