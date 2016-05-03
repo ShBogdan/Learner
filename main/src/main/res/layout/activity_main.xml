@@ -29,7 +29,7 @@
                 android:shadowDx="-2"
                 android:shadowDy="2"
                 android:shadowRadius="1"
-                />
+            />
         <Button
                 android:id="@+id/btn_add"
                 android:text="Найти слово"

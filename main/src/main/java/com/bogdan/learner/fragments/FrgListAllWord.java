@@ -36,8 +36,6 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
     Button btn_remove, btn_relearn;
 
 
-    private RecyclerView.Adapter mAdapter;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //        setHasOptionsMenu(true);
