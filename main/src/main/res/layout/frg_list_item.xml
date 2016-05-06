@@ -79,7 +79,7 @@
                 <CheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/checkBox"
+                    android:id="@+id/favorite"
                     android:checked="false"
                     android:layout_weight="1"/>
             </LinearLayout>

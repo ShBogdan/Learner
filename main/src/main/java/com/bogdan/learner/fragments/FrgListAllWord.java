@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,12 +102,14 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         String trans;
         String id;
         boolean isSelect;
+        boolean isFavorite;
 
 
-        public Word(String eng, String rus, String trans, boolean isSelect, String id) {
+        public Word(String eng, String rus, String trans, boolean isSelect, boolean isFavorite, String id) {
             this.eng = eng;
             this.rus = rus;
             this.isSelect = isSelect;
+            this.isFavorite = isFavorite;
             this.trans = trans;
             this.id = id;
 
@@ -127,7 +131,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         for (Map.Entry<Integer, ArrayList<String[]>> el : DBHelper.getDbHelper(getActivity()).uploadDb.entrySet()) {
             if ((el.getKey() != 0 || add_know_words) && el.getKey() != 1) {
                 for (String[] word : el.getValue()) {
-                    arrayList.add(new Word(word[0], word[1], word[2], false, word[3]));
+                    arrayList.add(new Word(word[0], word[1], word[2], false, false, word[3]));
                     Log.d(LOG_TAG, el.getKey().toString());
                     Log.d(LOG_TAG, word[0]);
                 }
@@ -145,33 +149,41 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
     }
 
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-        Context context;
-        ArrayList<Word> _object;
-        Word word;
+        ArrayList<Word> wordsArray;
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             public TextView eng;
             public TextView rus;
             public TextView trans;
+            public CheckBox favorite;
             LinearLayout btn;
             CardView thisCv;
 
             public ViewHolder(View v) {
                 super(v);
-
+                favorite = (CheckBox) v.findViewById(R.id.favorite);
                 eng   = (TextView) v.findViewById(R.id.englishWord);
                 rus   = (TextView) v.findViewById(R.id.russianWord);
                 trans = (TextView) v.findViewById(R.id.tv_trans);
                 btn = (LinearLayout) v.findViewById(R.id.btn_card);
                 thisCv = (CardView) v.findViewById(R.id.myLay);
                 btn.setOnClickListener(this);
+                favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        wordsArray.get(getAdapterPosition()).isFavorite = b;
+                        Log.d("MyLog",  wordsArray.get(getAdapterPosition()).eng + " " + getAdapterPosition());
+                        arrayList.get(Integer.parseInt(wordsArray.get(getAdapterPosition()).id)).isFavorite = b;
+                        DBHelper.getDbHelper(getActivity()).setFavorite(String.valueOf(b), wordsArray.get(getAdapterPosition()).id);
+                    }
+                });
 
             }
 
             @Override
             public void onClick(View v) {
                 ((CardView)thisCv).setCardBackgroundColor(Color.parseColor("#818CD6"));
-                Word word = _object.get(getAdapterPosition());
+                Word word = wordsArray.get(getAdapterPosition());
                 //                меняем состояние Word и красим view
                 if (word.isSelect) {
                     word.isSelect = false;
@@ -189,12 +201,12 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
         }
 
         public MyAdapter(ArrayList<Word> object) {
-            _object = object;
+            wordsArray = object;
         }
 
         @Override
         public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.frg_list_words, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.frg_list_item, parent, false);
             ViewHolder vh = new ViewHolder(v);
             return vh;
         }
@@ -202,10 +214,10 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.eng.setText(_object.get(position).eng);
-            holder.rus.setText(_object.get(position).rus);
-            holder.trans.setText(_object.get(position).trans);
-            Word word = _object.get(position);
+            holder.eng.setText(wordsArray.get(position).eng);
+            holder.rus.setText(wordsArray.get(position).rus);
+            holder.trans.setText(wordsArray.get(position).trans);
+            Word word = wordsArray.get(position);
             Log.d(LOG_TAG, word.eng);
 
             //                меняем состояние Word и красим view
@@ -215,17 +227,22 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener {
                 ((CardView)holder.thisCv).setCardBackgroundColor(Color.parseColor("#ffffff"));
             }
 
+            if(word.isFavorite){
+                holder.favorite.setChecked(word.isFavorite);
+            }else {
+                holder.favorite.setChecked(word.isFavorite);
+
+            }
+
         }
 
         @Override
         public int getItemCount() {
-            return _object.size();
+            return wordsArray.size();
         }
 
         public List<Word> getList() {
-            return this._object;
+            return this.wordsArray;
         }
-
     }
-
 }

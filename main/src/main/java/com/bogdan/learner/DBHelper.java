@@ -28,7 +28,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_ENG = "english";
     private static final String KEY_RUS = "russian";
     private static final String KEY_TRANS = "transcription";
-    private static final String KEY_TRANSLATIONS = "translations";
+    private static final String KEY_FAVORITE = "translations";
     private static final String KEY_DATE = "date";
 
     private static String DB_PATH;
@@ -143,16 +143,16 @@ public class DBHelper extends SQLiteOpenHelper {
             String english = cursor.getString(cursor.getColumnIndex(KEY_ENG));
             String russian = cursor.getString(cursor.getColumnIndex(KEY_RUS));
             String transcription = cursor.getString(cursor.getColumnIndex(KEY_TRANS));
-            String voicePatch = cursor.getString(cursor.getColumnIndex(KEY_TRANSLATIONS));
+            String favor = cursor.getString(cursor.getColumnIndex(KEY_FAVORITE));
             Integer date = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
             String id = cursor.getString(cursor.getColumnIndex(KEY_ROWID));
             engWords.add(english);
             if (wordsDb.containsKey(date)) {
                     /*Put in TreeMap "wordsDB" an ArrayList new String[]*/
-                wordsDb.get(date).add(new String[]{english, russian, transcription, id,voicePatch});
+                wordsDb.get(date).add(new String[]{english, russian, transcription, id,favor});
             } else {
                 wordsDb.put(date, new ArrayList<String[]>());
-                wordsDb.get(date).add(new String[]{english, russian, transcription, id,voicePatch});
+                wordsDb.get(date).add(new String[]{english, russian, transcription, id,favor});
             }
         }
 
@@ -188,6 +188,18 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_TRANS, transcription);
         contentValues.put(KEY_DATE, date);
         sqLiteDatabase.insert(DATABASE_TABLE, null, contentValues);
+        sqLiteDatabase.close();
+    }
+
+
+    /**
+     * Добавляем слово в избранное.
+     */
+    public void setFavorite(String  boo, String id) {
+        contentValues = new ContentValues();
+        sqLiteDatabase = dbHelper.getWritableDatabase();
+        contentValues.put(KEY_FAVORITE, boo);
+        sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ROWID + "= ?", new String[]{id});
         sqLiteDatabase.close();
     }
 
