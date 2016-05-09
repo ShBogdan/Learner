@@ -4,6 +4,7 @@
     <color name="my_background">#f8f8fc</color>
     <color name="card_shadow1">#ffdee0ec</color>
     <color name="card_shadow2">#CFD8DC</color>
+    <color name="card_background">#FFB1E8F5</color>
     <color name="transparent" type="color">#00FFFFFF</color>
     <color name="grey" type="color">#555555</color>
     <color name="green" type="color">#4499CC00</color>

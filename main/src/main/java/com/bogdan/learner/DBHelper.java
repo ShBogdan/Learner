@@ -201,6 +201,8 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_FAVORITE, boo);
         sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ROWID + "= ?", new String[]{id});
         sqLiteDatabase.close();
+        Log.d("MyLog", "Записали в базу " + boo);
+
     }
 
     /**

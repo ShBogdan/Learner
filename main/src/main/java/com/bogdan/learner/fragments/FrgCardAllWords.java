@@ -11,12 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.R;
+import com.rey.material.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,16 +41,16 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
 
     CardView btn_audio;
     TextView tv_english, tv_russian, tv_transcription, tv_sumWords;
-    LinearLayout lay_known, lay_unknown;
+    Button lay_known, lay_unknown;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_card_all_words, null);
         sp = getActivity().getSharedPreferences(FILE_NAME_WORDS, Context.MODE_PRIVATE);
 
-        lay_known = (LinearLayout) view.findViewById(R.id.lay_known);
+        lay_known = (Button) view.findViewById(R.id.lay_known);
         lay_known.setClickable(true);
-        lay_unknown = (LinearLayout) view.findViewById(R.id.lay_unknown);
+        lay_unknown = (Button) view.findViewById(R.id.lay_unknown);
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
 
         lay_known.setOnClickListener(this);

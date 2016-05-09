@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/frgAddWord"
-    android:background="@color/my_background"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/frgAddWord"
+              android:background="@color/my_background"
+              android:orientation="vertical">
 
     <LinearLayout
         android:orientation="vertical"
@@ -25,8 +26,8 @@
                 android:text="Добавлено для изучения 0"
                 android:id="@+id/tvSumWords"
                 android:textSize="20sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="18dp"
                 android:gravity="right"/>
         </LinearLayout>
 
@@ -39,8 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffffff"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="6dp"
         card_view:cardUseCompatPadding="true"
@@ -117,46 +118,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.rey.material.widget.Button
+            android:background="@color/my_background"
+            style="@style/Material.Drawable.Ripple.Wave"
             android:id="@+id/btn_know"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Знаю"
-                android:layout_marginBottom="18dp"
-                android:layout_marginLeft="18dp"
-                android:gravity="bottom"
-                android:textSize="26sp"
-                android:textColor="@drawable/tv_btn_style"
+            android:layout_weight="1"
+            android:text="Знаю"
+            app:rd_enable="true"
+            android:gravity="bottom|left"
+            android:textSize="20sp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"/>
 
-                />
-        </LinearLayout>
-
-        <LinearLayout
+        <com.rey.material.widget.Button
+            android:background="@color/my_background"
+            style="@style/Material.Drawable.Ripple.Wave"
             android:id="@+id/btn_unknown"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-            <TextView
-                android:clickable="false"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Не знаю"
-                android:layout_marginRight="18dp"
-                android:layout_marginBottom="18dp"
-                android:gravity="bottom|right"
-                android:textSize="26sp"
-                android:textColor="@drawable/tv_btn_style"
-                android:shadowColor="@color/text_shadow"
-
-                />
-        </LinearLayout>
-
+            android:layout_weight="1"
+            android:text="Не знаю"
+            app:rd_enable="true"
+            android:gravity="bottom|right"
+            android:textSize="20sp"
+            android:paddingBottom="20dp"
+            android:paddingRight="20dp"/>
     </LinearLayout>
+
+
 
 </LinearLayout>

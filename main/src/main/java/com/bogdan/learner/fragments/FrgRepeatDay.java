@@ -9,11 +9,11 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.R;
+import com.rey.material.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +27,7 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
     boolean reversWord;
     ArrayList<String[]> toDayListWords;
     TextView englishWord, transWord, russianWord, tvSumWords, btn_nextTV;
-    LinearLayout btnNext;
+    Button btnNext;
     CardView btn_audio;
     TextToSpeech toSpeech;
     int countBtnClick;
@@ -56,8 +56,8 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
         transWord = (TextView) view.findViewById(R.id.transWord);
         russianWord = (TextView) view.findViewById(R.id.russianWord);
         tvSumWords = (TextView) view.findViewById(R.id.tvSumWords);
-        btn_nextTV = (TextView) view.findViewById(R.id.btn_nextTv);
-        btnNext = (LinearLayout) view.findViewById(R.id.btn_next);
+
+        btnNext = (Button) view.findViewById(R.id.btn_next);
         btnNext.setOnClickListener(this);
         btn_audio.setOnClickListener(this);
         toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener(){
@@ -77,7 +77,7 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
         if (toDayListWords.size() != 0) {
             Collections.shuffle(toDayListWords);
             tvSumWords.setText(String.valueOf(toDayListWords.size()));
-            btn_nextTV.setText(R.string.answer);
+            btnNext.setText(R.string.answer);
             eng = toDayListWords.get(0)[0];
             rus = toDayListWords.get(0)[1];
             trn = toDayListWords.get(0)[2];
@@ -103,7 +103,7 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
             case R.id.btn_next:
                 countBtnClick--;
                 if (countBtnClick >= 1) {
-                    btn_nextTV.setText(R.string.next);
+                    btnNext.setText(R.string.next);
                     russianWord.setText(rus);
                     transWord.setText(toDayListWords.get(0)[2]);
                     toDayListWords.remove(0);

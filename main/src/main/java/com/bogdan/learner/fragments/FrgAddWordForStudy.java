@@ -10,12 +10,12 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
+import com.rey.material.widget.Button;
 
 import java.util.Locale;
 
@@ -23,7 +23,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     private final String LOG_TAG = "FrgAddWordForStudy";
     private DBHelper dayLibrary;
     private String[] word;
-    LinearLayout btn_know, btn_unknown;
+    Button btn_know, btn_unknown;
     TextView tv_english, tv_transcription, tv_russian, tvSumWords;
     TextToSpeech toSpeech;
     CardView btn_audio;
@@ -33,9 +33,9 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.frg_add_word_for_study, null);
         dayLibrary = DBHelper.getDbHelper(getActivity());
 
-        btn_know = (LinearLayout) view.findViewById(R.id.btn_know);
+        btn_know = (Button) view.findViewById(R.id.btn_know);
         btn_know.setOnClickListener(this);
-        btn_unknown = (LinearLayout) view.findViewById(R.id.btn_unknown);
+        btn_unknown = (Button) view.findViewById(R.id.btn_unknown);
         btn_unknown.setOnClickListener(this);
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
         btn_audio.setOnClickListener(this);

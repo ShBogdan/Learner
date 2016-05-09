@@ -26,6 +26,7 @@ import android.widget.LinearLayout.LayoutParams;
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
+import com.rey.material.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -171,7 +172,7 @@ public class FrgLearnToDay extends Fragment {
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.width = buttonSize;
         params.height = buttonSize;
-        params.setMargins(2,2,2,2);
+        params.setMargins(3,3,3,3);
 
 
         /*заполяем русское слово*/
@@ -180,7 +181,7 @@ public class FrgLearnToDay extends Fragment {
 
         final TextView tvInput = (TextView) getActivity().findViewById(R.id.tv_input);
 
-        final LinearLayout layWipe = (LinearLayout) getActivity().findViewById(R.id.lay_wipe);
+        final Button layWipe = (Button) getActivity().findViewById(R.id.lay_wipe);
 
         final TextView tvCorrectAnswer = (TextView) getActivity().findViewById(R.id.tv_correct_answer);
         tvCorrectAnswer.setText(englishWord);
@@ -205,7 +206,7 @@ public class FrgLearnToDay extends Fragment {
             btnLater.setId(countLetter);
             btnLater.addView(tv);
             btnLater.setTag(x);
-            btnLater.setCardElevation(6);
+            btnLater.setCardElevation(8);
             btnLater.setUseCompatPadding(true);
 
             View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -216,7 +217,7 @@ public class FrgLearnToDay extends Fragment {
                     if (lettersEngWord.contains(letter)) {
                         lettersEngWord.remove(letter);
                         btnLater.setEnabled(false);
-                        btnLater.setCardElevation(3);
+                        btnLater.setCardElevation(2);
                         deletedBtn.add(new String[]{letter, String.valueOf((int) btnLater.getId())});
                         answer.append(letter);
                         tvInput.setText(answer);
@@ -273,7 +274,9 @@ public class FrgLearnToDay extends Fragment {
                             tvInput.setText(answer.toString());
                             for (String[] s : deletedBtn) {
                                 if (s[0].equals(returnLetter)) {
-                                    getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1])).setEnabled(true);
+                                    CardView c = (CardView)getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1]));
+                                    c.setEnabled(true);
+                                    c.setCardElevation(8);
                                     deletedBtn.remove(s);
                                     break;
                                 }
@@ -282,7 +285,9 @@ public class FrgLearnToDay extends Fragment {
                             lettersEngWord.add(String.valueOf(answer));
                             for (String[] s : deletedBtn) {
                                 if (s[0].equals(String.valueOf(answer))) {
-                                    getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1])).setEnabled(true);
+                                    CardView c = (CardView)getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1]));
+                                    c.setEnabled(true);
+                                    c.setCardElevation(8);
                                     deletedBtn.remove(s);
                                     break;
                                 }
@@ -302,7 +307,10 @@ public class FrgLearnToDay extends Fragment {
             Display display = getActivity().getWindowManager().getDefaultDisplay();
             DisplayMetrics metricsB = new DisplayMetrics();
             display.getMetrics(metricsB);
-            buttonOnDisplayWidth = metricsB.widthPixels / buttonSize;
+            buttonOnDisplayWidth = (metricsB.widthPixels - dpToPx(36) )/ (buttonSize);
+            Log.d("MyLog", "disp_wight "+ metricsB.widthPixels);
+            Log.d("MyLog", "btn_size "+ buttonSize);
+            Log.d("MyLog", "count "+ buttonOnDisplayWidth);
 
             if (countLetter < buttonOnDisplayWidth) {
                 linearLayoutInnerButtonLine_1.addView(btnLater, params);
@@ -326,6 +334,19 @@ public class FrgLearnToDay extends Fragment {
             reloadFragment();
         }
 
+        final Button next = (Button) getActivity().findViewById(R.id.lay_next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                count--;
+                if (wordsForFrgLetters.size() > 0) {
+                    wordsForFrgLetters.remove(0);
+                }
+                reloadFragment();
+            }
+        });
+
+
     }
 
     protected void drawTheWord() {
@@ -336,7 +357,7 @@ public class FrgLearnToDay extends Fragment {
         tvTransWord.setText(transWord);
         TextView tvRussianWord = (TextView) getActivity().findViewById(R.id.russianWord);
         tvRussianWord.setText(russianWord);
-        LinearLayout nextBtn = (LinearLayout) getActivity().findViewById(R.id.btn_next);
+        Button nextBtn = (Button) getActivity().findViewById(R.id.btn_next);
         final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
         tvSumWords.setText(wordsForFrgLetters.size() + "/" + toDayListWords.size());
 

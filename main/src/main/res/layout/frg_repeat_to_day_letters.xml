@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/frg_repeat_to_day_word"
               android:orientation="vertical"
               android:layout_width="match_parent"
@@ -18,17 +19,11 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginLeft="18dp"></LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginLeft="19dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:text="ответ"
                 android:id="@+id/tv_correct_answer"
@@ -65,8 +60,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffffff"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="6dp"
         card_view:cardUseCompatPadding="true"
@@ -123,7 +118,7 @@
         android:layout_marginTop="18dp">
 
         <ScrollView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/scrollView"
             android:layout_gravity="center_horizontal"
@@ -177,23 +172,40 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lay_wipe"
-        android:tag="lay_wipe"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:gravity="bottom">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|top"
-            android:enabled="false"
-            android:layout_marginBottom="18dp"
+
+        <com.rey.material.widget.Button
+            android:id="@+id/lay_wipe"
+            android:tag="lay_wipe"
+            android:background="@color/my_background"
+            style="@style/Material.Drawable.Ripple.Wave"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="Стереть"
-            android:gravity="bottom|right"
-            android:textSize="26sp"
-            android:textColor="@drawable/tv_btn_style"
-            />
+            app:rd_enable="true"
+            android:gravity="bottom|center"
+            android:textSize="20sp"
+            android:layout_weight="0.9"/>
+
+        <com.rey.material.widget.Button
+            android:id="@+id/lay_next"
+            android:tag="lay_wipe"
+            android:background="@color/my_background"
+            style="@style/Material.Drawable.Ripple.Wave"
+
+            android:text="Пропустить"
+            app:rd_enable="true"
+            android:textSize="10sp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="0.5"/>
     </LinearLayout>
 
 </LinearLayout>
