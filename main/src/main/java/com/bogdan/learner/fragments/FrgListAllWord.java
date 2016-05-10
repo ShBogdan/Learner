@@ -248,13 +248,13 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                 if (word.isSelect) {
                     //                    ((CardView)thisCv).setCardBackgroundColor(Color.parseColor("#818CD6"));
                     colorFrom = Color.parseColor("#ffffff");
-                    colorTo = Color.parseColor("#818CD6");
+                    colorTo = getResources().getColor(R.color.my_background_1);
                     mSelectCount++;
 
 
                 } else {
                     //                    ((CardView)thisCv).setCardBackgroundColor(Color.parseColor("#ffffff"));
-                    colorFrom = Color.parseColor("#818CD6");
+                    colorFrom = getResources().getColor(R.color.my_background_1);
                     colorTo = Color.parseColor("#ffffff");
                     mSelectCount--;
                 }
@@ -318,7 +318,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
 
             //                меняем состояние Word и красим view
             if (word.isSelect) {
-                ((CardView)holder.thisCv).setCardBackgroundColor(Color.parseColor("#818CD6"));
+                ((CardView)holder.thisCv).setCardBackgroundColor( getResources().getColor(R.color.my_background_1));
 
             } else {
                 ((CardView)holder.thisCv).setCardBackgroundColor(Color.parseColor("#ffffff"));

@@ -218,6 +218,7 @@ public class FrgLearnToDay extends Fragment {
                         lettersEngWord.remove(letter);
                         btnLater.setEnabled(false);
                         btnLater.setCardElevation(2);
+                        btnLater.setCardBackgroundColor(getResources().getColor(R.color.my_background_1));
                         deletedBtn.add(new String[]{letter, String.valueOf((int) btnLater.getId())});
                         answer.append(letter);
                         tvInput.setText(answer);
@@ -277,6 +278,7 @@ public class FrgLearnToDay extends Fragment {
                                     CardView c = (CardView)getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1]));
                                     c.setEnabled(true);
                                     c.setCardElevation(8);
+                                    c.setCardBackgroundColor(Color.parseColor("#ffffff"));
                                     deletedBtn.remove(s);
                                     break;
                                 }
@@ -288,6 +290,8 @@ public class FrgLearnToDay extends Fragment {
                                     CardView c = (CardView)getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1]));
                                     c.setEnabled(true);
                                     c.setCardElevation(8);
+                                    c.setCardBackgroundColor(Color.parseColor("#ffffff"));
+
                                     deletedBtn.remove(s);
                                     break;
                                 }

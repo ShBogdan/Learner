@@ -3,86 +3,151 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/tools"
                 android:id="@+id/frgMainMenu"
                 android:background="@color/my_background">
 
-
-    <Button
+    <android.support.v7.widget.CardView
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/buttonstyle"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="6dp"
+        card_view:cardUseCompatPadding="true"
+        android:id="@+id/card_view_1">
+        <com.rey.material.widget.Button
+            android:background="@color/my_background"
+            style="@style/Material.Drawable.Ripple.Wave.Light"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Добавить новое слово"
             android:id="@+id/btn_addMoreWord"
-            android:layout_marginTop="35dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="@drawable/buttonstyle"
-            />
+            app:rd_enable="true"
+          />
+    </android.support.v7.widget.CardView>
 
-    <Button
-            android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/buttonstyle"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="6dp"
+        card_view:cardUseCompatPadding="true"
+        android:layout_below="@+id/card_view_1"
+        android:layout_alignLeft="@+id/card_view_1"
+        android:layout_alignStart="@+id/card_view_1"
+        android:layout_alignRight="@+id/card_view_1"
+        android:layout_alignEnd="@+id/card_view_1"
+        android:id="@+id/card_view_2">
+        <com.rey.material.widget.Button
+            android:background="@color/my_background"
+            style="@style/Material.Drawable.Ripple.Wave.Light"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Учить сегодня"
             android:id="@+id/btn_learnToday"
-            android:layout_below="@+id/btn_addMoreWord"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="@drawable/buttonstyle"/>
+            app:rd_enable="true"
+            />
+    </android.support.v7.widget.CardView>
 
-
-    <Button
-            android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/buttonstyle"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="6dp"
+        card_view:cardUseCompatPadding="true"
+        android:layout_below="@+id/card_view_2"
+        android:layout_alignLeft="@+id/card_view_2"
+        android:layout_alignStart="@+id/card_view_2"
+        android:layout_alignRight="@+id/card_view_2"
+        android:layout_alignEnd="@+id/card_view_2"
+        android:id="@+id/card_view_3">
+        <com.rey.material.widget.Button
+            android:background="@color/my_background"
+            style="@style/Material.Drawable.Ripple.Wave.Light"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Повторить изученное"
             android:id="@+id/btn_repeat"
-            android:layout_below="@+id/btn_learnToday"
-            android:layout_alignLeft="@+id/btn_learnToday"
-            android:layout_alignStart="@+id/btn_learnToday"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/buttonstyle"/>
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            app:rd_enable="true"
+            />
+    </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/buttons"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="6dp"
+        card_view:cardUseCompatPadding="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal">
+            android:layout_centerHorizontal="true">
 
-                <Button
-                    android:id="@+id/btn_info"
-                    android:text="Info"
-                    android:textColor="#FFFFFF"
-                    android:layout_weight="1"
-                    android:onClick="onButtonSelected"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textSize="18sp"
-                    android:background="@drawable/buttonstyle"
-                    android:shadowColor="#000000"
-                    android:shadowDx="-2"
-                    android:shadowDy="2"
-                    android:shadowRadius="1"
-                    />
-                <Button
-                    android:id="@+id/btn_like"
-                    android:text="Like!"
-                    android:textColor="#FFFFFF"
-                    android:layout_weight="1"
-                    android:onClick="onButtonSelected"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textSize="18sp"
-                    android:background="@drawable/buttonstyle"
-                    android:shadowColor="#000000"
-                    android:shadowDx="-2"
-                    android:shadowDy="2"
-                    android:shadowRadius="1"
-                    />
+            <com.rey.material.widget.Button
+                android:background="@color/main_button"
+                style="@style/Material.Drawable.Ripple.Wave.Light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_info"
+                android:text="Info"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                app:rd_enable="true"/>
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="2dp"
+                android:layout_height="match_parent">
+            </LinearLayout>
 
+            <com.rey.material.widget.Button
+                android:background="@color/main_button"
+                style="@style/Material.Drawable.Ripple.Wave.Light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_like"
+                android:text="Like!"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                app:rd_enable="true"/>
         </LinearLayout>
+    </android.support.v7.widget.CardView>
+
 </RelativeLayout>

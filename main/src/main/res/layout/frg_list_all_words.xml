@@ -46,7 +46,7 @@
             android:layout_centerHorizontal="true">
 
             <com.rey.material.widget.Button
-                android:background="@color/my_background"
+                android:background="@color/main_button"
                 style="@style/Material.Drawable.Ripple.Wave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
             </LinearLayout>
 
             <com.rey.material.widget.Button
-                android:background="@color/my_background"
+                android:background="@color/main_button"
                 style="@style/Material.Drawable.Ripple.Wave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

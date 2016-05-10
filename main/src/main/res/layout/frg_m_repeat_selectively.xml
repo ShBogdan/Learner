@@ -15,35 +15,45 @@
             android:text="Повторение сегодня"
             android:id="@+id/btn_repeat_day1"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/buttonstyle"/>
+            android:background="@drawable/buttonstyle"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Первое повторение(2 день)"
             android:id="@+id/btn_repeat_day2"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/buttonstyle"/>
+            android:background="@drawable/buttonstyle"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Второе повторение(3 день)"
             android:id="@+id/btn_repeat_day3"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/buttonstyle"/>
+            android:background="@drawable/buttonstyle"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Третье повторение(21 день)"
             android:id="@+id/btn_repeat_day21"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/buttonstyle"/>
+            android:background="@drawable/buttonstyle"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Четвертое повторение(90 день)"
             android:id="@+id/btn_repeat_day90"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/buttonstyle"/>
+            android:background="@drawable/buttonstyle"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
     <!--<Button-->
             <!--android:layout_width="fill_parent"-->
             <!--android:layout_height="wrap_content"-->
@@ -58,7 +68,9 @@
             android:text="Все слова"
             android:id="@+id/btn_all_words"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/buttonstyle"/>
+            android:background="@drawable/buttonstyle"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
@@ -107,7 +119,8 @@
                 android:id="@+id/tv_known"
                 android:layout_gravity="bottom"
                 android:textSize="12sp"
-                android:layout_marginLeft="18dp" />
+                android:layout_marginLeft="18dp"
+                android:layout_marginBottom="18dp"/>
         </LinearLayout>
     </LinearLayout>
 
