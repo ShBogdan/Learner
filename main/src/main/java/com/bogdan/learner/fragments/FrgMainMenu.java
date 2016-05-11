@@ -25,6 +25,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
     FragmentListener mCallback;
     String appPackageName;
     CardView cardView_1, cardView_2, cardView_3;
+    Button btn_learnToday, btn_addNewWord, btn_repeat;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,16 +37,18 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
         cardView_2 = (CardView) view.findViewById(R.id.card_view_2);
         cardView_3 = (CardView) view.findViewById(R.id.card_view_3);
 
-
-        Button btn_learnToday = (Button) view.findViewById(R.id.btn_learnToday);
-        btn_learnToday.setOnClickListener(this);
-        btn_learnToday.setOnTouchListener(this);
-        Button btn_addNewWord = (Button) view.findViewById(R.id.btn_addMoreWord);
+        btn_addNewWord = (Button) view.findViewById(R.id.btn_addMoreWord);
         btn_addNewWord.setOnClickListener(this);
-        btn_addNewWord.setOnTouchListener(this);
-        Button btn_repeat = (Button) view.findViewById(R.id.btn_repeat);
+//        btn_addNewWord.setOnTouchListener(this);
+
+        btn_learnToday = (Button) view.findViewById(R.id.btn_learnToday);
+        btn_learnToday.setOnClickListener(this);
+//        btn_learnToday.setOnTouchListener(this);
+
+        btn_repeat = (Button) view.findViewById(R.id.btn_repeat);
         btn_repeat.setOnClickListener(this);
-        btn_repeat.setOnTouchListener(this);
+//        btn_repeat.setOnTouchListener(this);
+
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         Button btn_info = (Button) view.findViewById(R.id.btn_info);
@@ -101,6 +104,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
             case MotionEvent.ACTION_DOWN:
                 if(view.getId()==(R.id.btn_addMoreWord))
                     cardView_1.setCardElevation(2);
+
                 if(view.getId()==(R.id.btn_learnToday))
                     cardView_2.setCardElevation(2);
                 if(view.getId()==(R.id.btn_repeat))
@@ -116,9 +120,6 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
                 break;
         }
 
-
-
-
-        return true;
+       return true;
     }
 }

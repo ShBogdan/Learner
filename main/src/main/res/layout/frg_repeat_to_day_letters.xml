@@ -60,10 +60,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffffff"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
         card_view:cardCornerRadius="2dp"
-        card_view:cardElevation="6dp"
+        card_view:cardElevation="4dp"
         card_view:cardUseCompatPadding="true"
         android:layout_marginTop="-16dp">
 
@@ -98,7 +98,7 @@
                 android:text=""
                 android:id="@+id/tv_input"
                 android:textSize="22sp"
-                android:textColor="#ff3c3c3c"
+                android:textColor="#ff1744"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="18dp"
@@ -113,9 +113,10 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="top"
-        android:layout_marginTop="18dp">
+        android:layout_marginTop="18dp"
+        android:layout_weight="1">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -164,6 +165,54 @@
                     android:gravity="center"
                     android:layout_gravity="center_horizontal">
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_5"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_6"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                android:id="@+id/linearLayoutInnerButtonLine_7"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal">
+            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_8"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_9"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_10"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
 
 
             </LinearLayout>
@@ -174,8 +223,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="bottom">
 
         <com.rey.material.widget.Button
@@ -188,9 +236,10 @@
             android:layout_height="match_parent"
             android:text="Стереть"
             app:rd_enable="true"
-            android:gravity="bottom|center"
+            android:gravity="center"
             android:textSize="20sp"
-            android:layout_weight="0.9"/>
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"/>
 
         <com.rey.material.widget.Button
             android:id="@+id/lay_next"
@@ -203,9 +252,12 @@
             android:textSize="10sp"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
 
-            android:layout_weight="0.5"/>
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="18dp"
+            />
     </LinearLayout>
 
 </LinearLayout>

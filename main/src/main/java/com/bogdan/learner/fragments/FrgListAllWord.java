@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -124,7 +125,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         mAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.hidd_button);
 
         buttons.setAnimation(mAnimation);
-        mRecyclerView.setPadding(0,0,0,0);
+        mRecyclerView.setPadding(0, 0, 0, 0);
         buttons.setAnimation(mAnimation);
         buttons.postDelayed(new Runnable() {
             @Override
@@ -265,7 +266,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                     buttons.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mRecyclerView.setPadding(0,0,0,buttons.getHeight()-20);
+                            mRecyclerView.setPadding(0,0,0,buttons.getHeight()-(dpToPx(10)));
                         }
                     }, 200);
 
@@ -393,5 +394,15 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
             return dialog;
         }
 
+    }
+
+    public static int dpToPx(int dp)
+    {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static int pxToDp(int px)
+    {
+        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
 }

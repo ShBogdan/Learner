@@ -17,10 +17,8 @@
             android:layout_height="wrap_content"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="6dp"
+            card_view:cardBackgroundColor="@color/main_button"
             card_view:cardUseCompatPadding="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp">
             <LinearLayout
@@ -34,7 +32,7 @@
                     android:background="@color/main_button"
                     style="@style/Material.Drawable.Ripple.Wave.Light"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/btn_toMain"
                     android:onClick="onButtonSelected"
                     android:text="На главную"
@@ -43,8 +41,9 @@
                     app:rd_enable="true"/>
 
                 <LinearLayout
+                    android:background="@color/my_background_1"
                     android:orientation="horizontal"
-                    android:layout_width="2dp"
+                    android:layout_width="1dp"
                     android:layout_height="match_parent">
                 </LinearLayout>
 
