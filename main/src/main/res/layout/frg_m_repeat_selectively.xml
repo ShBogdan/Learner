@@ -11,8 +11,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView3">
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView3"
+        android:layout_weight="1">
 
         <LinearLayout
             android:orientation="vertical"
@@ -222,12 +223,24 @@
                     />
             </android.support.v7.widget.CardView>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="22dp"
-                >
-            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:gravity="bottom"
+        android:layout_marginBottom="18dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
 
             <CheckBox
                 android:layout_width="match_parent"
@@ -236,46 +249,29 @@
                 android:id="@+id/changeWordPlace"
                 android:checked="false"
                 android:textSize="12sp"
-                android:layout_marginRight="18dp"
-                android:layout_marginLeft="18dp" />
+                />
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="изучено"
+                android:id="@+id/tv_learned"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp"
+                />
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="изучено"
-                        android:id="@+id/tv_learned"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="12sp"
-                        android:layout_marginLeft="18dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="известно ранее"
-                        android:id="@+id/tv_known"
-                        android:layout_gravity="bottom"
-                        android:textSize="12sp"
-                        android:layout_marginLeft="18dp"
-                        android:layout_marginBottom="18dp"/>
-                </LinearLayout>
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="известно ранее"
+                android:id="@+id/tv_known"
+                android:layout_gravity="bottom"
+                android:textSize="12sp"
+                />
         </LinearLayout>
-    </ScrollView>
+
+    </LinearLayout>
 
 </LinearLayout>

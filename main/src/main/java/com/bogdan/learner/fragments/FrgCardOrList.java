@@ -20,7 +20,7 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     SharedPreferences sp;
     SharedPreferences.Editor editor;
-    Button btnCards, btnList;
+    Button btnCards, btnFavorite ,btnList;
 //    RadioGroup radioGroup;
     RadioButton radioRandom, radioDate, radioAlphabet;
     CheckBox cbKnowWords;
@@ -36,8 +36,10 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
 
         btnCards = (Button) view.findViewById(R.id.btn_cards);
         btnList = (Button) view.findViewById(R.id.btn_list);
+        btnFavorite = (Button) view.findViewById(R.id.btn_favorite);
         btnCards.setOnClickListener(this);
         btnList.setOnClickListener(this);
+        btnFavorite.setOnClickListener(this);
 
         radioRandom = (RadioButton) view.findViewById(R.id.radioRandom);
         radioDate = (RadioButton) view.findViewById(R.id.radioDate);
@@ -95,6 +97,12 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
                 fTrans.replace(R.id.fragment_container, new FrgCardAllWords());
                 fTrans.addToBackStack(null).commit();
                 break;
+
+            case R.id.btn_favorite:
+                fTrans.replace(R.id.fragment_container, new FrgCardFavorite());
+                fTrans.addToBackStack(null).commit();
+                break;
+
             case R.id.btn_list:
                 fTrans.replace(R.id.fragment_container, new FrgListAllWord());
                 fTrans.addToBackStack(null).commit();

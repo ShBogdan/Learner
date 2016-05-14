@@ -36,7 +36,7 @@ android {
     }
     productFlavors {
         english_card {
-            applicationId 'com.bogdan.english.card'
+            applicationId 'com.bogdan.english.card1'
         }
     }
 }

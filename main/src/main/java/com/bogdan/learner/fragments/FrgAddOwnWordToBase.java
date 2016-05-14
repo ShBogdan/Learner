@@ -65,7 +65,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
 
     public void onClick(View v) {
         // проверяем на наличе заволненых полей и отсутствие пробелов
-        if (TextUtils.isEmpty(englishWord.getText()) || englishWord.getText().toString().contains(" ")) {
+        if (TextUtils.isEmpty(englishWord.getText())) {
             englishWord.setError(getResources().getString(R.string.cant_be_space));
         } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ") == 0) {
             russianWord.setError(getResources().getString(R.string.cant_be_space));

@@ -6,6 +6,7 @@
     <string name="load">"ЗАГРУЗИЛ"</string>
     <string name="no_words_today">Сегодня вы не добавили ни одного слова</string>
     <string name="no_words">Вы не изучили ни одного слова</string>
+    <string name="no_favor">Нет избранных</string>
     <string name="no_words_for_study">Больше нет слов для изучения</string>
     <string name="exit">Хотите закончить обучение?</string>
     <string name="yas">Да</string>
