@@ -39,7 +39,8 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
 
     CardView btn_audio;
     TextView tv_english, tv_russian, tv_transcription, tv_sumWords;
-    Button btn_next, btn_remove;
+    Button btn_next;
+    //    Button btn_remove;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,11 +49,11 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
 
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
         btn_next = (Button) view.findViewById(R.id.btn_next);
-        btn_remove = (Button) view.findViewById(R.id.btn_remove);
+        //        btn_remove = (Button) view.findViewById(R.id.btn_remove);
 
         btn_audio.setOnClickListener(this);
         btn_next.setOnClickListener(this);
-        btn_remove.setOnClickListener(this);
+        //        btn_remove.setOnClickListener(this);
 
         tv_english = (TextView) view.findViewById(R.id.tv_english);
         tv_russian = (TextView) view.findViewById(R.id.tv_russian);
@@ -90,15 +91,7 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
     }
 
     void readFile() {
-        //        arrayWords = new ArrayList<>();
-        //        if (sp.contains("words")) {
         wordsFromFile = sp.getStringSet("words", null);
-        //            if (wordsFromFile == null || wordsFromFile.size() == 0){
-        //                getFragmentManager().popBackStack();
-        //                Toast.makeText(getActivity(), R.string.no_words, Toast.LENGTH_SHORT).show();
-        //                }
-        //        } else
-        //            return;
         for (String el : wordsFromFile) {
             for (String[] _el : DBHelper.getDbHelper(getActivity()).learnedWords) {
                 if(_el[0].equals(el)){
@@ -114,7 +107,7 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
 
         for (String[] el : DBHelper.getDbHelper(getActivity()).learnedWords) {
             if(el[0].equals(arrayWords.get(0)[0])){
-               el[4] = "null";
+                el[4] = "null";
             }
         }
         arrayWords.remove(0);
@@ -138,6 +131,8 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
     }
 
     void inflateView() {
+        btn_next.setText("Ответ");
+
         if(arrayWords == null)
             arrayWords = new ArrayList<>();
 
@@ -149,27 +144,29 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
 
         if (arrayWords.size() != 0){
             if(clickCount == 0){
-
                 randomWord = arrayWords.get(0);
-
                 String eng = randomWord[0];
                 String trans = randomWord[randomWord.length-3];
-
                 tv_english.setText(eng);
                 tv_russian.setText("");
                 tv_transcription.setText(trans);
                 tv_sumWords.setText(String.valueOf(arrayWords.size()));
             }
             if(clickCount == 1){
+                btn_next.setText("Далее");
                 String rus = randomWord[1];
                 tv_russian.setText(rus);
                 clickCount = 0;
-                arrayWords.add(arrayWords.get(0));
+//                arrayWords.add(arrayWords.get(0));
+                Log.d("MyLog", "Размер " +arrayWords.size());
                 arrayWords.remove(0);
-                for (int i = 0; i < arrayWords.size(); i++) {
+                //                tv_sumWords.setText(String.valueOf(arrayWords.size()));
+                Log.d("MyLog", "Размер " +arrayWords.size());
+//
+//                for (int i = 0; i < arrayWords.size(); i++) {
+//                    Log.d("MyLog", String.valueOf(arrayWords.get(i)[0]));
+//                }
 
-                    Log.d("MyLog", String.valueOf(arrayWords.get(i)[0]));
-                }
                 return;
             }
             clickCount++;

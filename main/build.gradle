@@ -19,8 +19,8 @@ android {
         applicationId "com.bogdan.learner"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 2
-        versionName "1.0"
+        versionCode 3
+        versionName "2.0"
 
     }
     compileOptions {
@@ -36,7 +36,12 @@ android {
     }
     productFlavors {
         english_card {
-            applicationId 'com.bogdan.english.card1'
+            applicationId 'com.bogdan.english.card'
+            minSdkVersion 16
+            proguardFile 'C:/Learner/main/proguard-rules.pro'
+            targetSdkVersion 23
+            versionCode 3
+            versionName '2.0'
         }
     }
 }
@@ -48,6 +53,4 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'com.github.rey5137:material:1.2.2'
     compile 'xyz.danoz:recyclerviewfastscroller:0.1.3'
-//    compile 'com.github.jd-alexander:LikeButton:0.2.0'
-
 }
