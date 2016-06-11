@@ -80,7 +80,7 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
         wordsInToFile = new HashSet<>();
         for (String[] el : DBHelper.getDbHelper(getActivity()).learnedWords) {
             if(Boolean.parseBoolean(el[4]))
-                wordsInToFile.add(el[0]);
+                wordsInToFile.add(el[3]);
         }
     }
 
@@ -94,7 +94,7 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
         wordsFromFile = sp.getStringSet("words", null);
         for (String el : wordsFromFile) {
             for (String[] _el : DBHelper.getDbHelper(getActivity()).learnedWords) {
-                if(_el[0].equals(el)){
+                if(_el[3].equals(el)){
                     arrayWords.add(_el);
                 }
             }
@@ -106,7 +106,7 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
         wordsInToFile = new HashSet<>();
 
         for (String[] el : DBHelper.getDbHelper(getActivity()).learnedWords) {
-            if(el[0].equals(arrayWords.get(0)[0])){
+            if(el[3].equals(arrayWords.get(0)[3])){
                 el[4] = "null";
             }
         }
@@ -146,7 +146,7 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
             if(clickCount == 0){
                 randomWord = arrayWords.get(0);
                 String eng = randomWord[0];
-                String trans = randomWord[randomWord.length-3];
+                String trans = randomWord[randomWord.length-4];
                 tv_english.setText(eng);
                 tv_russian.setText("");
                 tv_transcription.setText(trans);

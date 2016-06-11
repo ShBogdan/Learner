@@ -159,7 +159,7 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
                 randomWord = arrayWords.get(randomIndexWord);
 
                 String eng = randomWord[0];
-                String trans = randomWord[randomWord.length-3];
+                String trans = randomWord[randomWord.length-4];
 
                 tv_english.setText(eng);
                 tv_russian.setText("");

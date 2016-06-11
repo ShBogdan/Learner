@@ -13,7 +13,7 @@
     <string name="no">Нет</string>
     <string name="added_successfully">успешно добавлено</string>
     <string name="word_in_the_base">Слово уже добавлено</string>
-    <string name="cant_be_space">Поля не могут быть пустыми или содержать пробел</string>
+    <string name="cant_be_space">Поля не могут быть пустыми</string>
     <string name="answer">Ответ</string>
     <string name="next">Далее</string>
     <string name="wasUpdate">Слова обновлены</string>

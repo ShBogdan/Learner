@@ -2,6 +2,7 @@ package com.bogdan.learner.fragments;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,14 +19,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
@@ -47,10 +53,10 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
     private SharedPreferences sp;
     private Button btn_remove, btn_relearn;
     private CardView buttons;
-    private boolean ifToFavorite = false;
-    boolean isChange = false;
+    private boolean isChange = false;
     private Animation mAnimation;
     private int mSelectCount;
+    public SearchView search;
 
 
 
@@ -58,8 +64,11 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.frg_list_all_words, container, false);
+        RecyclerViewHeader header = (RecyclerViewHeader) view.findViewById(R.id.header);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.r_view);
         sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+
+        search = (SearchView) view.findViewById(R.id.search);
 
         btn_remove = (Button) view.findViewById(R.id.btn_remove);
         btn_remove.setOnClickListener(this);
@@ -80,9 +89,14 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         fastScroller.setBarColor(Color.parseColor("#CFD8DC"));
         mRecyclerView.setOnScrollListener(fastScroller.getOnScrollListener());
 
+        mRecyclerView.setHasFixedSize(true);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new MyAdapter( arrayList);
+        adapter = new MyAdapter(arrayList);
         mRecyclerView.setAdapter(adapter);
+        header.attachTo(mRecyclerView);
+        search.setOnQueryTextListener(listener);
+
         return view;
     }
 
@@ -107,6 +121,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                     DBHelper.getDbHelper(getActivity()).updateWordDate(MainActivity.toDayDate, Integer.parseInt(arrayList.get(i).id));
                     arrayList.get(i).isSelect = false;
                     isChange = true;
+                    search.refreshDrawableState();
                 }
             }
         }
@@ -197,6 +212,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
             public CheckBox favorite;
             public LinearLayout btn;
             public CardView thisCv;
+            public ImageView btn_change_word;
             String id;
 
             public ViewHolder(View v) {
@@ -207,11 +223,12 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                 trans = (TextView) v.findViewById(R.id.tv_trans);
                 btn = (LinearLayout) v.findViewById(R.id.btn_card);
                 thisCv = (CardView) v.findViewById(R.id.myLay);
+                btn_change_word = (ImageView) v.findViewById(R.id.btn_change);
                 btn.setOnClickListener(this);
                 favorite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ifToFavorite = true;
+                        isChange = true;
                         if(favorite.isChecked()){
                             DBHelper.getDbHelper(getActivity()).setFavorite("true", id);
                             for (int i = 0; i <arrayList.size() ; i++) {
@@ -229,6 +246,51 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                         }
                     }
                 });
+                btn_change_word.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        final Dialog dialog = new Dialog(getActivity());
+                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        dialog.setContentView(R.layout.dialog_change_item);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.show();
+
+                        final EditText et_eng, et_rus;
+                        et_eng = (EditText) dialog.findViewById(R.id.englishWord);
+                        et_rus = (EditText) dialog.findViewById(R.id.russianWord);
+
+                        et_eng.setText(eng.getText());
+                        et_rus.setText(rus.getText());
+
+                        Toast.makeText(getActivity(), id, Toast.LENGTH_SHORT).show();
+
+                        Button btn_save, btn_cancel;
+                        btn_save = (Button) dialog.findViewById(R.id.btn_save);
+                        btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+
+                        btn_save.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                eng.setText(et_eng.getText());
+                                rus.setText(et_rus.getText());
+                                DBHelper.getDbHelper(getActivity()).changeWord(eng.getText().toString(), rus.getText().toString(), id);
+                                isChange = true;
+                                dialog.cancel();
+                            }
+                        });
+
+                        btn_cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.cancel();
+                            }
+                        });
+
+                    }
+                });
+
             }
 
             @Override
@@ -363,9 +425,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
 
         @Override
         protected Void doInBackground(Void... params) {
-            if(ifToFavorite)
-                DBHelper.getDbHelper(getActivity()).uploadDb();
-            if(isChange){
+             if(isChange){
                 DBHelper.getDbHelper(getActivity()).uploadDb();
                 isChange = false;
             }
@@ -405,4 +465,31 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
     {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
+
+    SearchView.OnQueryTextListener listener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextChange(String query) {
+            query = query.toLowerCase();
+
+            final ArrayList<Word> filteredList = new ArrayList<>();
+
+            for (int i = 0; i < arrayList.size(); i++) {
+
+                final String text = arrayList.get(i).eng.toLowerCase();
+                if (text.contains(query)) {
+                    filteredList.add(arrayList.get(i));
+                }
+            }
+
+//            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            adapter = new MyAdapter(filteredList);
+            mRecyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();  // data set changed
+            return true;
+
+        }
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+    };
 }

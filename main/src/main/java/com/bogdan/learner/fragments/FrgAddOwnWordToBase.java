@@ -57,6 +57,10 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                 transcription = dbHelper.getWord(parent.getItemAtPosition(position).toString())[2];
                 word_id = Integer.parseInt(dbHelper.getWord(parent.getItemAtPosition(position).toString())[3]);
 
+                if(Integer.parseInt(dbHelper.getWord(parent.getItemAtPosition(position).toString())[5]) > 1){
+                    Toast.makeText(getActivity(), "Это слово уже учили", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 

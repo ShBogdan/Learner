@@ -149,10 +149,10 @@ public class DBHelper extends SQLiteOpenHelper {
             engWords.add(english);
             if (wordsDb.containsKey(date)) {
                     /*Put in TreeMap "wordsDB" an ArrayList new String[]*/
-                wordsDb.get(date).add(new String[]{english, russian, transcription, id,favor});
+                wordsDb.get(date).add(new String[]{english, russian, transcription, id,favor, date.toString()});
             } else {
                 wordsDb.put(date, new ArrayList<String[]>());
-                wordsDb.get(date).add(new String[]{english, russian, transcription, id,favor});
+                wordsDb.get(date).add(new String[]{english, russian, transcription, id,favor, date.toString()});
             }
         }
 
@@ -213,6 +213,20 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues = new ContentValues();
         sqLiteDatabase = dbHelper.getWritableDatabase();
         contentValues.put(KEY_DATE, date);
+        sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ROWID + "= ?", new String[]{_id.toString()});
+        sqLiteDatabase.close();
+    }
+
+
+    /**
+     * Изменяем написание слова.
+     */
+    public void changeWord(String eng, String rus, String id) {
+        Integer _id = Integer.valueOf(id);
+        contentValues = new ContentValues();
+        sqLiteDatabase = dbHelper.getWritableDatabase();
+        contentValues.put(KEY_ENG, eng);
+        contentValues.put(KEY_RUS, rus);
         sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ROWID + "= ?", new String[]{_id.toString()});
         sqLiteDatabase.close();
     }
