@@ -33,7 +33,6 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
@@ -68,7 +67,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.frg_list_all_words, container, false);
-        RecyclerViewHeader header = (RecyclerViewHeader) view.findViewById(R.id.header);
+//        RecyclerViewHeader header = (RecyclerViewHeader) view.findViewById(R.id.header);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.r_view);
 
         sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
@@ -99,7 +98,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new MyAdapter(arrayList);
         mRecyclerView.setAdapter(adapter);
-        header.attachTo(mRecyclerView);
+//        header.attachTo(mRecyclerView);
         search.setOnQueryTextListener(listener);
 
         showHelp();
@@ -118,6 +117,8 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                     arrayList.remove(i);
                     i--;
                     isChange = true;
+                    search.onActionViewCollapsed();
+
                 }
             }
         }
@@ -487,7 +488,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                 }
             }
 
-//            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             adapter = new MyAdapter(filteredList);
             mRecyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();  // data set changed

@@ -8,6 +8,17 @@
     android:orientation="vertical"
     android:background="@color/my_background">
 
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textSize="16sp"
+        android:hint="Search here"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/r_view"
@@ -16,33 +27,34 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        />
+        android:layout_below="@+id/search"/>
 
-    <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center_horizontal|top">
+    <!--<com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader-->
+        <!--android:id="@+id/header"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:layout_gravity="center_horizontal|top">-->
 
-        <SearchView
-            android:id="@+id/search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:textSize="16sp"
-            android:hint="Search here"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"/>
+        <!--<SearchView-->
+            <!--android:id="@+id/search"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:paddingLeft="12dp"-->
+            <!--android:paddingRight="12dp"-->
+            <!--android:textSize="16sp"-->
+            <!--android:hint="Search here"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_centerHorizontal="true"/>-->
 
-    </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
+    <!--</com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>-->
 
     <xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
         android:id="@+id/fast_scroller"
         android:layout_width="30dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/search"
         />
 
 

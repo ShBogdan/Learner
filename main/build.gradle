@@ -19,8 +19,8 @@ android {
         applicationId "com.bogdan.learner"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 3
-        versionName "2.0"
+        versionCode 4
+        versionName "2.1"
 
     }
     compileOptions {
@@ -40,8 +40,8 @@ android {
             minSdkVersion 16
             proguardFile 'C:/Learner/main/proguard-rules.pro'
             targetSdkVersion 23
-            versionCode 3
-            versionName '2.0'
+            versionCode 4
+            versionName '2.1'
         }
     }
 }
