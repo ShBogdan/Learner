@@ -2,10 +2,12 @@ package com.bogdan.learner.fragments;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -51,6 +53,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
     private RecyclerView mRecyclerView;
     private MyAdapter adapter;
     private SharedPreferences sp;
+    SharedPreferences.Editor editor;
     private Button btn_remove, btn_relearn;
     private CardView buttons;
     private boolean isChange = false;
@@ -60,12 +63,14 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
 
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.frg_list_all_words, container, false);
         RecyclerViewHeader header = (RecyclerViewHeader) view.findViewById(R.id.header);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.r_view);
+
         sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
 
         search = (SearchView) view.findViewById(R.id.search);
@@ -96,6 +101,8 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         mRecyclerView.setAdapter(adapter);
         header.attachTo(mRecyclerView);
         search.setOnQueryTextListener(listener);
+
+        showHelp();
 
         return view;
     }
@@ -264,7 +271,6 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                         et_eng.setText(eng.getText());
                         et_rus.setText(rus.getText());
 
-                        Toast.makeText(getActivity(), id, Toast.LENGTH_SHORT).show();
 
                         Button btn_save, btn_cancel;
                         btn_save = (Button) dialog.findViewById(R.id.btn_save);
@@ -491,5 +497,28 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         public boolean onQueryTextSubmit(String query) {
             return false;
         }
+    };
+
+    public void showHelp(){
+        editor = sp.edit();
+        if(!sp.contains("howToDell")) {
+            editor.putBoolean("howToDell", true).apply();
+        }
+        if(sp.getBoolean("howToDell", true)){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.help)
+                    .setMessage(R.string.help_show)
+                    .setCancelable(false)
+                    .setNegativeButton("Я прочитал",
+                                       new DialogInterface.OnClickListener() {
+                                           public void onClick(DialogInterface dialog, int id) {
+                                               editor.putBoolean("howToDell", false).apply();
+                                               dialog.cancel();
+                                           }
+                                       });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+
     };
 }

@@ -21,5 +21,7 @@
     <string name="learned">Вы выучили все слова</string>
     <string name="add_to_study">Добавлено для изучения:</string>
     <string name="no_day">Нет слов для повторения</string>
+    <string name="help">Подсказка</string>
+    <string name="help_show">1. Чтобы удалить слово нажмите на него.\n 2. Чтобы добавить словово в избранное поставьте галочку.</string>
 
 </resources>
