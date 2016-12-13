@@ -22,4 +22,11 @@
         </receiver>
     </application>
 
+    <service
+        android:name=".TtsService"
+        android:enabled="true"
+        android:exported="false"
+        android:process="com.bogdan.learner">
+    </service>
+
 </manifest>

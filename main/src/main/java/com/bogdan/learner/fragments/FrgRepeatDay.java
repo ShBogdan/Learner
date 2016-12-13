@@ -6,12 +6,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bogdan.learner.DBHelper;
+import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 import com.rey.material.widget.Button;
 
@@ -21,10 +23,12 @@ import java.util.Locale;
 
 
 public class FrgRepeatDay extends Fragment implements View.OnClickListener {
+    private final String LOG_TAG = "MyLog";
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     SharedPreferences sp;
     String date;
     boolean reversWord;
+    boolean autoSpeech;
     ArrayList<String[]> toDayListWords;
     TextView englishWord, transWord, russianWord, tvSumWords, btn_nextTV;
     Button btnNext;
@@ -50,6 +54,10 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
 //      установлен ли пункт менять местами перевод
         sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         reversWord = sp.getBoolean("changeWordPlace", false);
+        autoSpeech = sp.getBoolean("autoSpeech", false);
+
+        Log.d(LOG_TAG, "FrgRepeatDay: " + reversWord);
+
 
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
         englishWord = (TextView) view.findViewById(R.id.englishWord);
@@ -60,14 +68,14 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
         btnNext = (Button) view.findViewById(R.id.btn_next);
         btnNext.setOnClickListener(this);
         btn_audio.setOnClickListener(this);
-        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener(){
-            @Override
-            public void onInit(int status) {
-                if(status != TextToSpeech.ERROR){
-                    toSpeech.setLanguage(Locale.ENGLISH);
-                }
-            }
-        });
+//        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener(){
+//            @Override
+//            public void onInit(int status) {
+//                if(status != TextToSpeech.ERROR){
+//                    toSpeech.setLanguage(Locale.ENGLISH);
+//                }
+//            }
+//        });
         reloadFragment();
         return view;
     }
@@ -87,14 +95,18 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
                 rus = temp;
                 trn = "";
             }
-            voice = toDayListWords.get(0)[0];
+            voice = eng;
             englishWord.setText(eng);
             transWord.setText(trn);
             russianWord.setText("");
+            if(autoSpeech){
+                MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
+            }
         } else {
             toDayListWords = new ArrayList<>(DBHelper.getDbHelper(getActivity()).getListWordsByDate(date));
             reloadFragment();
         }
+
     }
 
     @Override
@@ -113,7 +125,7 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.btn_audio:
-                toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
+                MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
                 break;
         }
     }

@@ -10,7 +10,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,14 +29,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
 
 
-public class MainActivity extends Activity implements FragmentListener {
+public class MainActivity extends Activity implements FragmentListener, TextToSpeech.OnInitListener{
     private final String LOG_TAG = "MainActivity";
-//    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     public static String toDayDate;
-//    SharedPreferences sp;
+    public static TextToSpeech toSpeech;
 
     DBHelper dbHelper;
     TreeMap<Integer, ArrayList<String[]>> uploadDb;
@@ -44,6 +47,7 @@ public class MainActivity extends Activity implements FragmentListener {
     FrgRepeatMenu frgRepeatMenu;
     FrgLearnToDay frgLearnToDay;
     FragmentTransaction fTrans;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +65,16 @@ public class MainActivity extends Activity implements FragmentListener {
         frgLearnToDay = new FrgLearnToDay();
         frgAddOwnWordToBase = new FrgAddOwnWordToBase();
 
-
         fTrans = getFragmentManager().beginTransaction();
         fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
         fTrans.commit();
+    }
 
-//        restartNotify();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        toSpeech = new TextToSpeech(this, this);
+
     }
 
     @Override
@@ -171,5 +179,33 @@ public class MainActivity extends Activity implements FragmentListener {
     protected void onRestart() {
         super.onRestart();
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+    }
+
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+
+            int result = toSpeech.setLanguage(Locale.ENGLISH);
+
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.d("TTS", "This Language is not supported");
+            } else {
+                Log.d("TTS", "Its fine!");
+            }
+
+        } else {
+            Log.d("TTS", "Initilization Failed!");
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        // Don't forget to shutdown tts!
+        if (toSpeech != null) {
+            toSpeech.stop();
+            toSpeech.shutdown();
+        }
+        super.onDestroy();
     }
 }

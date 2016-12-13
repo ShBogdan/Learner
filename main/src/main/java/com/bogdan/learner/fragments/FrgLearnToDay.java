@@ -3,6 +3,8 @@ package com.bogdan.learner.fragments;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -36,7 +38,8 @@ import java.util.Locale;
 
 public class FrgLearnToDay extends Fragment {
     public final String LOG_TAG = ":::::FrgLearnToDay:::::";
-
+    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
+    SharedPreferences sp;
     ArrayList<String[]> wordsForFrgLetters;
     ArrayList<String[]> toDayListWords;
     ArrayList<String[]> wordsForFrgRepeat;
@@ -48,13 +51,14 @@ public class FrgLearnToDay extends Fragment {
     String transWord;
     int countAttempt;
     int count; // для чередования фрагмента карточа - набор слова
-    TextToSpeech toSpeech;
+//    TextToSpeech toSpeech;
     CardView btn_audio;
     Handler handler;
     boolean onCreate;
     boolean onResume;
     boolean onDestroy;
     boolean onStop;
+    boolean autoSpeech;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,26 +102,28 @@ public class FrgLearnToDay extends Fragment {
         }
 
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
-        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(status!=TextToSpeech.ERROR){
-                    toSpeech.setLanguage(Locale.ENGLISH);
-                }
-            }
-        });
+//        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+//            @Override
+//            public void onInit(int status) {
+//                if(status!=TextToSpeech.ERROR){
+//                    toSpeech.setLanguage(Locale.ENGLISH);
+//                }
+//            }
+//        });
         btn_audio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toSpeech.speak(englishWord, TextToSpeech.QUEUE_ADD, null);
+                MainActivity.toSpeech.speak(englishWord, TextToSpeech.QUEUE_ADD, null);
             }
         });
 
-        Log.d(LOG_TAG, "OnCreate " + wordsForFrgRepeat.size());
-        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.size());
-        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[0]);
-        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[1]);
-        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[2]);
+        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+        autoSpeech = sp.getBoolean("autoSpeech", false);
+//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgRepeat.size());
+//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.size());
+//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[0]);
+//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[1]);
+//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[2]);
         return view;
     }
 
@@ -392,6 +398,9 @@ public class FrgLearnToDay extends Fragment {
         Button nextBtn = (Button) getActivity().findViewById(R.id.btn_next);
         final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
         tvSumWords.setText(wordsForFrgLetters.size() + "/" + toDayListWords.size());
+        if(autoSpeech){
+            MainActivity.toSpeech.speak(englishWord, TextToSpeech.QUEUE_ADD, null);
+        }
 
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override

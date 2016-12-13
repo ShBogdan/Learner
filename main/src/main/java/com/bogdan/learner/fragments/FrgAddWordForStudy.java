@@ -3,6 +3,8 @@ package com.bogdan.learner.fragments;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.CardView;
@@ -23,15 +25,20 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     private final String LOG_TAG = "FrgAddWordForStudy";
     private DBHelper dayLibrary;
     private String[] word;
+    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     Button btn_know, btn_unknown;
     TextView tv_english, tv_transcription, tv_russian, tvSumWords;
-    TextToSpeech toSpeech;
     CardView btn_audio;
+    SharedPreferences sp;
+    boolean autoSpeech;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_add_word_for_study, null);
         dayLibrary = DBHelper.getDbHelper(getActivity());
+
+        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+        autoSpeech = sp.getBoolean("autoSpeech", false);
 
         btn_know = (Button) view.findViewById(R.id.btn_know);
         btn_know.setOnClickListener(this);
@@ -40,14 +47,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
         btn_audio.setOnClickListener(this);
 
-        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR) {
-                    toSpeech.setLanguage(Locale.ENGLISH);
-                }
-            }
-        });
+
 
         try {
             int size;
@@ -65,6 +65,10 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
             tv_russian.setText(word[1]);
             tvSumWords = (TextView) view.findViewById(R.id.tvSumWords);
             tvSumWords.setText(getResources().getText(R.string.add_to_study) + " " + size);
+
+            if(autoSpeech){
+                MainActivity.toSpeech.speak(word[0], TextToSpeech.QUEUE_ADD, null);
+            }
         } catch (NullPointerException nullPointerException) {
             getFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new FrgMainMenu()).
@@ -95,7 +99,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.btn_audio:
-                toSpeech.speak(tv_english.getText().toString(), TextToSpeech.QUEUE_ADD, null);
+                MainActivity.toSpeech.speak(tv_english.getText().toString(), TextToSpeech.QUEUE_ADD, null);
                 break;
         }
     }

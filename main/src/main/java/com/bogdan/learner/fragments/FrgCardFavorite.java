@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bogdan.learner.DBHelper;
+import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 import com.rey.material.widget.Button;
 
@@ -28,8 +29,13 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
 
     private final String LOG_TAG = "::::FrgListAllWord::::";
     private final String FILE_NAME_WORDS = "favorites_words";
+    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     SharedPreferences sp;
+    SharedPreferences spSettings;
+    boolean reversWord;
+    boolean autoSpeech;
     TextToSpeech toSpeech;
+    String voice;
     ArrayList<String[]> arrayWords;
     Set<String> wordsInToFile;
     Set<String> wordsFromFile;
@@ -47,6 +53,12 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.frg_card_favorite, null);
         sp = getActivity().getSharedPreferences(FILE_NAME_WORDS, Context.MODE_PRIVATE);
 
+        //      установлен ли пункт менять местами перевод
+        spSettings = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+        reversWord = spSettings.getBoolean("changeWordPlace", false);
+        autoSpeech = spSettings.getBoolean("autoSpeech", false);
+
+
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
         btn_next = (Button) view.findViewById(R.id.btn_next);
         //        btn_remove = (Button) view.findViewById(R.id.btn_remove);
@@ -60,13 +72,13 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
         tv_transcription = (TextView) view.findViewById(R.id.tv_transcription);
         tv_sumWords = (TextView) view.findViewById(R.id.tv_sumWords);
 
-        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR)
-                    toSpeech.setLanguage(Locale.ENGLISH);
-            }
-        });
+//        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+//            @Override
+//            public void onInit(int status) {
+//                if (status != TextToSpeech.ERROR)
+//                    toSpeech.setLanguage(Locale.ENGLISH);
+//            }
+//        });
 
 
         createDataForFile();
@@ -125,7 +137,7 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
                 inflateView();
                 break;
             case R.id.btn_audio:
-                toSpeech.speak(tv_english.getText().toString(), TextToSpeech.QUEUE_ADD, null);
+                MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
                 break;
         }
     }
@@ -147,6 +159,14 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
                 randomWord = arrayWords.get(0);
                 String eng = randomWord[0];
                 String trans = randomWord[randomWord.length-4];
+
+                //если повторять ру-англ
+                if (reversWord) {
+                    eng = randomWord[1];
+                    trans = "";
+                }
+                voice = eng;
+
                 tv_english.setText(eng);
                 tv_russian.setText("");
                 tv_transcription.setText(trans);
@@ -155,6 +175,12 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
             if(clickCount == 1){
                 btn_next.setText("Далее");
                 String rus = randomWord[1];
+                //если повторять ру-англ
+                if (reversWord) {
+                    rus = randomWord[0];
+                    tv_transcription.setText(randomWord[randomWord.length-4]);
+                }
+
                 tv_russian.setText(rus);
                 clickCount = 0;
 //                arrayWords.add(arrayWords.get(0));
@@ -170,6 +196,11 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
                 return;
             }
             clickCount++;
+            Log.d(LOG_TAG, "FrgFawor: autoSpeech " + autoSpeech);
+
+            if(autoSpeech){
+                MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
+            }
 
 
         } else {
