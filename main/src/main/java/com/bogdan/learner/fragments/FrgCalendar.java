@@ -78,8 +78,8 @@ public class FrgCalendar extends Fragment{
             bundleDate.putString("com.bogdan.learner.fragments.day_date", dayDate);
             FragmentTransaction fTrans = getActivity().getFragmentManager().beginTransaction();
             fTrans.replace(R.id.fragment_container, fr);
-//            fTrans.addToBackStack(null).commit();
-            fTrans.commit();
+            fTrans.addToBackStack(null).commit();
+//            fTrans.commit();
         }
     }
 
@@ -141,31 +141,31 @@ public class FrgCalendar extends Fragment{
     }
 
 
-    class MyTask extends AsyncTask<Void, Void, Void> {
-        ProgressDialog mProgressDialog = createProgressDialog(getActivity());
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-            mProgressDialog.dismiss();
-        }
-
-
-
-    }
+//    class MyTask extends AsyncTask<Void, Void, Void> {
+//        ProgressDialog mProgressDialog = createProgressDialog(getActivity());
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            mProgressDialog.show();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            super.onPostExecute(result);
+//
+//            mProgressDialog.dismiss();
+//        }
+//
+//
+//
+//    }
     public ProgressDialog createProgressDialog(Context mContext) {
         ProgressDialog dialog = new ProgressDialog(mContext);
         try {
