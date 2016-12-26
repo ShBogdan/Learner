@@ -24,6 +24,7 @@ import com.bogdan.learner.fragments.FrgAddWordForStudy;
 import com.bogdan.learner.fragments.FrgLearnToDay;
 import com.bogdan.learner.fragments.FrgMainMenu;
 import com.bogdan.learner.fragments.FrgRepeatMenu;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends Activity implements FragmentListener, TextToSpeech.OnInitListener{
-    private final String LOG_TAG = "MainActivity";
+    final String LOG_TAG = "MainActivity";
     public static String toDayDate;
     public static TextToSpeech toSpeech;
 
@@ -47,6 +48,7 @@ public class MainActivity extends Activity implements FragmentListener, TextToSp
     FrgRepeatMenu frgRepeatMenu;
     FrgLearnToDay frgLearnToDay;
     FragmentTransaction fTrans;
+    FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -68,6 +70,12 @@ public class MainActivity extends Activity implements FragmentListener, TextToSp
         fTrans = getFragmentManager().beginTransaction();
         fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
         fTrans.commit();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "SomeId");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "SomeName");
+        bundle.putString("my_param", "param");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     @Override
@@ -153,26 +161,6 @@ public class MainActivity extends Activity implements FragmentListener, TextToSp
             InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
-    }
-
-
-    private void restartNotify() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 18); // For 1 PM or 2 PM
-        calendar.set(Calendar.MINUTE, 25);
-        calendar.set(Calendar.SECOND, 0);
-
-        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, MyBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
-                intent, PendingIntent.FLAG_CANCEL_CURRENT);
-// На случай, если мы ранее запускали активити, а потом поменяли время,
-// откажемся от уведомления
-        am.cancel(pendingIntent);
-// Устанавливаем разовое напоминание
-//        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
-
-        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @Override

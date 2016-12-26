@@ -18,6 +18,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.bogdan.learner.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.rey.material.widget.Button;
 
 public class FrgMainMenu extends Fragment implements View.OnClickListener, View.OnTouchListener{
@@ -26,6 +28,8 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
     String appPackageName;
     CardView cardView_1, cardView_2, cardView_3;
     Button btn_learnToday, btn_addNewWord, btn_repeat;
+    private AdView mAdView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,6 +84,13 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
 
             }
         });
+        mAdView = (AdView) view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
+//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        mAdView.loadAd(adRequest);
+
         return view;
     }
 
@@ -121,5 +132,26 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
         }
 
        return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mAdView.resume();
+    }
+
+    @Override
+    public void onPause() {
+        mAdView.pause();
+
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mAdView.destroy();
+
+        super.onDestroy();
     }
 }

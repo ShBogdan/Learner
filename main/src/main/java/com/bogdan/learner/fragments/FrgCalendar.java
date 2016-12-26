@@ -57,7 +57,11 @@ public class FrgCalendar extends Fragment{
                 mUiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        calendar.highlightDates(dates);
+                        try {
+                            calendar.highlightDates(dates);
+                        }catch (Exception e){
+                        }
+
                     }
                 });
                 mProgressDialog.dismiss();
@@ -96,16 +100,21 @@ public class FrgCalendar extends Fragment{
             }
             dates.add(d);
         }
-        Log.d("MyLog", dates.get(dates.size()-1).toString());
-        Log.d("MyLog", dates.get(0).toString());
-        Log.d("MyLog", String.valueOf(dates.size()));
+
         nextYear = Calendar.getInstance();
         nextYear.add(Calendar.DATE, 1);
 
         lastYear = Calendar.getInstance();
 //        lastYear.add(Calendar.YEAR, -3);;
 //        cal.setTime(dates.get(0));
-        lastYear.setTime(dates.get(0));
+        try {
+            lastYear.setTime(dates.get(0));
+        }catch (Exception e){
+            lastYear.add(Calendar.MONTH, -1);
+        }
+
+
+
 //        lastYear.add(cal.DATE, -1);;
 
         calendar = (CalendarPickerView) v.findViewById(R.id.calendar_view);
@@ -141,7 +150,7 @@ public class FrgCalendar extends Fragment{
     }
 
 
-//    class MyTask extends AsyncTask<Void, Void, Void> {
+    //    class MyTask extends AsyncTask<Void, Void, Void> {
 //        ProgressDialog mProgressDialog = createProgressDialog(getActivity());
 //
 //        @Override

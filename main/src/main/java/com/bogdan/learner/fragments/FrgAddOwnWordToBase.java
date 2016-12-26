@@ -19,6 +19,9 @@ import android.widget.Toast;
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.NativeExpressAdView;
 
 import java.util.ArrayList;
 
@@ -33,6 +36,9 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
     private AutoCompleteTextView englishWord;
     private Button btn_addToBase;
     private boolean isChange;
+    private AdView mAdView;
+    NativeExpressAdView adView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +70,13 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
             }
         });
 
+        adView = (NativeExpressAdView)view.findViewById(R.id.adView);
+
+        AdRequest request = new AdRequest.Builder()
+//                .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
+//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        adView.loadAd(request);
         return view;
     }
 
@@ -82,7 +95,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                         russianWord.getText().toString(),
                         transcription,
                         MainActivity.toDayDate);
-            //если менялся только перевод
+                //если менялся только перевод
             } else if ((englishWord.getText().toString()).equals(takenWord) && !russWord.equals(russianWord.getText().toString())){
                 dbHelper.insertWord(
                         englishWord.getText().toString(),
@@ -121,5 +134,25 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
             Log.d(LOG_TAG, "База перегруженна");
         }
         isChange = false;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        adView.resume();
+    }
+
+    @Override
+    public void onPause() {
+        adView.pause();
+
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        adView.destroy();
+
+        super.onDestroy();
     }
 }

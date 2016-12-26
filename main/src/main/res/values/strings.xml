@@ -23,5 +23,6 @@
     <string name="no_day">Нет слов для повторения</string>
     <string name="help">Подсказка</string>
     <string name="help_show">1. Чтобы удалить слово нажмите на него.\n 2. Чтобы добавить словово в избранное поставьте галочку.</string>
-
+    <string name="banner_ad_unit_id">ca-app-pub-2432219544659182/5231753150</string>
+    <!--<string name="banner_ad_unit_native_id">ca-app-pub-2432219544659182/8045618753</string>-->
 </resources>

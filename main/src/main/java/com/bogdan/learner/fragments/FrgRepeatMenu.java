@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarPickerView;
 import com.squareup.timessquare.DefaultDayViewAdapter;
@@ -41,6 +43,8 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
     CalendarPickerView calendar;
     Calendar nextYear;
     Calendar lastYear;
+    private AdView mAdView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,7 +79,13 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
         getChangeWordPlace();
         getAutoSpeech();
 
-//        getCalendar(view);
+
+        mAdView = (AdView) view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
+//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        mAdView.loadAd(adRequest);
 
         return view;
     }
@@ -221,6 +231,26 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mAdView.resume();
+    }
+
+    @Override
+    public void onPause() {
+        mAdView.pause();
+
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mAdView.destroy();
+
+        super.onDestroy();
+    }
 
 }
 
