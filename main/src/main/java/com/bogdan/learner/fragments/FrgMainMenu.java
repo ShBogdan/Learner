@@ -26,8 +26,8 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
     private final String TAG = "onClick";
     FragmentListener mCallback;
     String appPackageName;
-    CardView cardView_1, cardView_2, cardView_3;
-    Button btn_learnToday, btn_addNewWord, btn_repeat;
+    CardView cardView_1, cardView_2, cardView_3, cardView_4;
+    Button btn_learnToday, btn_addNewWord, btn_repeat, btn_choesFile;
     private AdView mAdView;
 
 
@@ -40,6 +40,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
         cardView_1 = (CardView) view.findViewById(R.id.card_view_1);
         cardView_2 = (CardView) view.findViewById(R.id.card_view_2);
         cardView_3 = (CardView) view.findViewById(R.id.card_view_3);
+        cardView_4 = (CardView) view.findViewById(R.id.card_view_4);
 
         btn_addNewWord = (Button) view.findViewById(R.id.btn_addMoreWord);
         btn_addNewWord.setOnClickListener(this);
@@ -52,6 +53,9 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
         btn_repeat = (Button) view.findViewById(R.id.btn_repeat);
         btn_repeat.setOnClickListener(this);
 //        btn_repeat.setOnTouchListener(this);
+
+//        btn_choesFile = (Button) view.findViewById(R.id.btn_choesFile);
+//        btn_choesFile.setOnClickListener(this);
 
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
@@ -70,8 +74,6 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
             }
         });
 
-
-
         Button btn_like = (Button) view.findViewById(R.id.btn_like);
         btn_like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,8 +88,9 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
         });
         mAdView = (AdView) view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
-//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("7D52B52E8021375F847F513F5BCC161D")
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -115,11 +118,12 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
             case MotionEvent.ACTION_DOWN:
                 if(view.getId()==(R.id.btn_addMoreWord))
                     cardView_1.setCardElevation(2);
-
                 if(view.getId()==(R.id.btn_learnToday))
                     cardView_2.setCardElevation(2);
                 if(view.getId()==(R.id.btn_repeat))
                     cardView_3.setCardElevation(2);
+//                if(view.getId()==(R.id.btn_choesFile))
+//                    cardView_4.setCardElevation(2);
                 break;
             case MotionEvent.ACTION_UP:
                 if(view.getId()==(R.id.btn_addMoreWord))
@@ -128,6 +132,8 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
                     cardView_2.setCardElevation(6);
                 if(view.getId()==(R.id.btn_repeat))
                     cardView_3.setCardElevation(6);
+//                if(view.getId()==(R.id.btn_choesFile))
+//                    cardView_4.setCardElevation(6);
                 break;
         }
 

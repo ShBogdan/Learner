@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -39,12 +40,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="englishWord"
+                    tools:text="englishWord"
                     android:id="@+id/englishWord"
                     android:textSize="25sp"
                     android:textStyle="bold"
                     android:shadowColor="#ff1c2736"
-                    android:phoneNumber="false"
                     android:layout_marginTop="8sp"
                     android:layout_marginBottom="8sp"/>
 
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="trans"
+                    tools:text="trans"
                     android:id="@+id/tv_trans"
                     android:textSize="18sp"
                     android:textColor="#ff282889" />
@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="russianWord"
+                    tools:text="russianWord"
                     android:id="@+id/russianWord"
                     android:textSize="25sp"
                     android:textColor="#ff3c3c3c"

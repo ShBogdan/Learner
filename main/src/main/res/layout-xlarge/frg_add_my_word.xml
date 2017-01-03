@@ -17,7 +17,7 @@
 
         <AutoCompleteTextView
             android:layout_marginTop="16dp"
-            android:hint="Английский"
+            android:hint="@string/english"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/originTextV" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"
@@ -25,7 +25,7 @@
 
         <EditText
             android:layout_marginTop="16dp"
-            android:hint="Русский"
+            android:hint="@string/russian"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/russianTextV"
@@ -58,7 +58,7 @@
                 style="@style/Material.Drawable.Ripple.Wave.Light"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:text="Добавить для изучения"
+                android:text="@string/add_for_study"
                 android:id="@+id/btn_add_to_base"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"

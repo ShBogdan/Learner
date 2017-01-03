@@ -10,226 +10,228 @@
         android:weightSum="1"
         android:background="@color/my_background"
         android:baselineAligned="false">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView3"
-        android:layout_weight="1">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView3"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <android.support.v7.widget.CardView
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/buttonstyle"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:orientation="horizontal"
+                    card_view:cardCornerRadius="2dp"
+                    card_view:cardElevation="3dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:id="@+id/card_view_1">
+                    <com.rey.material.widget.Button
+                        android:background="@color/my_background"
+                        style="@style/Material.Drawable.Ripple.Wave.Light"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/today_repetition"
+                        android:id="@+id/btn_repeat_day1"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        app:rd_enable="true"
+                        />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buttonstyle"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:orientation="horizontal"
+                    card_view:cardCornerRadius="2dp"
+                    card_view:cardElevation="3dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:id="@+id/card_view_2"
+                    android:layout_marginTop="-5dp">
+
+                    <com.rey.material.widget.Button
+                        android:background="@color/my_background"
+                        style="@style/Material.Drawable.Ripple.Wave.Light"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/first_repetition"
+                        android:id="@+id/btn_repeat_day2"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        app:rd_enable="true"
+                        />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buttonstyle"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:orientation="horizontal"
+                    card_view:cardCornerRadius="2dp"
+                    card_view:cardElevation="3dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:id="@+id/card_view_3"
+                    android:layout_marginTop="-5dp">
+                    <com.rey.material.widget.Button
+                        android:background="@color/my_background"
+                        style="@style/Material.Drawable.Ripple.Wave.Light"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/second_repetition"
+                        android:id="@+id/btn_repeat_day3"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        app:rd_enable="true"
+                        />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buttonstyle"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:orientation="horizontal"
+                    card_view:cardCornerRadius="2dp"
+                    card_view:cardElevation="3dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:id="@+id/card_view_4"
+                    android:layout_marginTop="-5dp">
+                    <com.rey.material.widget.Button
+                        android:background="@color/my_background"
+                        style="@style/Material.Drawable.Ripple.Wave.Light"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/third_repetition"
+                        android:id="@+id/btn_repeat_day21"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        app:rd_enable="true"
+                        />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buttonstyle"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:orientation="horizontal"
+                    card_view:cardCornerRadius="2dp"
+                    card_view:cardElevation="3dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:id="@+id/card_view_5"
+                    android:layout_marginTop="-5dp">
+                    <com.rey.material.widget.Button
+                        android:background="@color/my_background"
+                        style="@style/Material.Drawable.Ripple.Wave.Light"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fourth_repetition"
+                        android:id="@+id/btn_repeat_day90"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        app:rd_enable="true"
+                        />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buttonstyle"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:orientation="horizontal"
+                    card_view:cardCornerRadius="2dp"
+                    card_view:cardElevation="3dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:id="@+id/card_view_7"
+                    android:layout_marginTop="-5dp">
+                    <com.rey.material.widget.Button
+                        android:background="@color/my_background"
+                        style="@style/Material.Drawable.Ripple.Wave.Light"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/calendar"
+                        android:id="@+id/btn_calendar"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        app:rd_enable="true"
+                        />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buttonstyle"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:orientation="horizontal"
+                    card_view:cardCornerRadius="2dp"
+                    card_view:cardElevation="3dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:id="@+id/card_view_6"
+                    android:layout_marginTop="-5dp">
+                    <com.rey.material.widget.Button
+                        android:background="@color/my_background"
+                        style="@style/Material.Drawable.Ripple.Wave.Light"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all_words"
+                        android:id="@+id/btn_all_words"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        app:rd_enable="true"
+                        />
+                </android.support.v7.widget.CardView>
+
+
+            </LinearLayout>
+        </ScrollView>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <android.support.v7.widget.CardView
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/buttonstyle"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:orientation="horizontal"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp"
-                card_view:cardUseCompatPadding="true"
-                android:id="@+id/card_view_1">
-                <com.rey.material.widget.Button
-                    android:background="@color/my_background"
-                    style="@style/Material.Drawable.Ripple.Wave.Light"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Повторение сегодня"
-                    android:id="@+id/btn_repeat_day1"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    app:rd_enable="true"
-                    />
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/buttonstyle"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:orientation="horizontal"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp"
-                card_view:cardUseCompatPadding="true"
-                android:id="@+id/card_view_2"
-                android:layout_marginTop="-5dp">
-                <com.rey.material.widget.Button
-                    android:background="@color/my_background"
-                    style="@style/Material.Drawable.Ripple.Wave.Light"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Первое повторение(2 день)"
-                    android:id="@+id/btn_repeat_day2"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    app:rd_enable="true"
-                    />
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/buttonstyle"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:orientation="horizontal"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp"
-                card_view:cardUseCompatPadding="true"
-                android:id="@+id/card_view_3"
-                android:layout_marginTop="-5dp">
-                <com.rey.material.widget.Button
-                    android:background="@color/my_background"
-                    style="@style/Material.Drawable.Ripple.Wave.Light"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Второе повторение(3 день)"
-                    android:id="@+id/btn_repeat_day3"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    app:rd_enable="true"
-                    />
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/buttonstyle"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:orientation="horizontal"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp"
-                card_view:cardUseCompatPadding="true"
-                android:id="@+id/card_view_4"
-                android:layout_marginTop="-5dp">
-                <com.rey.material.widget.Button
-                    android:background="@color/my_background"
-                    style="@style/Material.Drawable.Ripple.Wave.Light"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Третье повторение(21 день)"
-                    android:id="@+id/btn_repeat_day21"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    app:rd_enable="true"
-                    />
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/buttonstyle"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:orientation="horizontal"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp"
-                card_view:cardUseCompatPadding="true"
-                android:id="@+id/card_view_5"
-                android:layout_marginTop="-5dp">
-                <com.rey.material.widget.Button
-                    android:background="@color/my_background"
-                    style="@style/Material.Drawable.Ripple.Wave.Light"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Четвертое повторение(90 день)"
-                    android:id="@+id/btn_repeat_day90"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    app:rd_enable="true"
-                    />
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/buttonstyle"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:orientation="horizontal"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp"
-                card_view:cardUseCompatPadding="true"
-                android:id="@+id/card_view_7"
-                android:layout_marginTop="-5dp">
-                <com.rey.material.widget.Button
-                    android:background="@color/my_background"
-                    style="@style/Material.Drawable.Ripple.Wave.Light"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Календарь"
-                    android:id="@+id/btn_calendar"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    app:rd_enable="true"
-                    />
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/buttonstyle"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:orientation="horizontal"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp"
-                card_view:cardUseCompatPadding="true"
-                android:id="@+id/card_view_6"
-                android:layout_marginTop="-5dp">
-                <com.rey.material.widget.Button
-                    android:background="@color/my_background"
-                    style="@style/Material.Drawable.Ripple.Wave.Light"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Все слова"
-                    android:id="@+id/btn_all_words"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    app:rd_enable="true"
-                    />
-            </android.support.v7.widget.CardView>
-
-
-        </LinearLayout>
-    </ScrollView>
-
-    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -247,7 +249,7 @@
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Автопроизношение слова"
+                android:text="@string/auto_speech"
                 android:id="@+id/autoSpeech"
                 android:checked="false"
                 android:textSize="12sp"
@@ -256,7 +258,7 @@
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Учить слова в порядке русский-ангийский"
+                android:text="@string/Learning_words_in_the_order_translate_original"
                 android:id="@+id/changeWordPlace"
                 android:checked="false"
                 android:textSize="12sp"
@@ -266,7 +268,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="изучено"
+                android:text="@string/learned_learn"
                 android:id="@+id/tv_learned"
                 android:layout_gravity="center_vertical"
                 android:textSize="12sp"
@@ -276,7 +278,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="известно ранее"
+                android:text="@string/known_words"
                 android:id="@+id/tv_known"
                 android:layout_gravity="bottom"
                 android:textSize="12sp"

@@ -143,7 +143,7 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
     }
 
     void inflateView() {
-        btn_next.setText("Ответ");
+        btn_next.setText(R.string.answer);
 
         if(arrayWords == null)
             arrayWords = new ArrayList<>();

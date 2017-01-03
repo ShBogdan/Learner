@@ -510,7 +510,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
             builder.setTitle(R.string.help)
                     .setMessage(R.string.help_show)
                     .setCancelable(false)
-                    .setNegativeButton("Я прочитал",
+                    .setNegativeButton(R.string.i_read,
                                        new DialogInterface.OnClickListener() {
                                            public void onClick(DialogInterface dialog, int id) {
                                                editor.putBoolean("howToDell", false).apply();

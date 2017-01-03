@@ -245,7 +245,7 @@ public class FrgLearnToDay extends Fragment {
 
                         /*Если написано верно бросаем следующее слово*/
                         if (englishWord.equals(answer.toString())) {
-                            Toast.makeText(getActivity(), "Правильно", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.right, Toast.LENGTH_SHORT).show();
                             count--;
                             layWipe.setClickable(false);
                             handler.postDelayed(new Runnable() {

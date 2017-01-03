@@ -17,14 +17,14 @@
 
         <AutoCompleteTextView
             android:layout_marginTop="16dp"
-            android:hint="Английский"
+            android:hint="@string/english"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/originTextV" android:layout_marginLeft="18dp" android:layout_marginRight="18dp"/>
 
         <EditText
             android:layout_marginTop="16dp"
-            android:hint="Русский"
+            android:hint="@string/russian"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/russianTextV"
@@ -55,7 +55,7 @@
                 style="@style/Material.Drawable.Ripple.Wave.Light"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Добавить для изучения"
+                android:text="@string/add_for_study"
                 android:id="@+id/btn_add_to_base"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
@@ -79,17 +79,6 @@
                 ads:adSize="FULL_WIDTHx200">
             </com.google.android.gms.ads.NativeExpressAdView>
 
-            <!--<com.google.android.gms.ads.AdView-->
-                <!--android:id="@+id/adView"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--ads:adSize="SMART_BANNER"-->
-                <!--ads:adUnitId="@string/banner_ad_unit_id"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_alignParentLeft="true"-->
-                <!--android:layout_alignParentStart="true"-->
-                <!--android:foregroundGravity="bottom">-->
-            <!--</com.google.android.gms.ads.AdView>-->
         </LinearLayout>
 
     </LinearLayout>

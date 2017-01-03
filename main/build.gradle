@@ -33,15 +33,14 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
-    }
+      }
     productFlavors {
         english_card {
             applicationId 'com.bogdan.english.card'
             minSdkVersion 16
-//            proguardFile 'C:/Learner/main/proguard-rules.pro'
             targetSdkVersion 25
-            versionCode 7
-            versionName '2.4'
+            versionCode 9
+            versionName '2.5.1'
         }
     }
 }

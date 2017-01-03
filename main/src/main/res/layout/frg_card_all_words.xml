@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:id="@+id/frgAddWord"
-              android:background="@color/my_background"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frgAddWord"
+    android:background="@color/my_background"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -30,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Сбросить"
+                android:text="@string/reset"
                 app:rd_enable="true"
                 android:gravity="center|left"/>
         </LinearLayout>
@@ -78,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Английское слово"
+                tools:text="Английское слово"
                 android:textStyle="bold"
                 android:id="@+id/tv_english"
                 android:layout_gravity="center_horizontal"
@@ -96,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Транскрипция"
+                tools:text="Транскрипция"
                 android:id="@+id/tv_transcription"
                 android:layout_above="@+id/tv_russian"
                 android:layout_alignLeft="@+id/tv_russian"
@@ -115,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Первод"
+                tools:text="Первод"
                 android:id="@+id/tv_russian"
                 android:layout_above="@+id/btn_audio"
                 android:layout_centerHorizontal="true"
@@ -144,7 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Не помню"
+            android:text="@string/forget"
             app:rd_enable="true"
             android:gravity="bottom|left"
             android:textSize="20sp"
@@ -159,7 +160,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Помню"
+            android:text="@string/remember"
             app:rd_enable="true"
             android:gravity="bottom|right"
             android:textSize="20sp"

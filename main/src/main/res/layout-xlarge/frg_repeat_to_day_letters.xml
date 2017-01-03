@@ -224,7 +224,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Стереть"
+            android:text="@string/erase"
             app:rd_enable="true"
             android:gravity="center|bottom"
             android:textSize="30sp"
@@ -238,7 +238,7 @@
             android:background="@color/my_background"
             style="@style/Material.Drawable.Ripple.Wave"
 
-            android:text="Пропустить"
+            android:text="@string/skip"
             app:rd_enable="true"
             android:textSize="20sp"
             android:orientation="vertical"
