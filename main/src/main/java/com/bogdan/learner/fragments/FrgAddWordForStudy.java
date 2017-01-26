@@ -29,16 +29,13 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     Button btn_know, btn_unknown;
     TextView tv_english, tv_transcription, tv_russian, tvSumWords;
     CardView btn_audio;
-    SharedPreferences sp;
-    boolean autoSpeech;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_add_word_for_study, null);
         dayLibrary = DBHelper.getDbHelper(getActivity());
 
-        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
-        autoSpeech = sp.getBoolean("autoSpeech", false);
 
         btn_know = (Button) view.findViewById(R.id.btn_know);
         btn_know.setOnClickListener(this);
@@ -66,7 +63,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
             tvSumWords = (TextView) view.findViewById(R.id.tvSumWords);
             tvSumWords.setText(getResources().getText(R.string.add_to_study) + " " + size);
 
-            if(autoSpeech){
+            if(MainActivity.isAutoSpeech){
                 MainActivity.toSpeech.speak(word[0], TextToSpeech.QUEUE_ADD, null);
             }
         } catch (NullPointerException nullPointerException) {

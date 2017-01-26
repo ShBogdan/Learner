@@ -1,8 +1,6 @@
 package com.bogdan.learner.fragments;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.CardView;
@@ -10,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bogdan.learner.DBHelper;
@@ -18,22 +17,20 @@ import com.bogdan.learner.R;
 import com.rey.material.widget.Button;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Locale;
 
 
 public class FrgRepeatDay extends Fragment implements View.OnClickListener {
     private final String LOG_TAG = "MyLog";
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
-    SharedPreferences sp;
     String date;
-    boolean reversWord;
-    boolean autoSpeech;
     ArrayList<String[]> toDayListWords;
+    String[] randomWord;
     TextView englishWord, transWord, russianWord, tvSumWords, btn_nextTV;
     Button btnNext;
     CardView btn_audio;
-    TextToSpeech toSpeech;
+    CheckBox favorite;
     int countBtnClick;
     String voice;
     String eng;
@@ -51,31 +48,18 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
         date = getArguments().getString("com.bogdan.learner.fragments.day_date");
         toDayListWords = new ArrayList<>(DBHelper.getDbHelper(getActivity()).getListWordsByDate(date));
 
-//      установлен ли пункт менять местами перевод
-        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
-        reversWord = sp.getBoolean("changeWordPlace", false);
-        autoSpeech = sp.getBoolean("autoSpeech", false);
-
-        Log.d(LOG_TAG, "FrgRepeatDay: " + reversWord);
-
-
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
         englishWord = (TextView) view.findViewById(R.id.englishWord);
         transWord = (TextView) view.findViewById(R.id.transWord);
         russianWord = (TextView) view.findViewById(R.id.russianWord);
         tvSumWords = (TextView) view.findViewById(R.id.tvSumWords);
-
+        favorite = (CheckBox) view.findViewById(R.id.favorite);
         btnNext = (Button) view.findViewById(R.id.btn_next);
+
         btnNext.setOnClickListener(this);
         btn_audio.setOnClickListener(this);
-//        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener(){
-//            @Override
-//            public void onInit(int status) {
-//                if(status != TextToSpeech.ERROR){
-//                    toSpeech.setLanguage(Locale.ENGLISH);
-//                }
-//            }
-//        });
+        favorite.setOnClickListener(this);
+
         reloadFragment();
         return view;
     }
@@ -86,10 +70,12 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
             Collections.shuffle(toDayListWords);
             tvSumWords.setText(String.valueOf(toDayListWords.size()));
             btnNext.setText(R.string.answer);
-            eng = toDayListWords.get(0)[0];
-            rus = toDayListWords.get(0)[1];
-            trn = toDayListWords.get(0)[2];
-            if (reversWord) {
+            randomWord = toDayListWords.get(0);
+            eng = randomWord[0];
+            rus = randomWord[1];
+            trn = randomWord[2];
+
+            if (MainActivity.isReversWordPlace) {
                 String temp = eng;
                 eng = rus;
                 rus = temp;
@@ -99,9 +85,15 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
             englishWord.setText(eng);
             transWord.setText(trn);
             russianWord.setText("");
-            if(autoSpeech){
+            if (MainActivity.isAutoSpeech) {
                 MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
             }
+
+            Log.d(LOG_TAG, Arrays.toString(randomWord));
+            favorite.setChecked(false);
+            favorite.setChecked(null != randomWord[4] && !randomWord[4].equals("false"));
+            Log.d(LOG_TAG, String.valueOf((randomWord[4])));
+
         } else {
             toDayListWords = new ArrayList<>(DBHelper.getDbHelper(getActivity()).getListWordsByDate(date));
             reloadFragment();
@@ -111,7 +103,7 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_next:
                 countBtnClick--;
                 if (countBtnClick >= 1) {
@@ -126,6 +118,16 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btn_audio:
                 MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
+                break;
+            case R.id.favorite:
+                if (favorite.isChecked()) {
+                    DBHelper.getDbHelper(getActivity()).setFavorite("true", randomWord[3]);
+                    randomWord[4] = "true";
+                } else {
+                    DBHelper.getDbHelper(getActivity()).setFavorite("false", randomWord[3]);
+                    randomWord[4] = "false";
+                }
+//                MainActivity.isBaseChanged = true;
                 break;
         }
     }

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -195,14 +196,13 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Добавляем слово в избранное.
      */
-    public void setFavorite(String  boo, String id) {
+    public synchronized void setFavorite(String  boo, String id) {
         contentValues = new ContentValues();
         sqLiteDatabase = dbHelper.getWritableDatabase();
         contentValues.put(KEY_FAVORITE, boo);
         sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ROWID + "= ?", new String[]{id});
         sqLiteDatabase.close();
-        Log.d("MyLog", "Записали в базу " + boo);
-
+        Log.d("MyLog", "Записали в базу " + id + " со значением "  +  boo);
     }
 
     /**
@@ -246,7 +246,7 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase = dbHelper.getWritableDatabase();
         sqLiteDatabase.execSQL("DELETE FROM " + DATABASE_TABLE + " WHERE " + KEY_ROWID + " = " + "\"" + id + "\"");
         sqLiteDatabase.close();
-       }
+    }
 
     /**
      * Проверяем на наличие не известных слов в базе. Если есть то выбираем случайное
@@ -299,7 +299,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return uploadDb.get(Integer.parseInt(date));
     }
 
-
     public ArrayList listUnknownWords() {
         ArrayList<String> listUnknownWords = new ArrayList<>();
         sqLiteDatabase = this.getReadableDatabase();
@@ -328,4 +327,52 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return null;
     }
+
+    public ArrayList<String[]> getListFavoriteWords(){
+        ArrayList<String[]> wordsFavor = new ArrayList<>();
+
+        sqLiteDatabase = dbHelper.getWritableDatabase();
+        cursor = sqLiteDatabase.rawQuery(
+                "SELECT * FROM words WHERE translations = ?;",
+                new String[] {"true"}
+        );
+        while (cursor.moveToNext()) {
+            String english = cursor.getString(cursor.getColumnIndex(KEY_ENG));
+            String russian = cursor.getString(cursor.getColumnIndex(KEY_RUS));
+            String transcription = cursor.getString(cursor.getColumnIndex(KEY_TRANS));
+            String favor = cursor.getString(cursor.getColumnIndex(KEY_FAVORITE));
+            Integer date = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
+            String id = cursor.getString(cursor.getColumnIndex(KEY_ROWID));
+            wordsFavor.add(new String[]{english, russian, transcription, id, favor, date.toString()});
+        }
+        return wordsFavor;
+    }
+
+    public ArrayList<String[]> getListKnownWords(Boolean withKnownBefore){
+        ArrayList<String[]> wordsKnown = new ArrayList<>();
+
+        sqLiteDatabase = dbHelper.getWritableDatabase();
+        if(withKnownBefore){
+            cursor = sqLiteDatabase.rawQuery(
+                    "SELECT * FROM words WHERE date is not ? ORDER BY date;",
+                    new String[] {"true"}
+            );
+        }else{
+            cursor = sqLiteDatabase.rawQuery(
+                    "SELECT * FROM words WHERE date is not ? and date is not ? ORDER BY date;",
+                    new String[] {"true","false"}
+            );
+        }
+        while (cursor.moveToNext()) {
+            String english = cursor.getString(cursor.getColumnIndex(KEY_ENG));
+            String russian = cursor.getString(cursor.getColumnIndex(KEY_RUS));
+            String transcription = cursor.getString(cursor.getColumnIndex(KEY_TRANS));
+            String favor = cursor.getString(cursor.getColumnIndex(KEY_FAVORITE));
+            Integer date = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
+            String id = cursor.getString(cursor.getColumnIndex(KEY_ROWID));
+            wordsKnown.add(new String[]{english, russian, transcription, id, favor, date.toString()});
+        }
+        return wordsKnown;
+    }
+
 }

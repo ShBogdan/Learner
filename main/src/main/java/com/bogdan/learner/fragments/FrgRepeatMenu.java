@@ -43,17 +43,16 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
     CalendarPickerView calendar;
     Calendar nextYear;
     Calendar lastYear;
-    private AdView mAdView;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_m_repeat_selectively, null);
 
-        tv_learned = (TextView)view.findViewById(R.id.tv_learned);
-        tv_learned.setText(getString(R.string.you_know) + DBHelper.getDbHelper(getActivity()).learnedWords.size() + getString(R.string.new_words));
-        tv_know    = (TextView)view.findViewById(R.id.tv_known);
-        tv_know.setText(getString(R.string.you_knew) +  DBHelper.getDbHelper(getActivity()).listKnownWords.size() + getString(R.string.words));
+//        tv_learned = (TextView)view.findViewById(R.id.tv_learned);
+//        tv_learned.setText(getString(R.string.you_know) + DBHelper.getDbHelper(getActivity()).learnedWords.size() + getString(R.string.new_words));
+//        tv_know    = (TextView)view.findViewById(R.id.tv_known);
+//        tv_know.setText(getString(R.string.you_knew) +  DBHelper.getDbHelper(getActivity()).listKnownWords.size() + getString(R.string.words));
 
         btn_repeat_day1 = (Button) view.findViewById(R.id.btn_repeat_day1);
         btn_repeat_day1.setOnClickListener(this);
@@ -69,24 +68,7 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
         btn_calendar.setOnClickListener(this);
         btn_all_words = (Button) view.findViewById(R.id.btn_all_words);
         btn_all_words.setOnClickListener(this);
-        changeWordPlace = (CheckBox) view.findViewById(R.id.changeWordPlace);
-        autoSpeech = (CheckBox) view.findViewById(R.id.autoSpeech);
-
         bundleDate = new Bundle();
-
-        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
-        editor = sp.edit();
-        getChangeWordPlace();
-        getAutoSpeech();
-
-
-        mAdView = (AdView) view.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
-//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        mAdView.loadAd(adRequest);
-
         return view;
     }
 
@@ -187,7 +169,6 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
             }
         });
     }
-
     private void getCalendar(View view){
         nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
@@ -230,28 +211,6 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
             }
         });
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        mAdView.resume();
-    }
-
-    @Override
-    public void onPause() {
-        mAdView.pause();
-
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        mAdView.destroy();
-
-        super.onDestroy();
-    }
-
 }
 
 

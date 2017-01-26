@@ -9,16 +9,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +26,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bogdan.learner.fragments.FragmentListener;
@@ -34,6 +40,8 @@ import com.bogdan.learner.fragments.FrgAddWordForStudy;
 import com.bogdan.learner.fragments.FrgLearnToDay;
 import com.bogdan.learner.fragments.FrgMainMenu;
 import com.bogdan.learner.fragments.FrgRepeatMenu;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
@@ -47,16 +55,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentListener, TextToSpeech.OnInitListener{
+public class MainActivity extends AppCompatActivity implements FragmentListener, TextToSpeech.OnInitListener, CompoundButton.OnCheckedChangeListener {
     final String LOG_TAG = "MyLog";
     private static final String DATABASE_NAME = "dictionary.sqlite";
+    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     public static String toDayDate;
     public static TextToSpeech toSpeech;
+    public static boolean isAutoSpeech;
+    public static boolean isReversWordPlace;
+    public static boolean isBaseChanged;
+    public static int wordAlternation;
+
 
     DBHelper dbHelper;
     TreeMap<Integer, ArrayList<String[]>> uploadDb;
@@ -70,7 +83,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     String downloadDbPath;
     String uploadDbPath;
     Context context;
-    private Handler mUiHandler = new Handler();
+    DrawerLayout mDrawerLayout;
+    View mMainView;
+    ActionBarDrawerToggle mDrawerToggle;
+    TextView tv_learned, tv_know, tv_today, tv_seekBarValue;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+    CheckBox mAutoSpeech, mChangeWordPlace, mNotifyMorning, mNotifyEvening;
+    AdView mAdView;
 
 
 
@@ -79,11 +99,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         savedInstanceState = null;
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "onCreate");
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         dbHelper = DBHelper.getDbHelper(this);
         uploadDb = dbHelper.uploadDb;
         context = getBaseContext();
+
+        mAdView = (AdView) findViewById(R.id.adView);
+
 
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
@@ -101,12 +124,24 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "SomeName");
         bundle.putString("my_param", "param");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+        initDrawerLayout();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        toSpeech = new TextToSpeech(MainActivity.this, MainActivity.this);
+
+    void advertise(Boolean isShow){
+        if(isShow){
+            //get in as search:addTestDevice
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .addTestDevice("7D52B52E8021375F847F513F5BCC161D")
+                    .build();
+            mAdView.loadAd(adRequest);
+        }else {
+            mAdView.setLayoutParams(new LinearLayout.LayoutParams(DrawerLayout.LayoutParams.MATCH_PARENT, 0));
+
+        }
+
     }
 
     @Override
@@ -276,15 +311,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         }).start();
     }
 
-    @Override
-    public void onDestroy() {
-        // Don't forget to shutdown tts!
-        if (toSpeech != null) {
-//            toSpeech.stop();
-            toSpeech.shutdown();
-        }
-        super.onDestroy();
-    }
+
 
     public static void deleteCache(Context context) {
         try {
@@ -319,32 +346,32 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         System.exit(0);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(hasPermission (WRITE_EXTERNAL_STORAGE)){
-            // Handle item selection
-            switch (item.getItemId()) {
-                case R.id.save:
-                    uploadDb();
-                    return true;
-                case R.id.load:
-                    downloadDb();
-                    return true;
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
-        }else {
-            askForPermission(WRITE_EXTERNAL_STORAGE , 10);
-            return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if(hasPermission (WRITE_EXTERNAL_STORAGE)){
+//            // Handle item selection
+//            switch (item.getItemId()) {
+//                case R.id.save:
+//                    uploadDb();
+//                    return true;
+//                case R.id.load:
+//                    downloadDb();
+//                    return true;
+//                default:
+//                    return super.onOptionsItemSelected(item);
+//            }
+//        }else {
+//            askForPermission(WRITE_EXTERNAL_STORAGE , 10);
+//            return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     public void dialog(String massage){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -379,5 +406,241 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
 
     private boolean hasPermission(String perm) {
         return(ContextCompat.checkSelfPermission( this, perm) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    void initDrawerLayout(){
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mMainView = (LinearLayout) findViewById(R.id.main_activity);
+        //реакция на открытие-закрытие
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                null,  /* значок-гамбургер для замены стрелки 'Up' */
+                R.string.drawer_open,  /* добавьте строку "open drawer" - описание для  accessibility */
+                R.string.drawer_close  /* добавьте "close drawer" - описание для accessibility */
+        ) {
+            public void onDrawerClosed(View view) {
+
+            }
+            public void onDrawerOpened(View drawerView) {
+                tv_learned = (TextView) findViewById(R.id.tv_learned);
+                tv_learned.setText(getString(R.string.you_know) +
+                        DBHelper.getDbHelper(context).learnedWords.size() + getString(R.string.new_words));
+                tv_know    = (TextView) findViewById(R.id.tv_known);
+                tv_know.setText(getString(R.string.you_knew) +
+                        DBHelper.getDbHelper(context).listKnownWords.size() + getString(R.string.words));
+                tv_today    = (TextView) findViewById(R.id.tv_today);
+                Integer size = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();
+                tv_today.setText(getString(R.string.today_learned) + size + getString(R.string.words));
+            }
+        };
+
+
+        sp = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
+        getAutoSpeech();
+        getChangeWordPlace();
+        getWordAlternation();
+        setUseBase();
+        setAlarm();
+
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
+
+    }
+    private void getChangeWordPlace(){
+        mChangeWordPlace = (CheckBox) findViewById(R.id.changeWordPlace);
+        if(!sp.contains("changeWordPlace")) {
+            editor.putBoolean("changeWordPlace", false).apply();
+        }
+        if(sp.getBoolean("changeWordPlace", false)){
+            isReversWordPlace = false;
+        }
+        if(sp.getBoolean("changeWordPlace", true)){
+            mChangeWordPlace.setChecked(true);
+            isReversWordPlace = true;
+        }
+        mChangeWordPlace.setOnCheckedChangeListener(this);
+    }
+    private void getAutoSpeech(){
+        mAutoSpeech = (CheckBox) findViewById(R.id.autoSpeech);
+        if(!sp.contains("autoSpeech")) {
+            editor.putBoolean("autoSpeech", false).apply();
+        }
+        if(sp.getBoolean("autoSpeech", false)){
+            isAutoSpeech = false;
+        }
+        if(sp.getBoolean("autoSpeech", true)){
+            mAutoSpeech.setChecked(true);
+            isAutoSpeech = true;
+        }
+
+        mAutoSpeech.setOnCheckedChangeListener(this);
+    }
+    private void getWordAlternation(){
+        if(!sp.contains("WordAlternation")) {
+            editor.putInt("WordAlternation", 2).apply();
+        }
+        wordAlternation = sp.getInt("WordAlternation", 2);
+        tv_seekBarValue = (TextView)findViewById(R.id.tv_seekBarValue);
+        tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
+
+
+        final SeekBar seekbar = (SeekBar)findViewById(R.id.seekBar);
+        seekbar.setMax(10);
+        seekbar.setProgress(wordAlternation);
+
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(seekBar.getProgress() == 0){
+                    wordAlternation = seekBar.getProgress()+1;
+                }else{
+                    wordAlternation = seekBar.getProgress();
+                }
+                tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                if(seekBar.getProgress() == 0){
+                    wordAlternation = seekBar.getProgress()+1;
+
+                }else{
+                    wordAlternation = seekBar.getProgress();
+                }
+                tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if(seekBar.getProgress() == 0){
+                    wordAlternation = seekBar.getProgress()+1;
+                }else{
+                    wordAlternation = seekBar.getProgress();
+                }
+                tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
+                editor.putInt("WordAlternation", wordAlternation).apply();
+            }
+        });
+
+
+    }
+    private void setUseBase(){
+        Button load_base = (Button) findViewById(R.id.load_base);
+        Button save_base = (Button) findViewById(R.id.save_base);
+        load_base.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(hasPermission (WRITE_EXTERNAL_STORAGE)){
+                    downloadDb();
+                }else {
+                    askForPermission(WRITE_EXTERNAL_STORAGE , 10);
+                }
+            }
+        });
+        save_base.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(hasPermission (WRITE_EXTERNAL_STORAGE)){
+                    uploadDb();
+                }else {
+                    askForPermission(WRITE_EXTERNAL_STORAGE , 10);
+                }
+            }
+        });
+    }
+    private void setAlarm(){
+        mNotifyMorning = (CheckBox) findViewById(R.id.notify_morning);
+        if(!sp.contains("notify_morning")) {
+            editor.putBoolean("notify_morning", false).apply();
+        }
+        if(sp.getBoolean("notify_morning", false)){
+        }
+        if(sp.getBoolean("notify_morning", true)){
+            mNotifyMorning.setChecked(true);
+        }
+
+        mNotifyEvening = (CheckBox) findViewById(R.id.notify_evening);
+
+        if(!sp.contains("notify_evening")) {
+            editor.putBoolean("notify_evening", false).apply();
+        }
+        if(sp.getBoolean("notify_evening", false)){
+        }
+        if(sp.getBoolean("notify_evening", true)){
+            mNotifyEvening.setChecked(true);
+        }
+
+        mNotifyMorning.setOnCheckedChangeListener(this);
+        mNotifyEvening.setOnCheckedChangeListener(this);
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.notify_morning:
+                if(mNotifyMorning.isChecked()){
+                    editor.putBoolean("notify_morning", true).apply();
+                    new AlarmManagerBroadcastReceiver().setMorningAlarm(context);
+                } else {
+                    editor.putBoolean("notify_morning", false).apply();
+                    new AlarmManagerBroadcastReceiver().cancelMorning(context);
+                }
+                break;
+            case R.id.notify_evening:
+                if(mNotifyEvening.isChecked()){
+                    editor.putBoolean("notify_evening", true).apply();
+                    new AlarmManagerBroadcastReceiver().setEveningAlarm(context);
+                } else {
+                    editor.putBoolean("notify_evening", false).apply();
+                    new AlarmManagerBroadcastReceiver().cancelEvening(context);
+                }
+                break;
+
+            case R.id.autoSpeech:
+                if(mAutoSpeech.isChecked()){
+                    editor.putBoolean("autoSpeech", true).apply();
+                    isAutoSpeech = true;
+                } else {
+                    editor.putBoolean("autoSpeech", false).apply();
+                    isAutoSpeech = false;
+                }
+                break;
+            case R.id.changeWordPlace:
+                if(mChangeWordPlace.isChecked()){
+                    editor.putBoolean("changeWordPlace", true).apply();
+                    isReversWordPlace = true;
+                } else{
+                    editor.putBoolean("changeWordPlace", false).apply();
+                    isReversWordPlace = false;
+                }
+                break;
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        toSpeech = new TextToSpeech(MainActivity.this, MainActivity.this);
+        Log.d(LOG_TAG,"onResume");
+        advertise(true);
+//        mAdView.resume();
+    }
+    @Override
+    protected void onPause() {
+        mAdView.destroy();
+        super.onPause();
+    }
+    @Override
+    public void onDestroy() {
+        if (toSpeech != null) {
+            toSpeech.shutdown();
+        }
+        mAdView.resume();
+        super.onDestroy();
     }
 }

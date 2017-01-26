@@ -37,9 +37,7 @@ import java.util.Collections;
 import java.util.Locale;
 
 public class FrgLearnToDay extends Fragment {
-    public final String LOG_TAG = ":::::FrgLearnToDay:::::";
-    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
-    SharedPreferences sp;
+    final String LOG_TAG = "MyLog";
     ArrayList<String[]> wordsForFrgLetters;
     ArrayList<String[]> toDayListWords;
     ArrayList<String[]> wordsForFrgRepeat;
@@ -51,14 +49,12 @@ public class FrgLearnToDay extends Fragment {
     String transWord;
     int countAttempt;
     int count; // для чередования фрагмента карточа - набор слова
-//    TextToSpeech toSpeech;
     CardView btn_audio;
     Handler handler;
     boolean onCreate;
     boolean onResume;
     boolean onDestroy;
     boolean onStop;
-    boolean autoSpeech;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,26 +67,23 @@ public class FrgLearnToDay extends Fragment {
         if (wordsForFrgLetters == null || wordsForFrgLetters.size() == 0) {
             Collections.shuffle(toDayListWords);
             wordsForFrgLetters = new ArrayList<>(toDayListWords);
-            wordsForFrgRepeat = new ArrayList<>();
-            if (wordsForFrgLetters.size() >= 2) {
-                wordsForFrgRepeat.add(wordsForFrgLetters.get(0));
-                wordsForFrgRepeat.add(wordsForFrgLetters.get(1));
-                count = 2;
-            } else {
-                wordsForFrgRepeat.add(wordsForFrgLetters.get(0));
-                count = 2;
+            wordsForFrgRepeat  = new ArrayList<>();
+            for (int i = 0; i < MainActivity.wordAlternation; i++) {
+                if (wordsForFrgLetters.size() > i) {
+                    wordsForFrgRepeat.add(wordsForFrgLetters.get(i));
+                }
             }
+            count = wordsForFrgRepeat.size();
         }
-        if (count == 0) {
-            if (wordsForFrgLetters.size() >= 2) {
-                wordsForFrgRepeat.add(wordsForFrgLetters.get(0));
-                wordsForFrgRepeat.add(wordsForFrgLetters.get(1));
-                count = 2;
-            } else {
-                wordsForFrgRepeat.add(wordsForFrgLetters.get(0));
-                count = 1;
+        if(count == 0 ) {
+            for (int i = 0; i < MainActivity.wordAlternation; i++) {
+                if (wordsForFrgLetters.size() > i) {
+                    wordsForFrgRepeat.add(wordsForFrgLetters.get(i));
+                }
             }
+            count = wordsForFrgRepeat.size();
         }
+
         Log.d(LOG_TAG, "wordsForFrgRepeat  " + wordsForFrgRepeat.size());
 
         if (wordsForFrgRepeat.size() != 0) {
@@ -102,28 +95,12 @@ public class FrgLearnToDay extends Fragment {
         }
 
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
-//        toSpeech = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
-//            @Override
-//            public void onInit(int status) {
-//                if(status!=TextToSpeech.ERROR){
-//                    toSpeech.setLanguage(Locale.ENGLISH);
-//                }
-//            }
-//        });
         btn_audio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.toSpeech.speak(englishWord, TextToSpeech.QUEUE_ADD, null);
             }
         });
-
-        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
-        autoSpeech = sp.getBoolean("autoSpeech", false);
-//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgRepeat.size());
-//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.size());
-//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[0]);
-//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[1]);
-//        Log.d(LOG_TAG, "OnCreate " + wordsForFrgLetters.get(0)[2]);
         return view;
     }
 
@@ -388,17 +365,18 @@ public class FrgLearnToDay extends Fragment {
     }
 
     protected void drawTheWord() {
-
-        TextView tvEnglishWord = (TextView) getActivity().findViewById(R.id.englishWord);
-        tvEnglishWord.setText(englishWord);
-        TextView tvTransWord = (TextView) getActivity().findViewById(R.id.transWord);
-        tvTransWord.setText(transWord);
-        TextView tvRussianWord = (TextView) getActivity().findViewById(R.id.russianWord);
-        tvRussianWord.setText(russianWord);
-        Button nextBtn = (Button) getActivity().findViewById(R.id.btn_next);
         final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
+        TextView tvEnglishWord    = (TextView) getActivity().findViewById(R.id.englishWord);
+        TextView tvTransWord      = (TextView) getActivity().findViewById(R.id.transWord);
+        TextView tvRussianWord    = (TextView) getActivity().findViewById(R.id.russianWord);
+        Button nextBtn            = (Button) getActivity().findViewById(R.id.btn_next);
+
+        tvEnglishWord.setText(englishWord);
+        tvTransWord.setText(transWord);
+        tvRussianWord.setText(russianWord);
         tvSumWords.setText(wordsForFrgLetters.size() + "/" + toDayListWords.size());
-        if(autoSpeech){
+
+        if(MainActivity.isAutoSpeech){
             MainActivity.toSpeech.speak(englishWord, TextToSpeech.QUEUE_ADD, null);
         }
 
@@ -418,8 +396,8 @@ public class FrgLearnToDay extends Fragment {
         word = arrayWords.get(0);
         englishWord = word[0];
         russianWord = word[1];
-        transWord = word[2];
-        answer = new StringBuilder();
+        transWord   = word[2];
+        answer      = new StringBuilder();
         if (lettersEngWord == null) {
             lettersEngWord = new ArrayList<>();
             for (char c : englishWord.toCharArray()) {

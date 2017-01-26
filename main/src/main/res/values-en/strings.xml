@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Learner</string>
-    <string name="Learning_words_in_the_order_translate_original">Learning words in the order translate-original</string>
+    <string name="Learning_words_in_the_order_translate_original">Reverse words to translation-original</string>
     <string name="action_settings">Srttings</string>
     <string name="add_for_study">Add for study</string>
     <string name="add_new_word">Add new word</string>
@@ -37,7 +37,7 @@
     <string name="load">\"LOAD\"</string>
     <string name="loadbase">Upload base</string>
     <string name="main_menu">Main Menu</string>
-    <string name="new_words">\" new words\"</string>
+    <string name="new_words">" new words"</string>
     <string name="next">Next</string>
     <string name="no">No</string>
     <string name="no_day">No words for repeat</string>
@@ -63,12 +63,22 @@
     <string name="unknown">Unknown</string>
     <string name="wasUpdate">Updated</string>
     <string name="word_in_the_base">Word has already been added</string>
-    <string name="words">\" words\"</string>
+    <string name="words">" words"</string>
     <string name="yas">Yas</string>
-    <string name="you_knew">\"You already knew: \"</string>
-    <string name="you_know">\"You have studied: \"</string>
+    <string name="you_knew">"Already knew: "</string>
+    <string name="you_know">"Have studied: "</string>
+    <string name="today_learned">"Learned today: "</string>
     <string name="load_base">After this operation, the current database will be lost !!! Select dictionary.sqlite file after which the application will be restarted. The new base will take effect after a restart.</string>
     <string name="help_show">1. To delete a word, click on it. 2. To add a word to favorites click a tick.</string>
     <string name="base_saved">The database is stored in the Download folder named dictionary.sqlite. Copy this file to another device, and specify the path to it in the menu \"Upload base\"</string>
     <string name="i_read">Ok</string>
+    <string name="alternation">"The alternation to remember words, write the words: "</string>
+    <string name="general">"General: "</string>
+    <string name="option_learn_today">"Learn today: "</string>
+    <string name="notify">"Notify: "</string>
+    <string name="notify_morning">Remind me in the  morning</string>
+    <string name="notify_evening">Remind me in the evening</string>
+    <string name="option_base">"Save/load database to the phone: "</string>
+    <string name="notify_send_morning">Good morning. Laziness kills yours dream</string>
+    <string name="notify_send_evening">There is no perfect time. Do it now.</string>
 </resources>

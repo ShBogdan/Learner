@@ -27,8 +27,8 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
     FragmentListener mCallback;
     String appPackageName;
     CardView cardView_1, cardView_2, cardView_3, cardView_4;
-    Button btn_learnToday, btn_addNewWord, btn_repeat, btn_choesFile;
-    private AdView mAdView;
+    Button btn_learnToday, btn_addNewWord, btn_repeat;
+
 
 
     @Override
@@ -86,13 +86,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
 
             }
         });
-        mAdView = (AdView) view.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("7D52B52E8021375F847F513F5BCC161D")
-                .build();
-        mAdView.loadAd(adRequest);
+
 
         return view;
     }
@@ -138,26 +132,5 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
         }
 
        return true;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        mAdView.resume();
-    }
-
-    @Override
-    public void onPause() {
-        mAdView.pause();
-
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        mAdView.destroy();
-
-        super.onDestroy();
     }
 }
