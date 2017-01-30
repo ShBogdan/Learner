@@ -21,9 +21,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -40,6 +37,8 @@ import com.bogdan.learner.fragments.FrgAddWordForStudy;
 import com.bogdan.learner.fragments.FrgLearnToDay;
 import com.bogdan.learner.fragments.FrgMainMenu;
 import com.bogdan.learner.fragments.FrgRepeatMenu;
+import com.bogdan.learner.util.Billing;
+import com.bogdan.learner.util.CallBackBill;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -52,14 +51,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentListener, TextToSpeech.OnInitListener, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity implements FragmentListener, TextToSpeech.OnInitListener, CompoundButton.OnCheckedChangeListener, CallBackBill {
+    //var
+    //region
     final String LOG_TAG = "MyLog";
     private static final String DATABASE_NAME = "dictionary.sqlite";
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
@@ -69,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     public static boolean isReversWordPlace;
     public static boolean isBaseChanged;
     public static int wordAlternation;
+    public static boolean isPremium = false;
+    public static boolean isTrialTimeEnd = false;
 
 
     DBHelper dbHelper;
@@ -79,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     FrgRepeatMenu frgRepeatMenu;
     FrgLearnToDay frgLearnToDay;
     FragmentTransaction fTrans;
-    FirebaseAnalytics mFirebaseAnalytics;
     String downloadDbPath;
     String uploadDbPath;
     Context context;
@@ -90,8 +94,12 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     CheckBox mAutoSpeech, mChangeWordPlace, mNotifyMorning, mNotifyEvening;
-    AdView mAdView;
 
+    FirebaseAnalytics mFirebaseAnalytics;
+    public AdView mAdView;
+    Billing bill;
+
+    //endregion
 
 
     @Override
@@ -103,10 +111,26 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         dbHelper = DBHelper.getDbHelper(this);
         uploadDb = dbHelper.uploadDb;
-        context = getBaseContext();
+        context = this;
 
+        sp = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
+        bill = new Billing(this);
+        bill.startSetup(); //add to comment for emulator
+
+
+        if(!sp.contains("IsPremium")) {
+            editor.putBoolean("IsPremium", false).apply();
+        }
+        isPremium = sp.getBoolean("IsPremium", false);
         mAdView = (AdView) findViewById(R.id.adView);
 
+//        setPremium(false); //test
+
+
+
+        advertise(!isPremium);
 
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
@@ -126,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         initDrawerLayout();
-    }
 
+    }
 
     void advertise(Boolean isShow){
         if(isShow){
@@ -135,18 +159,22 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
             AdRequest adRequest = new AdRequest.Builder()
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                     .addTestDevice("7D52B52E8021375F847F513F5BCC161D")
+                    .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
                     .build();
             mAdView.loadAd(adRequest);
+            Log.d(LOG_TAG,"Стартп текламы");
         }else {
+            mAdView.destroy();
             mAdView.setLayoutParams(new LinearLayout.LayoutParams(DrawerLayout.LayoutParams.MATCH_PARENT, 0));
-
         }
-
     }
 
     @Override
     public void onButtonSelected(View view) {
         fTrans = getFragmentManager().beginTransaction();
+        Integer wordsAllowed = 1000;
+        if(!isPremium){
+            wordsAllowed = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();}
         switch (view.getId()) {
             /*Кнопки активити*/
             case R.id.btn_toMain:
@@ -157,20 +185,28 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                 break;
 
             case R.id.btn_add:
-                FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
-                if (f != null && f.isVisible()) {
-                    //do nothing
-                } else {
-                    fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase, "com.bogdan.learner.fragments.frgAddOwnWordToBase");
-                    fTrans.addToBackStack("frgAddOwnWordToBase");
+                if(!isPremium && isTrialTimeEnd && wordsAllowed > 4){
+                    Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
+                }else{
+                    FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
+                    if (f != null && f.isVisible()) {
+                        //do nothing
+                    } else {
+                        fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase, "com.bogdan.learner.fragments.frgAddOwnWordToBase");
+                        fTrans.addToBackStack("frgAddOwnWordToBase");
+                    }
                 }
                 break;
 
 
             /*Кнопки фрагментов*/
             case R.id.btn_addMoreWord:
-                fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
-                fTrans.addToBackStack("frgAddWordForStudy");
+                if(!isPremium && isTrialTimeEnd && wordsAllowed > 4){
+                    Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
+                }else{
+                    fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
+                    fTrans.addToBackStack("frgAddWordForStudy");
+                }
                 break;
 
             case R.id.btn_learnToday:
@@ -189,9 +225,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                     Toast.makeText(this, R.string.no_words, Toast.LENGTH_SHORT).show();
                 }
                 break;
-//            case R.id.btn_choesFile:
-//                downloadDb();
-//                break;
+            case R.id.btn_buyIt:
+                try {
+                    bill.launchPurchaseFlow();
+                }catch (IllegalStateException e){
+                    Toast.makeText(this,"Попробуйте позже", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
         }
         fTrans.commit();
     }
@@ -300,27 +341,25 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                     int result = toSpeech.setLanguage(Locale.ENGLISH);
                     if (result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.d(LOG_TAG, "This Language is not supported");
+                        Log.d(LOG_TAG, "onInit_This Language is not supported");
                     } else {
-                        Log.d(LOG_TAG, "Its fine!");
+//                        Log.d(LOG_TAG, "onInit_Its fine!");
                     }
                 } else {
-                    Log.d(LOG_TAG, "Initilization Failed!");
+                    Log.d(LOG_TAG, "onInit_Initilization Failed!");
                 }
             }
         }).start();
     }
 
-
-
-    public static void deleteCache(Context context) {
+    public void deleteCache(Context context) {
         try {
             File dir = context.getCacheDir();
             deleteDir(dir);
         } catch (Exception e) {}
     }
 
-    public static boolean deleteDir(File dir) {
+    public boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
             for (int i = 0; i < children.length; i++) {
@@ -345,33 +384,6 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if(hasPermission (WRITE_EXTERNAL_STORAGE)){
-//            // Handle item selection
-//            switch (item.getItemId()) {
-//                case R.id.save:
-//                    uploadDb();
-//                    return true;
-//                case R.id.load:
-//                    downloadDb();
-//                    return true;
-//                default:
-//                    return super.onOptionsItemSelected(item);
-//            }
-//        }else {
-//            askForPermission(WRITE_EXTERNAL_STORAGE , 10);
-//            return super.onOptionsItemSelected(item);
-//        }
-//    }
 
     public void dialog(String massage){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -434,10 +446,6 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                 tv_today.setText(getString(R.string.today_learned) + size + getString(R.string.words));
             }
         };
-
-
-        sp = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
-        editor = sp.edit();
 
         getAutoSpeech();
         getChangeWordPlace();
@@ -625,22 +633,125 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     @Override
     protected void onResume() {
         super.onResume();
+        toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        dbHelper.date = Integer.parseInt(toDayDate);
+        isTrialTimeEnd = isTrialTimeEmd();
         toSpeech = new TextToSpeech(MainActivity.this, MainActivity.this);
         Log.d(LOG_TAG,"onResume");
-        advertise(true);
-//        mAdView.resume();
+        mAdView.resume();
     }
     @Override
     protected void onPause() {
-        mAdView.destroy();
+        mAdView.pause();
         super.onPause();
     }
+
     @Override
     public void onDestroy() {
+        //tospeech
         if (toSpeech != null) {
             toSpeech.shutdown();
         }
-        mAdView.resume();
+//        //advertise
+        mAdView.destroy();
+
         super.onDestroy();
+
+        //billing
+        if (bill.mHelper != null)
+            bill.mHelper.dispose();
+        bill.mHelper = null;
+    }
+
+    @Override
+    public void setPremium(Boolean boo){
+        Log.d(LOG_TAG,"Hello CallBack = " + boo);
+        editor.putBoolean("IsPremium", boo).apply();
+        isPremium = sp.getBoolean("IsPremium", false);
+        if(isPremium){
+            Log.d(LOG_TAG,"Remove advertise");
+            mAdView.destroy();
+            mAdView.setLayoutParams(new LinearLayout.LayoutParams(DrawerLayout.LayoutParams.MATCH_PARENT, 0));
+        }else {
+            Log.d(LOG_TAG,"Show advertise");
+            advertise(!isPremium);
+        }
+    }
+
+    boolean isTrialTimeEmd(){
+        long installedDate = 0;
+        try {
+            installedDate = getApplication()
+                    .getPackageManager()
+                    .getPackageInfo("com.bogdan.english.card", 0)
+                    .firstInstallTime;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        installedDate = installedDate + TimeUnit.DAYS.toMillis(3);
+
+        Log.d(LOG_TAG,"end data" + new SimpleDateFormat("yyyyMMdd").format(installedDate));
+
+        Calendar time = Calendar.getInstance();
+        if(time.getTimeInMillis()>installedDate){
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(LOG_TAG, "onActivityResult " + requestCode + "," + resultCode + "," + data);
+        if (bill.mHelper == null) return;
+        if (!bill.mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+            Log.d(LOG_TAG, "onActivityResult handled by IABUtil.");
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if(hasPermission (WRITE_EXTERNAL_STORAGE)){
+//            // Handle item selection
+//            switch (item.getItemId()) {
+//                case R.id.save:
+//                    uploadDb();
+//                    return true;
+//                case R.id.load:
+//                    downloadDb();
+//                    return true;
+//                default:
+//                    return super.onOptionsItemSelected(item);
+//            }
+//        }else {
+//            askForPermission(WRITE_EXTERNAL_STORAGE , 10);
+//            return super.onOptionsItemSelected(item);
+//        }
+//    }

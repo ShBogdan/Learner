@@ -116,9 +116,14 @@ public class FrgCalendar extends Fragment{
 
 
 //        lastYear.add(cal.DATE, -1);;
-
+        try {
         calendar = (CalendarPickerView) v.findViewById(R.id.calendar_view);
         today = new Date();
+        }catch (Exception e){
+            Toast.makeText(getActivity(), R.string.calendar_problem, Toast.LENGTH_SHORT).show();
+            Log.d("MyLog", "ERROR CALENDAR");
+
+        }
 
 
         calendar.init(lastYear.getTime(), nextYear.getTime())

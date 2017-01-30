@@ -12,6 +12,7 @@
     <color name="grey" type="color">#555555</color>
     <color name="green" type="color">#4499CC00</color>
     <color name="darkgreen" type="color">#FF669900</color>
+    <color name="buyIt" type="color">#98ccfd</color>
 
     <color name="tv_btn">#ff22204a</color>
     <color name="grey_font">#ff9e9e9e</color>

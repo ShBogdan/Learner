@@ -36,8 +36,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
     private AutoCompleteTextView englishWord;
     private Button btn_addToBase;
     private boolean isChange;
-    private AdView mAdView;
-    NativeExpressAdView adView;
+//    NativeExpressAdView adView;
 
 
     @Override
@@ -70,50 +69,63 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
             }
         });
 
-        adView = (NativeExpressAdView)view.findViewById(R.id.adView);
+//        adView = (NativeExpressAdView)view.findViewById(R.id.adView);
 
         AdRequest request = new AdRequest.Builder()
 //                .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
 //                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
-        adView.loadAd(request);
+//        adView.loadAd(request);
         return view;
     }
 
     public void onClick(View v) {
-        // проверяем на наличе заволненых полей и отсутствие пробелов
-        if (TextUtils.isEmpty(englishWord.getText())) {
-            englishWord.setError(getResources().getString(R.string.cant_be_space));
-        } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ") == 0) {
-            russianWord.setError(getResources().getString(R.string.cant_be_space));
-        } else {
-            // если слово пользователя менялось то транскипции не будет
-            if(!(englishWord.getText().toString()).equals(takenWord)){
-                transcription = "";
-                dbHelper.insertWord(
-                        englishWord.getText().toString(),
-                        russianWord.getText().toString(),
-                        transcription,
-                        MainActivity.toDayDate);
-                //если менялся только перевод
-            } else if ((englishWord.getText().toString()).equals(takenWord) && !russWord.equals(russianWord.getText().toString())){
-                dbHelper.insertWord(
-                        englishWord.getText().toString(),
-                        russianWord.getText().toString(),
-                        transcription,
-                        MainActivity.toDayDate);
-            }
-            //если слово уже в базе и не менялось
-            else {
-                dbHelper.updateWordDate(MainActivity.toDayDate, word_id);
-            }
+        Integer wordsAllowed = 1000;
+        if(!MainActivity.isPremium){
+            wordsAllowed = (DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate) == null)
+                    ? 0 : DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate).size();
+        }
 
-            hideKeyboard();
-            Toast.makeText(getActivity(), "\"" + englishWord.getText().toString() + "\" " + getResources().getString(R.string.added_successfully), Toast.LENGTH_SHORT).show();
-            englishWord.setText("");
-            russianWord.setText("");
-            transcription = "";
-            isChange = true;
+        if(!MainActivity.isPremium && MainActivity.isTrialTimeEnd && wordsAllowed > 4){
+            Toast.makeText(getActivity(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
+        }else{
+            // проверяем на наличе заволненых полей и отсутствие пробелов
+            if (TextUtils.isEmpty(englishWord.getText())) {
+                englishWord.setError(getResources().getString(R.string.cant_be_space));
+            } else if (TextUtils.isEmpty(russianWord.getText()) || russianWord.getText().toString().indexOf(" ") == 0) {
+                russianWord.setError(getResources().getString(R.string.cant_be_space));
+            } else {
+                // если слово пользователя менялось то транскипции не будет
+                if(!(englishWord.getText().toString()).equals(takenWord)){
+                    transcription = "";
+                    dbHelper.insertWord(
+                            englishWord.getText().toString(),
+                            russianWord.getText().toString(),
+                            transcription,
+                            MainActivity.toDayDate);
+                    //если менялся только перевод
+                } else if ((englishWord.getText().toString()).equals(takenWord) && !russWord.equals(russianWord.getText().toString())){
+                    dbHelper.insertWord(
+                            englishWord.getText().toString(),
+                            russianWord.getText().toString(),
+                            transcription,
+                            MainActivity.toDayDate);
+                }
+                //если слово уже в базе и не менялось
+                else {
+                    dbHelper.updateWordDate(MainActivity.toDayDate, word_id);
+                }
+
+                hideKeyboard();
+                Toast.makeText(getActivity(), "\"" + englishWord.getText().toString() + "\" " + getResources().getString(R.string.added_successfully), Toast.LENGTH_SHORT).show();
+                englishWord.setText("");
+                russianWord.setText("");
+                transcription = "";
+                isChange = true;
+            }
+        }
+        if(!MainActivity.isPremium){
+            DBHelper.getDbHelper(getActivity()).uploadDb();
         }
     }
 
@@ -139,19 +151,19 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
 
-        adView.resume();
+//        adView.resume();
     }
 
     @Override
     public void onPause() {
-        adView.pause();
+//        adView.pause();
 
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        adView.destroy();
+//        adView.destroy();
 
         super.onDestroy();
     }

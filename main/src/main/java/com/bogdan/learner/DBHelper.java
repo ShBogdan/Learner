@@ -21,7 +21,7 @@ import java.util.TreeMap;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String LOG_TAG = "DBHelper";
-    private Integer date = Integer.parseInt(MainActivity.toDayDate);
+    public Integer date = Integer.parseInt(MainActivity.toDayDate);
     private static DBHelper dbHelper;
     private Context mContext;
 

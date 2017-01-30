@@ -8,11 +8,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
@@ -22,10 +24,9 @@ import com.rey.material.widget.Button;
 import java.util.Locale;
 
 public class FrgAddWordForStudy extends Fragment implements View.OnClickListener {
-    private final String LOG_TAG = "FrgAddWordForStudy";
+    private final String LOG_TAG = "MyLog";
     private DBHelper dayLibrary;
     private String[] word;
-    private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     Button btn_know, btn_unknown;
     TextView tv_english, tv_transcription, tv_russian, tvSumWords;
     CardView btn_audio;
@@ -51,7 +52,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
             if (dayLibrary.getListWordsByDate(MainActivity.toDayDate) == null){
                 size = 0;
             } else {
-               size = dayLibrary.getListWordsByDate(MainActivity.toDayDate).size();
+                size = dayLibrary.getListWordsByDate(MainActivity.toDayDate).size();
             }
             word = dayLibrary.getRandomWord();
             tv_english = (TextView) view.findViewById(R.id.tv_english);
@@ -84,6 +85,11 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        Integer wordsAllowed = 1000;
+        if(!MainActivity.isPremium){
+            wordsAllowed = (DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate) == null)
+                    ? 0 : DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate).size();
+        }
         switch (v.getId()) {
             case R.id.btn_know:
                 dayLibrary.isLearnWord(false);
@@ -91,8 +97,12 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.btn_unknown:
-                dayLibrary.isLearnWord(true);
-                reloadFragment();
+
+                if(!MainActivity.isPremium&& MainActivity.isTrialTimeEnd && wordsAllowed > 4){
+                    Toast.makeText(getActivity(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
+                }else{
+                    dayLibrary.isLearnWord(true);
+                    reloadFragment();}
                 break;
 
             case R.id.btn_audio:
@@ -108,8 +118,6 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
         fTrans.detach(thisFrg);
         fTrans.attach(thisFrg);
         fTrans.commit();
-
-
     }
 }
 

@@ -44,13 +44,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/english_cardDebug/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/english_cardDebug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/english_cardDebug/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/english_card/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/english_card/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/english_card/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/english_card/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/english_card/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/english_card/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/english_card/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testEnglish_cardDebug/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testEnglish_cardDebug/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testEnglish_cardDebug/assets" type="java-test-resource" />
@@ -59,6 +52,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testEnglish_cardDebug/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testEnglish_cardDebug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testEnglish_cardDebug/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/english_card/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/english_card/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/english_card/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/english_card/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/english_card/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/english_card/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/english_card/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/english_card/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/english_card/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/english_card/assets" type="java-resource" />
@@ -168,6 +168,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/pre-dexed" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard-rules" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/reload-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/restart-dex" />

@@ -72,6 +72,8 @@
     <string name="help_show">1. To delete a word, click on it. 2. To add a word to favorites click a tick.</string>
     <string name="base_saved">The database is stored in the Download folder named dictionary.sqlite. Copy this file to another device, and specify the path to it in the menu \"Upload base\"</string>
     <string name="i_read">Ok</string>
+    <string name="drawer_open">open drawer</string>
+    <string name="drawer_close">drawer close</string>
     <string name="alternation">"The alternation to remember words, write the words: "</string>
     <string name="general">"General: "</string>
     <string name="option_learn_today">"Learn today: "</string>
@@ -81,4 +83,12 @@
     <string name="option_base">"Save/load database to the phone: "</string>
     <string name="notify_send_morning">Good morning. Laziness kills yours dream</string>
     <string name="notify_send_evening">There is no perfect time. Do it now.</string>
+    <string name="more_than_6">No more than five words for trial version</string>
+    <string name="mmOptions">Pull left side of your screen for options.Also you can find CheckBox above learned cards it give you the opportunity to add this card to "Favorite" section.</string>
+    <string name="toread">Massage</string>
+    <string name="billInfo">Dear friends.\nThe app becomes partially paid.\nIn the paid version you will be able to add unlimited numbers of your words to study for a day and disable advertise. Hurry to purchase the full version of the application at the promotional price of just 1 dollar to 15/02/2017 date.\nFurther price is 3 dollars.\nFree version, it has advertising and the restriction of 5 words per day(It will be activated after three days of installation). Thank you for staying with us.</string>
+    <string name="calendar_problem">Date problems</string>
+    <string name="app_info">Benefits of the application «English cards»:\n\n • Add your own English words (or any other language), it will allow full control of the process of learning, as well as edit them if necessary.\n • Learn to speak in English-Russian and Russian-English, that is more effective. In the future it will be difficult to forget the learned words.\n • Repeat the words for any date of the calendar.\n • Include complex words to favorites not to look for them.\n • It has ability to transfer learned words database to another device.\n • And also at the first time you can count the number of words that you know and have learned, which will increase your motivation to learn English.\n\n You can add words in two ways. First, you add words to study from our vocabulary of 12 000 words are arranged in a frequency basis. Second, if you\'re reading some text, and there you find some unfamiliar word, you can immediately add it to study, it is necessary to use "Add own words".\n\n For better absorption  we recommend you to add not more than 10 words a day. You can find counted words in  the top menu.\n\n After in the main menu you should click on "Learn today." There you need to remember the words and work out them in writing. In the following days you will need to repeat the words of the second, third, twenty-first and the ninetieth day. This principle of repetition will allow you to remember better. All the words in the application, you can learn both from English into Russian, and in reverse order, from Russian into English (tick "Revers words to translation-original"). Also touching words on the card, you will be voiced transcriptions.\n In the full list of the words "All words" you can repeat all the words, relearn them, remove, rewrite(change them). The list can be sorted in three ways: random, by date and in alphabetical order\n\n Implemented words count.. Have you ever asked the question: "How many English words do I know? What is my vocabulary?". With this application you solve this issue for themselves once and for all. This app will keep score, not only the words that you will learn, but also the words that you already know.\n\n If you have any comments about the application or how to improve it, be sure to write shulga.bogdan@gmail.com</string>
+    <string name="btn_buy">Disable advertisement\n Disable constraints</string>
+    <string name="ok_please_do_not_show_again">Ok please do not show again.</string>
 </resources>
