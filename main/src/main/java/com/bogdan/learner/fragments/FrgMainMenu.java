@@ -158,27 +158,58 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
     }
 
     public void showHelp(){
-        editor = sp.edit();
-        if(!sp.contains("mmOptions")) {
-            editor.putBoolean("mmOptions", true).apply();
-        }
-        if(sp.getBoolean("mmOptions", true)){
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
-            builder.setTitle(R.string.help)
-                    .setMessage(R.string.mmOptions)
-                    .setCancelable(false)
-                    .setNegativeButton(R.string.i_read,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    editor.putBoolean("mmOptions", false).apply();
-                                    dialog.cancel();
-                                }
-                            });
-            android.app.AlertDialog alert = builder.create();
-            alert.show();
-        }
+        final CheckBox dontShowAgain;
+        AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+        LayoutInflater adbInflater = LayoutInflater.from(getActivity());
+        View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
+        SharedPreferences settings = getActivity().getSharedPreferences(SETTINGS, 0);
+        String skipMessage = settings.getString("mmOption", "NOT checked");
 
-    };
+        dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
+        adb.setView(eulaLayout);
+        adb.setTitle(R.string.help);
+        adb.setMessage(R.string.mmOptions);
+
+        adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String checkBoxResult = "NOT checked";
+
+                if (dontShowAgain.isChecked()) {
+                    checkBoxResult = "checked";
+                }
+
+                SharedPreferences settings = getActivity().getSharedPreferences(SETTINGS, 0);
+                SharedPreferences.Editor editor = settings.edit();
+
+                editor.putString("mmOption", checkBoxResult);
+                editor.apply();
+
+                // Do what you want to do on "OK" action
+            }
+        });
+
+        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String checkBoxResult = "NOT checked";
+
+                if (dontShowAgain.isChecked()) {
+                    checkBoxResult = "checked";
+                }
+
+                SharedPreferences settings = getActivity().getSharedPreferences(SETTINGS, 0);
+                SharedPreferences.Editor editor = settings.edit();
+
+                editor.putString("mmOption", checkBoxResult);
+                editor.apply();
+
+                // Do what you want to do on "CANCEL" action
+            }
+        });
+
+        if (!skipMessage.equals("checked")) {
+            adb.show();
+        }
+    }
 
     public void billInfo(){
         final CheckBox dontShowAgain;

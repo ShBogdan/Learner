@@ -21,6 +21,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     CheckBox mAutoSpeech, mChangeWordPlace, mNotifyMorning, mNotifyEvening;
+    Boolean mSlideState = false;
 
     FirebaseAnalytics mFirebaseAnalytics;
     public AdView mAdView;
@@ -231,6 +236,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                 }catch (IllegalStateException e){
                     Toast.makeText(this,"Попробуйте позже", Toast.LENGTH_SHORT).show();
                 }
+                infoAfterBuy();
+
                 break;
 
         }
@@ -341,9 +348,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                     int result = toSpeech.setLanguage(Locale.ENGLISH);
                     if (result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.d(LOG_TAG, "onInit_This Language is not supported");
                     } else {
-//                        Log.d(LOG_TAG, "onInit_Its fine!");
+                        Log.d(LOG_TAG, "onInit_Its fine!");
                     }
                 } else {
                     Log.d(LOG_TAG, "onInit_Initilization Failed!");
@@ -678,6 +684,21 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent e) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if(!mSlideState){
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+                mSlideState = true;
+            }else{
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+                mSlideState = false;
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, e);
+    }
+
     boolean isTrialTimeEmd(){
         long installedDate = 0;
         try {
@@ -698,6 +719,61 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         }
         return false;
     }
+
+    public void infoAfterBuy(){
+        final CheckBox dontShowAgain;
+        android.support.v7.app.AlertDialog.Builder adb = new android.support.v7.app.AlertDialog.Builder(this);
+        LayoutInflater adbInflater = LayoutInflater.from(this);
+        View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
+        SharedPreferences settings = getSharedPreferences(SETTINGS, 0);
+        String skipMessage = settings.getString("infoAfterBuy", "NOT checked");
+
+        dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
+        adb.setView(eulaLayout);
+        adb.setTitle(R.string.toread);
+        adb.setMessage(R.string.infoAfteBuy);
+
+        adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String checkBoxResult = "NOT checked";
+
+                if (dontShowAgain.isChecked()) {
+                    checkBoxResult = "checked";
+                }
+
+                SharedPreferences settings = getSharedPreferences(SETTINGS, 0);
+                SharedPreferences.Editor editor = settings.edit();
+
+                editor.putString("infoAfterBuy", checkBoxResult);
+                editor.apply();
+
+                // Do what you want to do on "OK" action
+            }
+        });
+
+        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String checkBoxResult = "NOT checked";
+
+                if (dontShowAgain.isChecked()) {
+                    checkBoxResult = "checked";
+                }
+
+                SharedPreferences settings = getSharedPreferences(SETTINGS, 0);
+                SharedPreferences.Editor editor = settings.edit();
+
+                editor.putString("infoAfterBuy", checkBoxResult);
+                editor.apply();
+
+                // Do what you want to do on "CANCEL" action
+            }
+        });
+
+        if (!skipMessage.equals("checked")) {
+            adb.show();
+        }
+    }
+
 
 
     @Override
