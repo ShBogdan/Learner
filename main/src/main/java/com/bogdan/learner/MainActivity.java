@@ -24,7 +24,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -64,7 +63,9 @@ import java.util.concurrent.TimeUnit;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentListener, TextToSpeech.OnInitListener, CompoundButton.OnCheckedChangeListener, CallBackBill {
+public class MainActivity extends AppCompatActivity
+        implements FragmentListener, TextToSpeech.OnInitListener,
+        CompoundButton.OnCheckedChangeListener, CallBackBill {
     //var
     //region
     final String LOG_TAG = "MyLog";
@@ -103,9 +104,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     FirebaseAnalytics mFirebaseAnalytics;
     public AdView mAdView;
     Billing bill;
-
     //endregion
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,14 +124,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         bill.startSetup(); //add to comment for emulator
 
 
-        if(!sp.contains("IsPremium")) {
+        if (!sp.contains("IsPremium")) {
             editor.putBoolean("IsPremium", false).apply();
         }
         isPremium = sp.getBoolean("IsPremium", false);
         mAdView = (AdView) findViewById(R.id.adView);
 
-//        setPremium(false); //test
-
+        // TODO: 012 12.04.18
+//        setPremium(true); //test
 
 
         advertise(!isPremium);
@@ -158,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
 
     }
 
-    void advertise(Boolean isShow){
-        if(isShow){
+    void advertise(Boolean isShow) {
+        if (isShow) {
             //get in as search:addTestDevice
             AdRequest adRequest = new AdRequest.Builder()
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
@@ -167,8 +166,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                     .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
                     .build();
             mAdView.loadAd(adRequest);
-            Log.d(LOG_TAG,"Стартп текламы");
-        }else {
+            Log.d(LOG_TAG, "Стартп текламы");
+        } else {
             mAdView.destroy();
             mAdView.setLayoutParams(new LinearLayout.LayoutParams(DrawerLayout.LayoutParams.MATCH_PARENT, 0));
         }
@@ -178,8 +177,9 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     public void onButtonSelected(View view) {
         fTrans = getFragmentManager().beginTransaction();
         Integer wordsAllowed = 1000;
-        if(!isPremium){
-            wordsAllowed = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();}
+        if (!isPremium) {
+            wordsAllowed = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();
+        }
         switch (view.getId()) {
             /*Кнопки активити*/
             case R.id.btn_toMain:
@@ -190,9 +190,9 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                 break;
 
             case R.id.btn_add:
-                if(!isPremium && isTrialTimeEnd && wordsAllowed > 4){
+                if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
                     Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
                     if (f != null && f.isVisible()) {
                         //do nothing
@@ -206,9 +206,9 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
 
             /*Кнопки фрагментов*/
             case R.id.btn_addMoreWord:
-                if(!isPremium && isTrialTimeEnd && wordsAllowed > 4){
+                if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
                     Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
                     fTrans.addToBackStack("frgAddWordForStudy");
                 }
@@ -233,8 +233,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
             case R.id.btn_buyIt:
                 try {
                     bill.launchPurchaseFlow();
-                }catch (IllegalStateException e){
-                    Toast.makeText(this,"Попробуйте позже", Toast.LENGTH_SHORT).show();
+                } catch (IllegalStateException e) {
+                    Toast.makeText(this, "Попробуйте позже", Toast.LENGTH_SHORT).show();
                 }
                 infoAfterBuy();
 
@@ -245,14 +245,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     }
 
     public void uploadDb() {
-        if(android.os.Build.VERSION.SDK_INT >= 4.2){
-            uploadDbPath = this.getApplicationInfo().dataDir + "/databases/"+DATABASE_NAME;
+        if (android.os.Build.VERSION.SDK_INT >= 4.2) {
+            uploadDbPath = this.getApplicationInfo().dataDir + "/databases/" + DATABASE_NAME;
         } else {
-            uploadDbPath = this.getFilesDir() + this.getPackageName() + "/databases/"+DATABASE_NAME;
+            uploadDbPath = this.getFilesDir() + this.getPackageName() + "/databases/" + DATABASE_NAME;
         }
         try {
             InputStream in = new FileInputStream(uploadDbPath);
-            OutputStream out = new FileOutputStream(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/"+DATABASE_NAME);
+            OutputStream out = new FileOutputStream(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + DATABASE_NAME);
 
             // Transfer bytes from in to out
             byte[] buf = new byte[1024];
@@ -269,15 +269,16 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     }
 
     public void downloadDb() {
-        if(android.os.Build.VERSION.SDK_INT >= 4.2){
-            uploadDbPath = this.getApplicationInfo().dataDir + "/databases/"+DATABASE_NAME;
+        if (android.os.Build.VERSION.SDK_INT >= 4.2) {
+            uploadDbPath = this.getApplicationInfo().dataDir + "/databases/" + DATABASE_NAME;
         } else {
-            uploadDbPath = this.getFilesDir() + this.getPackageName() + "/databases/"+DATABASE_NAME;
+            uploadDbPath = this.getFilesDir() + this.getPackageName() + "/databases/" + DATABASE_NAME;
         }
         new FileChooser(this).setFileListener(new FileChooser.FileSelectedListener() {
-            @Override public void fileSelected(final File file) {
+            @Override
+            public void fileSelected(final File file) {
 
-                if(file.getName().equals("dictionary.sqlite")){
+                if (file.getName().equals("dictionary.sqlite")) {
                     try {
                         downloadDbPath = file.getPath();
                         InputStream in = new FileInputStream(downloadDbPath);
@@ -296,8 +297,9 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else{
-                    dialog(getResources().getString(R.string.unknoun_file));}
+                } else {
+                    dialog(getResources().getString(R.string.unknoun_file));
+                }
             }
         }).showDialog();
         dialog(getResources().getString(R.string.load_base));
@@ -362,7 +364,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         try {
             File dir = context.getCacheDir();
             deleteDir(dir);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     public boolean deleteDir(File dir) {
@@ -375,23 +378,23 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                 }
             }
             return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
+        } else if (dir != null && dir.isFile()) {
             return dir.delete();
         } else {
             return false;
         }
     }
 
-    public void restartApp(){
+    public void restartApp() {
         Intent mStartActivity = new Intent(context, MainActivity.class);
         int mPendingIntentId = 123456;
-        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
     }
 
-    public void dialog(String massage){
+    public void dialog(String massage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.help)
                 .setMessage(massage)
@@ -423,10 +426,10 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     }
 
     private boolean hasPermission(String perm) {
-        return(ContextCompat.checkSelfPermission( this, perm) == PackageManager.PERMISSION_GRANTED);
+        return (ContextCompat.checkSelfPermission(this, perm) == PackageManager.PERMISSION_GRANTED);
     }
 
-    void initDrawerLayout(){
+    void initDrawerLayout() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mMainView = (LinearLayout) findViewById(R.id.main_activity);
         //реакция на открытие-закрытие
@@ -440,14 +443,15 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
             public void onDrawerClosed(View view) {
 
             }
+
             public void onDrawerOpened(View drawerView) {
                 tv_learned = (TextView) findViewById(R.id.tv_learned);
                 tv_learned.setText(getString(R.string.you_know) +
                         DBHelper.getDbHelper(context).learnedWords.size() + getString(R.string.new_words));
-                tv_know    = (TextView) findViewById(R.id.tv_known);
+                tv_know = (TextView) findViewById(R.id.tv_known);
                 tv_know.setText(getString(R.string.you_knew) +
                         DBHelper.getDbHelper(context).listKnownWords.size() + getString(R.string.words));
-                tv_today    = (TextView) findViewById(R.id.tv_today);
+                tv_today = (TextView) findViewById(R.id.tv_today);
                 Integer size = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();
                 tv_today.setText(getString(R.string.today_learned) + size + getString(R.string.words));
             }
@@ -464,54 +468,57 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
 
 
     }
-    private void getChangeWordPlace(){
+
+    private void getChangeWordPlace() {
         mChangeWordPlace = (CheckBox) findViewById(R.id.changeWordPlace);
-        if(!sp.contains("changeWordPlace")) {
+        if (!sp.contains("changeWordPlace")) {
             editor.putBoolean("changeWordPlace", false).apply();
         }
-        if(sp.getBoolean("changeWordPlace", false)){
+        if (sp.getBoolean("changeWordPlace", false)) {
             isReversWordPlace = false;
         }
-        if(sp.getBoolean("changeWordPlace", true)){
+        if (sp.getBoolean("changeWordPlace", true)) {
             mChangeWordPlace.setChecked(true);
             isReversWordPlace = true;
         }
         mChangeWordPlace.setOnCheckedChangeListener(this);
     }
-    private void getAutoSpeech(){
+
+    private void getAutoSpeech() {
         mAutoSpeech = (CheckBox) findViewById(R.id.autoSpeech);
-        if(!sp.contains("autoSpeech")) {
+        if (!sp.contains("autoSpeech")) {
             editor.putBoolean("autoSpeech", false).apply();
         }
-        if(sp.getBoolean("autoSpeech", false)){
+        if (sp.getBoolean("autoSpeech", false)) {
             isAutoSpeech = false;
         }
-        if(sp.getBoolean("autoSpeech", true)){
+        if (sp.getBoolean("autoSpeech", true)) {
             mAutoSpeech.setChecked(true);
             isAutoSpeech = true;
         }
 
         mAutoSpeech.setOnCheckedChangeListener(this);
     }
-    private void getWordAlternation(){
-        if(!sp.contains("WordAlternation")) {
+
+    private void getWordAlternation() {
+        if (!sp.contains("WordAlternation")) {
             editor.putInt("WordAlternation", 2).apply();
         }
         wordAlternation = sp.getInt("WordAlternation", 2);
-        tv_seekBarValue = (TextView)findViewById(R.id.tv_seekBarValue);
+        tv_seekBarValue = (TextView) findViewById(R.id.tv_seekBarValue);
         tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
 
 
-        final SeekBar seekbar = (SeekBar)findViewById(R.id.seekBar);
+        final SeekBar seekbar = (SeekBar) findViewById(R.id.seekBar);
         seekbar.setMax(10);
         seekbar.setProgress(wordAlternation);
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(seekBar.getProgress() == 0){
-                    wordAlternation = seekBar.getProgress()+1;
-                }else{
+                if (seekBar.getProgress() == 0) {
+                    wordAlternation = seekBar.getProgress() + 1;
+                } else {
                     wordAlternation = seekBar.getProgress();
                 }
                 tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
@@ -520,10 +527,10 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                if(seekBar.getProgress() == 0){
-                    wordAlternation = seekBar.getProgress()+1;
+                if (seekBar.getProgress() == 0) {
+                    wordAlternation = seekBar.getProgress() + 1;
 
-                }else{
+                } else {
                     wordAlternation = seekBar.getProgress();
                 }
                 tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
@@ -531,9 +538,9 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if(seekBar.getProgress() == 0){
-                    wordAlternation = seekBar.getProgress()+1;
-                }else{
+                if (seekBar.getProgress() == 0) {
+                    wordAlternation = seekBar.getProgress() + 1;
+                } else {
                     wordAlternation = seekBar.getProgress();
                 }
                 tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
@@ -543,49 +550,51 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
 
 
     }
-    private void setUseBase(){
+
+    private void setUseBase() {
         Button load_base = (Button) findViewById(R.id.load_base);
         Button save_base = (Button) findViewById(R.id.save_base);
         load_base.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hasPermission (WRITE_EXTERNAL_STORAGE)){
+                if (hasPermission(WRITE_EXTERNAL_STORAGE)) {
                     downloadDb();
-                }else {
-                    askForPermission(WRITE_EXTERNAL_STORAGE , 10);
+                } else {
+                    askForPermission(WRITE_EXTERNAL_STORAGE, 10);
                 }
             }
         });
         save_base.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hasPermission (WRITE_EXTERNAL_STORAGE)){
+                if (hasPermission(WRITE_EXTERNAL_STORAGE)) {
                     uploadDb();
-                }else {
-                    askForPermission(WRITE_EXTERNAL_STORAGE , 10);
+                } else {
+                    askForPermission(WRITE_EXTERNAL_STORAGE, 10);
                 }
             }
         });
     }
-    private void setAlarm(){
+
+    private void setAlarm() {
         mNotifyMorning = (CheckBox) findViewById(R.id.notify_morning);
-        if(!sp.contains("notify_morning")) {
+        if (!sp.contains("notify_morning")) {
             editor.putBoolean("notify_morning", false).apply();
         }
-        if(sp.getBoolean("notify_morning", false)){
+        if (sp.getBoolean("notify_morning", false)) {
         }
-        if(sp.getBoolean("notify_morning", true)){
+        if (sp.getBoolean("notify_morning", true)) {
             mNotifyMorning.setChecked(true);
         }
 
         mNotifyEvening = (CheckBox) findViewById(R.id.notify_evening);
 
-        if(!sp.contains("notify_evening")) {
+        if (!sp.contains("notify_evening")) {
             editor.putBoolean("notify_evening", false).apply();
         }
-        if(sp.getBoolean("notify_evening", false)){
+        if (sp.getBoolean("notify_evening", false)) {
         }
-        if(sp.getBoolean("notify_evening", true)){
+        if (sp.getBoolean("notify_evening", true)) {
             mNotifyEvening.setChecked(true);
         }
 
@@ -596,9 +605,9 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
+        switch (buttonView.getId()) {
             case R.id.notify_morning:
-                if(mNotifyMorning.isChecked()){
+                if (mNotifyMorning.isChecked()) {
                     editor.putBoolean("notify_morning", true).apply();
                     new AlarmManagerBroadcastReceiver().setMorningAlarm(context);
                 } else {
@@ -607,7 +616,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                 }
                 break;
             case R.id.notify_evening:
-                if(mNotifyEvening.isChecked()){
+                if (mNotifyEvening.isChecked()) {
                     editor.putBoolean("notify_evening", true).apply();
                     new AlarmManagerBroadcastReceiver().setEveningAlarm(context);
                 } else {
@@ -617,7 +626,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                 break;
 
             case R.id.autoSpeech:
-                if(mAutoSpeech.isChecked()){
+                if (mAutoSpeech.isChecked()) {
                     editor.putBoolean("autoSpeech", true).apply();
                     isAutoSpeech = true;
                 } else {
@@ -626,16 +635,17 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
                 }
                 break;
             case R.id.changeWordPlace:
-                if(mChangeWordPlace.isChecked()){
+                if (mChangeWordPlace.isChecked()) {
                     editor.putBoolean("changeWordPlace", true).apply();
                     isReversWordPlace = true;
-                } else{
+                } else {
                     editor.putBoolean("changeWordPlace", false).apply();
                     isReversWordPlace = false;
                 }
                 break;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -643,9 +653,10 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         dbHelper.date = Integer.parseInt(toDayDate);
         isTrialTimeEnd = isTrialTimeEmd();
         toSpeech = new TextToSpeech(MainActivity.this, MainActivity.this);
-        Log.d(LOG_TAG,"onResume");
+        Log.d(LOG_TAG, "onResume");
         mAdView.resume();
     }
+
     @Override
     protected void onPause() {
         mAdView.pause();
@@ -665,21 +676,22 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
 
         //billing
         if (bill.mHelper != null)
-            bill.mHelper.dispose();
-        bill.mHelper = null;
+            // TODO: 012 12.04.18 should be uncommitted
+            //            bill.mHelper.dispose();
+            bill.mHelper = null;
     }
 
     @Override
-    public void setPremium(Boolean boo){
-        Log.d(LOG_TAG,"Hello CallBack = " + boo);
+    public void setPremium(Boolean boo) {
+        Log.d(LOG_TAG, "Hello CallBack = " + boo);
         editor.putBoolean("IsPremium", boo).apply();
         isPremium = sp.getBoolean("IsPremium", false);
-        if(isPremium){
-            Log.d(LOG_TAG,"Remove advertise");
+        if (isPremium) {
+            Log.d(LOG_TAG, "Remove advertise");
             mAdView.destroy();
             mAdView.setLayoutParams(new LinearLayout.LayoutParams(DrawerLayout.LayoutParams.MATCH_PARENT, 0));
-        }else {
-            Log.d(LOG_TAG,"Show advertise");
+        } else {
+            Log.d(LOG_TAG, "Show advertise");
             advertise(!isPremium);
         }
     }
@@ -687,11 +699,11 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent e) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            if(!mSlideState){
-            mDrawerLayout.openDrawer(Gravity.LEFT);
+            if (!mSlideState) {
+                mDrawerLayout.openDrawer(Gravity.LEFT);
                 mSlideState = true;
-            }else{
-            mDrawerLayout.closeDrawer(Gravity.LEFT);
+            } else {
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
                 mSlideState = false;
             }
             return true;
@@ -699,7 +711,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         return super.onKeyDown(keyCode, e);
     }
 
-    boolean isTrialTimeEmd(){
+    boolean isTrialTimeEmd() {
         long installedDate = 0;
         try {
             installedDate = getApplication()
@@ -711,16 +723,16 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
         }
         installedDate = installedDate + TimeUnit.DAYS.toMillis(3);
 
-        Log.d(LOG_TAG,"end data" + new SimpleDateFormat("yyyyMMdd").format(installedDate));
+        Log.d(LOG_TAG, "end data" + new SimpleDateFormat("yyyyMMdd").format(installedDate));
 
         Calendar time = Calendar.getInstance();
-        if(time.getTimeInMillis()>installedDate){
+        if (time.getTimeInMillis() > installedDate) {
             return true;
         }
         return false;
     }
 
-    public void infoAfterBuy(){
+    public void infoAfterBuy() {
         final CheckBox dontShowAgain;
         android.support.v7.app.AlertDialog.Builder adb = new android.support.v7.app.AlertDialog.Builder(this);
         LayoutInflater adbInflater = LayoutInflater.from(this);
@@ -775,34 +787,17 @@ public class MainActivity extends AppCompatActivity implements FragmentListener,
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(LOG_TAG, "onActivityResult " + requestCode + "," + resultCode + "," + data);
         if (bill.mHelper == null) return;
         if (!bill.mHelper.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
-        }
-        else {
+        } else {
             Log.d(LOG_TAG, "onActivityResult handled by IABUtil.");
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //    @Override

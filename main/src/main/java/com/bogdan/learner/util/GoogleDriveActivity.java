@@ -1,19 +1,6 @@
 package com.bogdan.learner.util;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.IntentSender;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-//import com.google.android.gms.drive.Drive;
-
-public class GoogleDriveActivity{
+public class GoogleDriveActivity {
 // {extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 //    final int RESOLVE_CONNECTION_REQUEST_CODE = 66699;
 //    GoogleApiClient mGoogleApiClient;
