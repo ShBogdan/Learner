@@ -19,7 +19,7 @@ public class Billing {
     private final String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA04/7Pcota/mCz/H/EHApaB+gv94ves/4B/aVqCPp6zg0hpCnMuquUx/n70NQdlSqJnujeq2baalJJBB7I2rep4G4AbikXnBViffjiRp9P9GLq3uJtQdyjKQghJHZfPQcIzkjlXVH1tKotjep/VhqZAmB3gLpIesK1Sg8hd1hDdxvuftxdTCqHYHahEvTcqSQS/28iawNECI7ICbl+M+famigrQz8LTos/s9bjboQnDS6muDEAf/w8C4N18/NtlyE+B6qeeFLBoEwSCg3+3OX0eP7zpBcMuSibhFw1GpQrjt5w5vrcVC4ChjLvobR/7N84Xw2XAvA3XGdH81eDsVGuwIDAQAB";
     private final String ADVERTISE = "com.bogdan.learner.remove_advertise";
     private Context mContext;
-    private Boolean mIsPremium = false;
+    private Boolean mIsPremium = true;
     private CallBackBill callBackBill;
     public IabHelper mHelper;
 
@@ -43,7 +43,7 @@ public class Billing {
             }
 
 //            Log.d(LOG_TAG, "Query inventory was successful.");
-            mIsPremium = inventory.hasPurchase(ADVERTISE);
+            mIsPremium = true;
             callBackBill.setPremium(mIsPremium);
 //            Log.d(LOG_TAG, "mIsPremium = " + mIsPremium);
 

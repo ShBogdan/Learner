@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
     public static boolean isReversWordPlace;
     public static boolean isBaseChanged;
     public static int wordAlternation;
-    public static boolean isPremium = false;
+    public static boolean isPremium = true;
     public static boolean isTrialTimeEnd = false;
 
 
@@ -125,16 +125,16 @@ public class MainActivity extends AppCompatActivity
 
 
         if (!sp.contains("IsPremium")) {
-            editor.putBoolean("IsPremium", false).apply();
+            editor.putBoolean("IsPremium", true).apply();
         }
-        isPremium = sp.getBoolean("IsPremium", false);
+        isPremium = sp.getBoolean("IsPremium", true);
         mAdView = (AdView) findViewById(R.id.adView);
 
         // TODO: 012 12.04.18
 //        setPremium(true); //test
 
 
-        advertise(!isPremium);
+        advertise(!true);
 
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
@@ -176,10 +176,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onButtonSelected(View view) {
         fTrans = getFragmentManager().beginTransaction();
-        Integer wordsAllowed = 1000;
-        if (!isPremium) {
-            wordsAllowed = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();
-        }
+        Integer wordsAllowed = 10000;
+
         switch (view.getId()) {
             /*Кнопки активити*/
             case R.id.btn_toMain:
@@ -190,7 +188,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.btn_add:
-                if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
+                if (false) {
                     Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
                 } else {
                     FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
@@ -206,7 +204,7 @@ public class MainActivity extends AppCompatActivity
 
             /*Кнопки фрагментов*/
             case R.id.btn_addMoreWord:
-                if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
+                if (false) {
                     Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
                 } else {
                     fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
@@ -651,7 +649,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         dbHelper.date = Integer.parseInt(toDayDate);
-        isTrialTimeEnd = isTrialTimeEmd();
+        isTrialTimeEnd = false;
         toSpeech = new TextToSpeech(MainActivity.this, MainActivity.this);
         Log.d(LOG_TAG, "onResume");
         mAdView.resume();
@@ -684,8 +682,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void setPremium(Boolean boo) {
         Log.d(LOG_TAG, "Hello CallBack = " + boo);
-        editor.putBoolean("IsPremium", boo).apply();
-        isPremium = sp.getBoolean("IsPremium", false);
+        editor.putBoolean("IsPremium", true).apply();
+        isPremium = sp.getBoolean("IsPremium", true);
         if (isPremium) {
             Log.d(LOG_TAG, "Remove advertise");
             mAdView.destroy();
