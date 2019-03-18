@@ -3,6 +3,7 @@ package com.bogdan.learner;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager.LayoutParams;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Arrays;
 
+@SuppressWarnings("all")
 class FileChooser {
     private static final String PARENT_DIR = "..";
 
@@ -114,6 +116,7 @@ class FileChooser {
             dialog.setTitle(currentPath.getPath());
             list.setAdapter(new ArrayAdapter(activity,
                     android.R.layout.simple_list_item_1, fileList) {
+                @NonNull
                 @Override public View getView(int pos, View view, ViewGroup parent) {
                     view = super.getView(pos, view, parent);
                     ((TextView) view).setSingleLine(true);
