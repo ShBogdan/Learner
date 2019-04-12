@@ -44,6 +44,7 @@ import com.bogdan.learner.util.Billing;
 import com.bogdan.learner.util.CallBackBill;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
@@ -110,12 +111,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         savedInstanceState = null;
         super.onCreate(savedInstanceState);
+
         Log.d(LOG_TAG, "onCreate");
         setContentView(R.layout.main);
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         dbHelper = DBHelper.getDbHelper(this);
         uploadDb = dbHelper.uploadDb;
         context = this;
+        MobileAds.initialize(this, "ca-app-pub-2432219544659182~3755019955");
 
         sp = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         editor = sp.edit();
@@ -132,7 +135,6 @@ public class MainActivity extends AppCompatActivity
 
         // TODO: 012 12.04.18
 //        setPremium(true); //test
-
 
         advertise(!isPremium);
 
