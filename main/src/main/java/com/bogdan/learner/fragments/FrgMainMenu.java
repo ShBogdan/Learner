@@ -1,8 +1,8 @@
 package com.bogdan.learner.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,11 +12,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
-import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,43 +19,39 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
+
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
-import com.bogdan.learner.util.Billing;
-import com.bogdan.learner.util.IabHelper;
-import com.bogdan.learner.util.IabResult;
-import com.bogdan.learner.util.Inventory;
-import com.bogdan.learner.util.Purchase;
 import com.rey.material.widget.Button;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class FrgMainMenu extends Fragment implements View.OnClickListener, View.OnTouchListener{
+public class FrgMainMenu extends Fragment implements View.OnClickListener, View.OnTouchListener {
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     final String TAG = "onClick";
     final String LOG_TAG = "MyLog";
     FragmentListener mCallback;
     String appPackageName = "com.bogdan.english.card";
-    CardView cardView_1, cardView_2, cardView_3, cardView_4;
-    Button btn_learnToday, btn_addNewWord, btn_repeat, btn_buyIt;
+    CardView cardView_1, cardView_2, cardView_3, cardView_4, cardView_5;
+    Button btn_learnToday, btn_addNewWord, btn_repeat, btn_buyIt, btn_options;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
+    Context mContext;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mContext = getActivity();
         View view = inflater.inflate(R.layout.frg_m_m, null);
-        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+        sp = mContext.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         showHelp();
-        billInfo();
 
         cardView_1 = (CardView) view.findViewById(R.id.card_view_1);
         cardView_2 = (CardView) view.findViewById(R.id.card_view_2);
         cardView_3 = (CardView) view.findViewById(R.id.card_view_3);
         cardView_4 = (CardView) view.findViewById(R.id.card_view_4);
+        cardView_5 = (CardView) view.findViewById(R.id.card_view_5);
 
         btn_addNewWord = (Button) view.findViewById(R.id.btn_addMoreWord);
         btn_addNewWord.setOnClickListener(this);
@@ -77,7 +68,10 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
         btn_buyIt = (Button) view.findViewById(R.id.btn_buyIt);
         btn_buyIt.setOnClickListener(this);
 
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        btn_options = (Button) view.findViewById(R.id.btn_options);
+        btn_options.setOnClickListener(this);
+
+        getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         Button btn_info = (Button) view.findViewById(R.id.btn_info);
         btn_info.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +101,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
             }
         });
 
-        if(MainActivity.isPremium){
+        if (MainActivity.isPremium) {
             cardView_4.setVisibility(View.INVISIBLE);
         }
 
@@ -131,38 +125,42 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        switch (motionEvent.getAction()){
+        switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if(view.getId()==(R.id.btn_addMoreWord))
+                if (view.getId() == (R.id.btn_addMoreWord))
                     cardView_1.setCardElevation(2);
-                if(view.getId()==(R.id.btn_learnToday))
+                if (view.getId() == (R.id.btn_learnToday))
                     cardView_2.setCardElevation(2);
-                if(view.getId()==(R.id.btn_repeat))
+                if (view.getId() == (R.id.btn_repeat))
                     cardView_3.setCardElevation(2);
-                if(view.getId()==(R.id.btn_buyIt))
+                if (view.getId() == (R.id.btn_buyIt))
                     cardView_4.setCardElevation(2);
+                if (view.getId() == (R.id.btn_options))
+                    cardView_5.setCardElevation(2);
                 break;
             case MotionEvent.ACTION_UP:
-                if(view.getId()==(R.id.btn_addMoreWord))
+                if (view.getId() == (R.id.btn_addMoreWord))
                     cardView_1.setCardElevation(6);
-                if(view.getId()==(R.id.btn_learnToday))
+                if (view.getId() == (R.id.btn_learnToday))
                     cardView_2.setCardElevation(6);
-                if(view.getId()==(R.id.btn_repeat))
+                if (view.getId() == (R.id.btn_repeat))
                     cardView_3.setCardElevation(6);
-                if(view.getId()==(R.id.btn_buyIt))
+                if (view.getId() == (R.id.btn_buyIt))
                     cardView_4.setCardElevation(6);
+                if (view.getId() == (R.id.btn_options))
+                    cardView_5.setCardElevation(6);
                 break;
         }
 
         return true;
     }
 
-    public void showHelp(){
+    public void showHelp() {
         final CheckBox dontShowAgain;
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
         LayoutInflater adbInflater = LayoutInflater.from(getActivity());
         View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
-        SharedPreferences settings = getActivity().getSharedPreferences(SETTINGS, 0);
+        SharedPreferences settings = mContext.getSharedPreferences(SETTINGS, 0);
         String skipMessage = settings.getString("mmOption", "NOT checked");
 
         dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
@@ -178,7 +176,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
                     checkBoxResult = "checked";
                 }
 
-                SharedPreferences settings = getActivity().getSharedPreferences(SETTINGS, 0);
+                SharedPreferences settings = mContext.getSharedPreferences(SETTINGS, 0);
                 SharedPreferences.Editor editor = settings.edit();
 
                 editor.putString("mmOption", checkBoxResult);
@@ -196,7 +194,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
                     checkBoxResult = "checked";
                 }
 
-                SharedPreferences settings = getActivity().getSharedPreferences(SETTINGS, 0);
+                SharedPreferences settings = mContext.getSharedPreferences(SETTINGS, 0);
                 SharedPreferences.Editor editor = settings.edit();
 
                 editor.putString("mmOption", checkBoxResult);
@@ -206,17 +204,24 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
             }
         });
 
-        if (!skipMessage.equals("checked")) {
+        if (skipMessage != null && !skipMessage.equals("checked")) {
             adb.show();
         }
     }
 
-    public void billInfo(){
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mContext = context;
+
+    }
+
+    public void billInfo() {
         final CheckBox dontShowAgain;
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
         LayoutInflater adbInflater = LayoutInflater.from(getActivity());
         View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
-        SharedPreferences settings = getActivity().getSharedPreferences(SETTINGS, 0);
+        SharedPreferences settings = mContext.getSharedPreferences(SETTINGS, 0);
         String skipMessage = settings.getString("skipMessage", "NOT checked");
 
         dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
@@ -232,7 +237,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
                     checkBoxResult = "checked";
                 }
 
-                SharedPreferences settings = getActivity().getSharedPreferences(SETTINGS, 0);
+                SharedPreferences settings = mContext.getSharedPreferences(SETTINGS, 0);
                 SharedPreferences.Editor editor = settings.edit();
 
                 editor.putString("skipMessage", checkBoxResult);
@@ -250,7 +255,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
                     checkBoxResult = "checked";
                 }
 
-                SharedPreferences settings = getActivity().getSharedPreferences(SETTINGS, 0);
+                SharedPreferences settings = mContext.getSharedPreferences(SETTINGS, 0);
                 SharedPreferences.Editor editor = settings.edit();
 
                 editor.putString("skipMessage", checkBoxResult);
@@ -260,7 +265,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
             }
         });
 
-        if (!skipMessage.equals("checked")) {
+        if (skipMessage != null && !skipMessage.equals("checked")) {
             adb.show();
         }
     }

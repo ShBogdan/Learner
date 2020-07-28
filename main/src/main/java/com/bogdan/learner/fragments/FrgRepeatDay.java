@@ -1,15 +1,16 @@
 package com.bogdan.learner.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;

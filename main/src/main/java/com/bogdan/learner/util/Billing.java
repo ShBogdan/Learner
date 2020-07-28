@@ -1,10 +1,9 @@
 package com.bogdan.learner.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.LinearLayout;
 
@@ -26,9 +25,9 @@ public class Billing {
 
     public Billing(Context mContext) {
         this.mContext = mContext;
-        callBackBill = (CallBackBill)mContext;
+        callBackBill = (CallBackBill) mContext;
         mHelper = new IabHelper(mContext, base64EncodedPublicKey);
-      }
+    }
 
 
     private IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
@@ -60,8 +59,7 @@ public class Billing {
     // Callback for when a purchase is finished
     private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
             = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase)
-        {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
 //            Log.d(LOG_TAG, "Purchase finished: " + result + ", purchase: " + purchase);
 //            if (result.isFailure()) {
 //                complain("Error purchasing: " + result);
@@ -74,7 +72,7 @@ public class Billing {
         }
     };
 
-    public void startSetup(){
+    public void startSetup() {
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
 //                Log.d(LOG_TAG, "Setup finished.");
@@ -88,8 +86,8 @@ public class Billing {
         });
     }
 
-    public void launchPurchaseFlow(){
-        if(null!=mHelper)
+    public void launchPurchaseFlow() {
+        if (null != mHelper)
             mHelper.launchPurchaseFlow((Activity) mContext, ADVERTISE, 10001, mPurchaseFinishedListener, "PAYLOAD_STRING");
 
     }
@@ -100,12 +98,12 @@ public class Billing {
     }
 
     void alert(final String message) {
-        ((Activity)mContext).runOnUiThread(new Runnable() {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
 
-                android.support.v7.app.AlertDialog.Builder bld = new android.support.v7.app.AlertDialog.Builder(mContext);
+                AlertDialog.Builder bld = new AlertDialog.Builder(mContext);
                 bld.setMessage(message);
                 bld.setNeutralButton("OK", null);
 //                Log.d(LOG_TAG, "Showing alert dialog: " + message);
@@ -113,8 +111,6 @@ public class Billing {
             }
         });
     }
-
-
 
 
 }

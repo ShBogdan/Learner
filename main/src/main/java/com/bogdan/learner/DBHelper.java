@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -68,14 +67,14 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         dbHelper = this;
         this.mContext = context;
-        if(android.os.Build.VERSION.SDK_INT >= 4.2){
+        if (android.os.Build.VERSION.SDK_INT >= 4.2) {
             DB_PATH = mContext.getApplicationInfo().dataDir + "/databases/";
         } else {
             DB_PATH = mContext.getFilesDir() + mContext.getPackageName() + "/databases/";
         }
-        if(checkDataBase()){
+        if (checkDataBase()) {
             Log.d(LOG_TAG, "exist");
-        }else{
+        } else {
             try {
                 copyDataBase(mContext);
             } catch (IOException e) {
@@ -88,43 +87,38 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(LOG_TAG, "learnedWords=" + learnedWords.size());
     }
 
-    public static DBHelper getDbHelper(Context context){
-        if(dbHelper == null){
+    public static DBHelper getDbHelper(Context context) {
+        if (dbHelper == null) {
             dbHelper = new DBHelper(context);
         }
         return dbHelper;
     }
 
-    private boolean checkDataBase(){
+    private boolean checkDataBase() {
         sqLiteDatabase = null;
-        try{
+        try {
             String myPath = DB_PATH + DATABASE_NAME;
             sqLiteDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        }catch(SQLiteException e){
+        } catch (SQLiteException e) {
             //база еще не существует
         }
-        if(sqLiteDatabase != null){
+        if (sqLiteDatabase != null) {
             sqLiteDatabase.close();
         }
-        return sqLiteDatabase != null ? true : false;
+        return sqLiteDatabase != null;
     }
 
     private void copyDataBase(Context context) throws IOException {
-        sqLiteDatabase = dbHelper.getWritableDatabase();
-        //Открываем локальную БД как входящий поток
+        dbHelper.close();
         InputStream myInput = context.getAssets().open(DATABASE_NAME);
-        //Путь ко вновь созданной БД
         String outFileName = DB_PATH + DATABASE_NAME;
-        //Открываем пустую базу данных как исходящий поток
         OutputStream myOutput = new FileOutputStream(outFileName);
 
-        //перемещаем байты из входящего файла в исходящий
         byte[] buffer = new byte[1024];
         int length;
-        while ((length = myInput.read(buffer))>0){
+        while ((length = myInput.read(buffer)) > 0) {
             myOutput.write(buffer, 0, length);
         }
-        //закрываем потоки
         myOutput.flush();
         myOutput.close();
         myInput.close();
@@ -149,11 +143,11 @@ public class DBHelper extends SQLiteOpenHelper {
             String id = cursor.getString(cursor.getColumnIndex(KEY_ROWID));
             engWords.add(english);
             if (wordsDb.containsKey(date)) {
-                    /*Put in TreeMap "wordsDB" an ArrayList new String[]*/
-                wordsDb.get(date).add(new String[]{english, russian, transcription, id,favor, date.toString()});
+                /*Put in TreeMap "wordsDB" an ArrayList new String[]*/
+                wordsDb.get(date).add(new String[]{english, russian, transcription, id, favor, date.toString()});
             } else {
                 wordsDb.put(date, new ArrayList<String[]>());
-                wordsDb.get(date).add(new String[]{english, russian, transcription, id,favor, date.toString()});
+                wordsDb.get(date).add(new String[]{english, russian, transcription, id, favor, date.toString()});
             }
         }
 
@@ -163,17 +157,16 @@ public class DBHelper extends SQLiteOpenHelper {
 
         listUnknownWords = uploadDb.get(1);
 
-        if(uploadDb.get(0) == null){
+        if (uploadDb.get(0) == null) {
             listKnownWords = new ArrayList<>();
-        }else {
+        } else {
             listKnownWords = uploadDb.get(0);
         }
 
         learnedWords = new ArrayList<String[]>();
         for (Map.Entry<Integer, ArrayList<String[]>> el : uploadDb.entrySet()) {
             if (el.getKey() != 0 && el.getKey() != 1) {
-                for (String[] word : el.getValue())
-                    learnedWords.add(word);
+                learnedWords.addAll(el.getValue());
             }
         }
     }
@@ -181,7 +174,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Добавляет ваше слово в таблицу
      */
-    public void insertWord(String english, String russian, String transcription ,String date) {
+    public void insertWord(String english, String russian, String transcription, String date) {
         contentValues = new ContentValues();
         sqLiteDatabase = dbHelper.getWritableDatabase();
         contentValues.put(KEY_ENG, english);
@@ -196,13 +189,13 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Добавляем слово в избранное.
      */
-    public synchronized void setFavorite(String  boo, String id) {
+    public synchronized void setFavorite(String boo, String id) {
         contentValues = new ContentValues();
         sqLiteDatabase = dbHelper.getWritableDatabase();
         contentValues.put(KEY_FAVORITE, boo);
         sqLiteDatabase.update(DATABASE_TABLE, contentValues, KEY_ROWID + "= ?", new String[]{id});
         sqLiteDatabase.close();
-        Log.d("MyLog", "Записали в базу " + id + " со значением "  +  boo);
+        Log.d("MyLog", "Записали в базу " + id + " со значением " + boo);
     }
 
     /**
@@ -312,29 +305,29 @@ public class DBHelper extends SQLiteOpenHelper {
         return listUnknownWords;
     }
 
-    public String[] getWord(String engWord){
-        for(String[] word : listUnknownWords){
+    public String[] getWord(String engWord) {
+        for (String[] word : listUnknownWords) {
             if (word[0].equals(engWord))
                 return word;
         }
-        for(String[] word : listKnownWords){
+        for (String[] word : listKnownWords) {
             if (word[0].equals(engWord))
                 return word;
         }
-        for(String[] word : learnedWords) {
+        for (String[] word : learnedWords) {
             if (word[0].equals(engWord))
                 return word;
         }
         return null;
     }
 
-    public ArrayList<String[]> getListFavoriteWords(){
+    public ArrayList<String[]> getListFavoriteWords() {
         ArrayList<String[]> wordsFavor = new ArrayList<>();
 
         sqLiteDatabase = dbHelper.getWritableDatabase();
         cursor = sqLiteDatabase.rawQuery(
                 "SELECT * FROM words WHERE translations = ?;",
-                new String[] {"true"}
+                new String[]{"true"}
         );
         while (cursor.moveToNext()) {
             String english = cursor.getString(cursor.getColumnIndex(KEY_ENG));
@@ -348,19 +341,19 @@ public class DBHelper extends SQLiteOpenHelper {
         return wordsFavor;
     }
 
-    public ArrayList<String[]> getListKnownWords(Boolean withKnownBefore){
+    public ArrayList<String[]> getListKnownWords(Boolean withKnownBefore) {
         ArrayList<String[]> wordsKnown = new ArrayList<>();
 
         sqLiteDatabase = dbHelper.getWritableDatabase();
-        if(withKnownBefore){
+        if (withKnownBefore) {
             cursor = sqLiteDatabase.rawQuery(
                     "SELECT * FROM words WHERE date is not ? ORDER BY date;",
-                    new String[] {"true"}
+                    new String[]{"true"}
             );
-        }else{
+        } else {
             cursor = sqLiteDatabase.rawQuery(
                     "SELECT * FROM words WHERE date is not ? and date is not ? ORDER BY date;",
-                    new String[] {"true","false"}
+                    new String[]{"true", "false"}
             );
         }
         while (cursor.moveToNext()) {

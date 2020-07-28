@@ -4,7 +4,6 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,9 +13,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +29,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
@@ -45,7 +46,7 @@ import java.util.Map;
 
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
-public class FrgListAllWord extends Fragment implements View.OnClickListener{
+public class FrgListAllWord extends Fragment implements View.OnClickListener {
     private final String LOG_TAG = "MyLog";
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     private ArrayList<Word> arrayList;
@@ -58,17 +59,15 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
     private Animation mAnimation;
     private int mSelectCount;
     private SearchView search;
-
-
-
+    Context mContext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.frg_list_all_words, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.r_view);
+        mContext = getActivity();
 
-        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+        sp = mContext.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
 
         search = (SearchView) view.findViewById(R.id.search);
 
@@ -81,7 +80,6 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         buttons = (CardView) view.findViewById(R.id.buttons);
         buttons.setVisibility(View.INVISIBLE);
         mAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.show_buttons);
-
 
 
         VerticalRecyclerViewFastScroller fastScroller = (VerticalRecyclerViewFastScroller) view.findViewById(R.id.fast_scroller);
@@ -104,6 +102,12 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mContext = context;
+    }
+
+    @Override
     public void onClick(View v) {
         MainActivity.isBaseChanged = false;
         //        удаляем выделенные слова
@@ -122,7 +126,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         //        обновляем дату у выделенных слов
         if (v.getId() == R.id.btn_relearn) {
             for (int i = 0; i < arrayList.size(); i++) {
-                if (arrayList.get(i).isSelect){
+                if (arrayList.get(i).isSelect) {
                     DBHelper.getDbHelper(getActivity()).updateWordDate(MainActivity.toDayDate, Integer.parseInt(arrayList.get(i).id));
                     arrayList.get(i).isSelect = false;
                     MainActivity.isBaseChanged = true;
@@ -131,12 +135,12 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
             }
         }
 
-        if(MainActivity.isBaseChanged) {
+        if (MainActivity.isBaseChanged) {
             Toast.makeText(getActivity(), R.string.wasUpdate, Toast.LENGTH_SHORT).show();
             new MyTask().execute();
             //        перегружаем view
             adapter.notifyDataSetChanged();
-        }else {
+        } else {
             Toast.makeText(getActivity(), R.string.nothing_to_update, Toast.LENGTH_SHORT).show();
         }
 
@@ -207,7 +211,6 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
 //        Collections.reverse(arrayList);
 
 
-
         //        В случайнов порядке "random"
         if (setting.equals("random")) {
             Collections.shuffle(arrayList);
@@ -218,13 +221,13 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         }
 
         end = System.currentTimeMillis();
-        Log.d(LOG_TAG, end-start +" time");
+        Log.d(LOG_TAG, end - start + " time");
     }
 
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         ArrayList<Word> wordsArray;
 
-        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             TextView eng;
             TextView rus;
             TextView trans;
@@ -237,8 +240,8 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
             ViewHolder(View v) {
                 super(v);
                 favorite = (CheckBox) v.findViewById(R.id.favorite);
-                eng   = (TextView) v.findViewById(R.id.englishWord);
-                rus   = (TextView) v.findViewById(R.id.russianWord);
+                eng = (TextView) v.findViewById(R.id.englishWord);
+                rus = (TextView) v.findViewById(R.id.russianWord);
                 trans = (TextView) v.findViewById(R.id.tv_trans);
                 btn = (LinearLayout) v.findViewById(R.id.btn_card);
                 thisCv = (CardView) v.findViewById(R.id.myLay);
@@ -248,17 +251,17 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                     @Override
                     public void onClick(View v) {
                         MainActivity.isBaseChanged = true;
-                        if(favorite.isChecked()){
+                        if (favorite.isChecked()) {
                             DBHelper.getDbHelper(getActivity()).setFavorite("true", id);
-                            for (int i = 0; i <arrayList.size() ; i++) {
-                                if(arrayList.get(i).id.equals(id)){
+                            for (int i = 0; i < arrayList.size(); i++) {
+                                if (arrayList.get(i).id.equals(id)) {
                                     arrayList.get(i).isFavorite = true;
                                 }
                             }
-                        }else {
+                        } else {
                             DBHelper.getDbHelper(getActivity()).setFavorite("false", id);
-                            for (int i = 0; i <arrayList.size() ; i++) {
-                                if(arrayList.get(i).id.equals(id)){
+                            for (int i = 0; i < arrayList.size(); i++) {
+                                if (arrayList.get(i).id.equals(id)) {
                                     arrayList.get(i).isFavorite = false;
                                 }
                             }
@@ -339,18 +342,19 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
                     colorTo = Color.parseColor("#ffffff");
                     mSelectCount--;
                 }
-                if(mSelectCount>0 && buttons.getVisibility() == View.INVISIBLE){
+                if (mSelectCount > 0 && buttons.getVisibility() == View.INVISIBLE) {
                     mAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.show_buttons);
                     buttons.setAnimation(mAnimation);
                     buttons.setVisibility(View.VISIBLE);
                     buttons.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mRecyclerView.setPadding(0,0,0,buttons.getHeight()-(dpToPx(10)));
+                            mRecyclerView.setPadding(0, 0, 0, buttons.getHeight() - (dpToPx(10)));
                         }
                     }, 200);
 
-                }if (mSelectCount == 0 && buttons.getVisibility() == View.VISIBLE) {
+                }
+                if (mSelectCount == 0 && buttons.getVisibility() == View.VISIBLE) {
                     mAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.hidd_button);
                     buttons.setAnimation(mAnimation);
                     buttons.setVisibility(View.INVISIBLE);
@@ -399,15 +403,15 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
 
             //                меняем состояние Word и красим view
             if (word.isSelect) {
-                ((CardView)holder.thisCv).setCardBackgroundColor( getResources().getColor(R.color.my_background_1));
+                ((CardView) holder.thisCv).setCardBackgroundColor(getResources().getColor(R.color.my_background_1));
 
             } else {
-                ((CardView)holder.thisCv).setCardBackgroundColor(Color.parseColor("#ffffff"));
+                ((CardView) holder.thisCv).setCardBackgroundColor(Color.parseColor("#ffffff"));
             }
 
-            if(word.isFavorite){
+            if (word.isFavorite) {
                 holder.favorite.setChecked(word.isFavorite);
-            }else {
+            } else {
                 holder.favorite.setChecked(word.isFavorite);
 
             }
@@ -427,13 +431,14 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
     @Override
     public void onStop() {
         super.onStop();
-        if(MainActivity.isBaseChanged) {
+        if (MainActivity.isBaseChanged) {
             new MyTask().execute();
         }
     }
 
     class MyTask extends AsyncTask<Void, Void, Void> {
         ProgressDialog mProgressDialog = createProgressDialog(getActivity());
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -442,7 +447,7 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
 
         @Override
         protected Void doInBackground(Void... params) {
-             if(MainActivity.isBaseChanged){
+            if (MainActivity.isBaseChanged) {
                 DBHelper.getDbHelper(getActivity()).uploadDb();
                 MainActivity.isBaseChanged = false;
             }
@@ -470,13 +475,11 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
         }
     }
 
-    public static int dpToPx(int dp)
-    {
+    public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
-    public static int pxToDp(int px)
-    {
+    public static int pxToDp(int px) {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
 
@@ -502,31 +505,34 @@ public class FrgListAllWord extends Fragment implements View.OnClickListener{
             return true;
 
         }
+
         public boolean onQueryTextSubmit(String query) {
             return false;
         }
     };
 
-    public void showHelp(){
+    public void showHelp() {
         editor = sp.edit();
-        if(!sp.contains("howToDell")) {
+        if (!sp.contains("howToDell")) {
             editor.putBoolean("howToDell", true).apply();
         }
-        if(sp.getBoolean("howToDell", true)){
+        if (sp.getBoolean("howToDell", true)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.help)
                     .setMessage(R.string.help_show)
                     .setCancelable(false)
                     .setNegativeButton(R.string.i_read,
-                                       new DialogInterface.OnClickListener() {
-                                           public void onClick(DialogInterface dialog, int id) {
-                                               editor.putBoolean("howToDell", false).apply();
-                                               dialog.cancel();
-                                           }
-                                       });
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    editor.putBoolean("howToDell", false).apply();
+                                    dialog.cancel();
+                                }
+                            });
             AlertDialog alert = builder.create();
             alert.show();
         }
 
-    };
+    }
+
+    ;
 }

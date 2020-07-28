@@ -1,10 +1,8 @@
 package com.bogdan.learner.fragments;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.R;
@@ -25,7 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class FrgCalendar extends Fragment{
+public class FrgCalendar extends Fragment {
     Bundle bundleDate;
 
     CalendarPickerView calendar;
@@ -37,6 +38,7 @@ public class FrgCalendar extends Fragment{
     private Handler mUiHandler = new Handler();
     Context mContext = getActivity();
     ProgressDialog mProgressDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frg_m_calendar, null);
@@ -59,7 +61,7 @@ public class FrgCalendar extends Fragment{
                     public void run() {
                         try {
                             calendar.highlightDates(dates);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                         }
 
                     }
@@ -73,21 +75,23 @@ public class FrgCalendar extends Fragment{
         return view;
     }
 
-    private void startDayFragment(String dayDate){
-        if(DBHelper.getDbHelper(getActivity()).getListWordsByDate(dayDate) == null){
+    private void startDayFragment(String dayDate) {
+        if (DBHelper.getDbHelper(getActivity()).getListWordsByDate(dayDate) == null) {
             Toast.makeText(getActivity(), R.string.no_day, Toast.LENGTH_SHORT).show();
         } else {
             Fragment fr = new FrgRepeatDay();
+
             fr.setArguments(bundleDate);
             bundleDate.putString("com.bogdan.learner.fragments.day_date", dayDate);
-            FragmentTransaction fTrans = getActivity().getFragmentManager().beginTransaction();
+
+            FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
             fTrans.replace(R.id.fragment_container, fr);
             fTrans.addToBackStack(null).commit();
 //            fTrans.commit();
         }
     }
 
-    private void initCalendar(View v){
+    private void initCalendar(View v) {
         //пометить изученные
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         dates = new ArrayList<Date>();
@@ -109,17 +113,16 @@ public class FrgCalendar extends Fragment{
 //        cal.setTime(dates.get(0));
         try {
             lastYear.setTime(dates.get(0));
-        }catch (Exception e){
+        } catch (Exception e) {
             lastYear.add(Calendar.MONTH, -1);
         }
 
 
-
 //        lastYear.add(cal.DATE, -1);;
         try {
-        calendar = (CalendarPickerView) v.findViewById(R.id.calendar_view);
-        today = new Date();
-        }catch (Exception e){
+            calendar = (CalendarPickerView) v.findViewById(R.id.calendar_view);
+            today = new Date();
+        } catch (Exception e) {
             Toast.makeText(getActivity(), R.string.calendar_problem, Toast.LENGTH_SHORT).show();
             Log.d("MyLog", "ERROR CALENDAR");
 
@@ -137,7 +140,7 @@ public class FrgCalendar extends Fragment{
         calendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
-                Log.d("MyLog", "onDateSelected " +date.toString());
+                Log.d("MyLog", "onDateSelected " + date.toString());
                 startDayFragment(new SimpleDateFormat("yyyyMMdd").format(date));
             }
 

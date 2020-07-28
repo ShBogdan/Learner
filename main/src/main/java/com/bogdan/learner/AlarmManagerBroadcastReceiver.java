@@ -29,19 +29,20 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
         String notifyMorning = context.getString(R.string.notify_send_morning);
         String notifyEvening = context.getString(R.string.notify_send_evening);
 
-        Bundle extras= intent.getExtras();
-        if(extras!=null){
-            if(extras.getBoolean("NOTIFY")){
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            if (extras.getBoolean("NOTIFY")) {
                 notification(context, notifyMorning);
-                Toast.makeText(context,"MORNING Notify", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "MORNING Notify", Toast.LENGTH_SHORT).show();
             }
-            if(!extras.getBoolean("NOTIFY")){
+            if (!extras.getBoolean("NOTIFY")) {
                 notification(context, notifyEvening);
-                Toast.makeText(context,"EVENING Notify", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "EVENING Notify", Toast.LENGTH_SHORT).show();
             }
         }
     }
-    void setMorningAlarm(Context context){
+
+    void setMorningAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
         intent.putExtra("NOTIFY", true);
@@ -50,7 +51,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
         time.set(Calendar.HOUR_OF_DAY, 7);
         time.set(Calendar.MINUTE, 0);
         Calendar now = Calendar.getInstance();
-        if(time.getTimeInMillis() < now.getTimeInMillis())
+        if (time.getTimeInMillis() < now.getTimeInMillis())
             time.add(Calendar.DAY_OF_MONTH, 1);//TimeUnit.DAYS.toMillis(1)
         alarmManager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
@@ -58,7 +59,8 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                 AlarmManager.INTERVAL_DAY,
                 pi);
     }
-    void setEveningAlarm(Context context){
+
+    void setEveningAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
         intent.putExtra("NOTIFY", false);
@@ -67,7 +69,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
         time.set(Calendar.HOUR_OF_DAY, 20);
         time.set(Calendar.MINUTE, 0);
         Calendar now = Calendar.getInstance();
-        if(time.getTimeInMillis() < now.getTimeInMillis())
+        if (time.getTimeInMillis() < now.getTimeInMillis())
             time.add(Calendar.DAY_OF_MONTH, 1);//TimeUnit.DAYS.toMillis(1)
         alarmManager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
@@ -75,25 +77,28 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                 AlarmManager.INTERVAL_DAY,
                 pi);
     }
-    public void cancelMorning(Context context){
-        Intent intent=new Intent(context, AlarmManagerBroadcastReceiver.class);
-        PendingIntent sender= PendingIntent.getBroadcast(context, morningId, intent, 0);
-        AlarmManager alarmManager=(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+    public void cancelMorning(Context context) {
+        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        PendingIntent sender = PendingIntent.getBroadcast(context, morningId, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
     }
-    public void cancelEvening(Context context){
-        Intent intent=new Intent(context, AlarmManagerBroadcastReceiver.class);
-        PendingIntent sender= PendingIntent.getBroadcast(context, eveningId, intent, 0);
-        AlarmManager alarmManager=(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+    public void cancelEvening(Context context) {
+        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        PendingIntent sender = PendingIntent.getBroadcast(context, eveningId, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
     }
-    void notification(Context context, String massage){
+
+    void notification(Context context, String massage) {
         Notification.Builder builder = new Notification.Builder(context);
         Intent notificationIntent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,notificationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
         builder.setSmallIcon(R.drawable.notify)
                 .setContentTitle("Hello!")
-                .setLargeIcon(BitmapFactory.decodeResource( context.getResources(), R.mipmap.ic_launcher))
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
                 .setContentText(massage)
                 .setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);

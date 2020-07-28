@@ -1,8 +1,5 @@
 package com.bogdan.learner.fragments;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,20 +12,15 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bogdan.learner.DBHelper;
-import com.bogdan.learner.MainActivity;
-import com.bogdan.learner.R;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.squareup.timessquare.CalendarCellDecorator;
-import com.squareup.timessquare.CalendarPickerView;
-import com.squareup.timessquare.DefaultDayViewAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import java.text.ParseException;
+import com.bogdan.learner.DBHelper;
+import com.bogdan.learner.R;
+import com.squareup.timessquare.CalendarPickerView;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 
 public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
@@ -92,12 +84,12 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
                 startFragment(getOldDate(-89));
                 break;
             case R.id.btn_calendar:
-                FragmentTransaction fCTrans = getActivity().getFragmentManager().beginTransaction();
+                FragmentTransaction fCTrans = getActivity().getSupportFragmentManager().beginTransaction();
                 fCTrans.replace(R.id.fragment_container, new FrgCalendar());
                 fCTrans.addToBackStack(null).commit();
                 break;
             case R.id.btn_all_words:
-                FragmentTransaction fTrans = getActivity().getFragmentManager().beginTransaction();
+                FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
                 fTrans.replace(R.id.fragment_container, new FrgCardOrList());
                 fTrans.addToBackStack(null).commit();
                 break;
@@ -107,7 +99,7 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
     /**
      * для получения конкретного дня по дате(метод принимает отрицательные значения)
      */
-    private String getOldDate(int days){
+    private String getOldDate(int days) {
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
@@ -115,26 +107,26 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
         return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
     }
 
-    private void startFragment(String dayDate){
-        if(DBHelper.getDbHelper(getActivity()).getListWordsByDate(dayDate) == null){
+    private void startFragment(String dayDate) {
+        if (DBHelper.getDbHelper(getActivity()).getListWordsByDate(dayDate) == null) {
             Toast.makeText(getActivity(), R.string.no_day, Toast.LENGTH_SHORT).show();
         } else {
             Fragment fr = new FrgRepeatDay();
             fr.setArguments(bundleDate);
             bundleDate.putString("com.bogdan.learner.fragments.day_date", dayDate);
-            FragmentTransaction fTrans = getActivity().getFragmentManager().beginTransaction();
+            androidx.fragment.app.FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
             fTrans.replace(R.id.fragment_container, fr);
             fTrans.addToBackStack(null).commit();
         }
     }
 
-    private void getChangeWordPlace(){
-        if(!sp.contains("changeWordPlace")) {
+    private void getChangeWordPlace() {
+        if (!sp.contains("changeWordPlace")) {
             editor.putBoolean("changeWordPlace", false).apply();
         }
-        if(sp.getBoolean("changeWordPlace", false)){
+        if (sp.getBoolean("changeWordPlace", false)) {
         }
-        if(sp.getBoolean("changeWordPlace", true)){
+        if (sp.getBoolean("changeWordPlace", true)) {
             changeWordPlace.toggle();
         }
 
@@ -142,39 +134,42 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
         changeWordPlace.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(changeWordPlace.isChecked()){
+                if (changeWordPlace.isChecked()) {
                     editor.putBoolean("changeWordPlace", true).apply();
                 } else
                     editor.putBoolean("changeWordPlace", false).apply();
             }
         });
     }
-    private void getAutoSpeech(){
-        if(!sp.contains("autoSpeech")) {
+
+    private void getAutoSpeech() {
+        if (!sp.contains("autoSpeech")) {
             editor.putBoolean("autoSpeech", false).apply();
         }
-        if(sp.getBoolean("autoSpeech", false)){
+        if (sp.getBoolean("autoSpeech", false)) {
         }
-        if(sp.getBoolean("autoSpeech", true)){
+        if (sp.getBoolean("autoSpeech", true)) {
             autoSpeech.toggle();
         }
 
         autoSpeech.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(autoSpeech.isChecked()){
+                if (autoSpeech.isChecked()) {
                     editor.putBoolean("autoSpeech", true).apply();
                 } else
                     editor.putBoolean("autoSpeech", false).apply();
             }
         });
     }
-    private void getCalendar(View view){
+
+    private void getCalendar(View view) {
         nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
 
         lastYear = Calendar.getInstance();
-        lastYear.add(Calendar.YEAR, -1);;
+        lastYear.add(Calendar.YEAR, -1);
+        ;
 
         calendar = (CalendarPickerView) view.findViewById(R.id.calendar_view);
         Date today = new Date();
@@ -202,7 +197,7 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
         calendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
-                Log.d("MyLog", "onDateSelected " +date.toString());
+                Log.d("MyLog", "onDateSelected " + date.toString());
                 startFragment(new SimpleDateFormat("yyyyMMdd").format(date));
             }
 

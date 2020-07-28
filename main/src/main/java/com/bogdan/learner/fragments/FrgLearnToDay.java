@@ -1,17 +1,12 @@
 package com.bogdan.learner.fragments;
 
 import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -27,6 +22,10 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
@@ -34,7 +33,6 @@ import com.rey.material.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Locale;
 
 public class FrgLearnToDay extends Fragment {
     final String LOG_TAG = "MyLog";
@@ -67,7 +65,7 @@ public class FrgLearnToDay extends Fragment {
         if (wordsForFrgLetters == null || wordsForFrgLetters.size() == 0) {
             Collections.shuffle(toDayListWords);
             wordsForFrgLetters = new ArrayList<>(toDayListWords);
-            wordsForFrgRepeat  = new ArrayList<>();
+            wordsForFrgRepeat = new ArrayList<>();
             for (int i = 0; i < MainActivity.wordAlternation; i++) {
                 if (wordsForFrgLetters.size() > i) {
                     wordsForFrgRepeat.add(wordsForFrgLetters.get(i));
@@ -75,7 +73,7 @@ public class FrgLearnToDay extends Fragment {
             }
             count = wordsForFrgRepeat.size();
         }
-        if(count == 0 ) {
+        if (count == 0) {
             for (int i = 0; i < MainActivity.wordAlternation; i++) {
                 if (wordsForFrgLetters.size() > i) {
                     wordsForFrgRepeat.add(wordsForFrgLetters.get(i));
@@ -116,7 +114,7 @@ public class FrgLearnToDay extends Fragment {
         int screenSize = getResources().getConfiguration().screenLayout &
                 Configuration.SCREENLAYOUT_SIZE_MASK;
 
-        switch(screenSize) {
+        switch (screenSize) {
             case Configuration.SCREENLAYOUT_SIZE_XLARGE:
                 Log.d("MyLog", "SCREENLAYOUT_SIZE_XLARGE");
                 buttonSize = dpToPx(75);
@@ -164,7 +162,7 @@ public class FrgLearnToDay extends Fragment {
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.width = buttonSize;
         params.height = buttonSize;
-        params.setMargins(buttonMargin,buttonMargin,buttonMargin,buttonMargin);
+        params.setMargins(buttonMargin, buttonMargin, buttonMargin, buttonMargin);
 
 
         /*заполяем русское слово*/
@@ -190,7 +188,7 @@ public class FrgLearnToDay extends Fragment {
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         DisplayMetrics metricsB = new DisplayMetrics();
         display.getMetrics(metricsB);
-        buttonOnDisplayWidth = (metricsB.widthPixels - dpToPx(36) )/ (buttonSize+buttonMargin+buttonMargin);
+        buttonOnDisplayWidth = (metricsB.widthPixels - dpToPx(36)) / (buttonSize + buttonMargin + buttonMargin);
 
         for (String x : lettersEngWord) {
             countLetter++;
@@ -210,6 +208,7 @@ public class FrgLearnToDay extends Fragment {
                 @Override
                 public void onClick(final View v) {
                     String letter = v.getTag().toString();
+                    Log.d(LOG_TAG, "Попытки:  " + countAttempt);
 
                     if (lettersEngWord.contains(letter)) {
                         lettersEngWord.remove(letter);
@@ -272,7 +271,7 @@ public class FrgLearnToDay extends Fragment {
                             tvInput.setText(answer.toString());
                             for (String[] s : deletedBtn) {
                                 if (s[0].equals(returnLetter)) {
-                                    CardView c = (CardView)getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1]));
+                                    CardView c = (CardView) getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1]));
                                     c.setEnabled(true);
                                     c.setCardElevation(4);
                                     c.setCardBackgroundColor(Color.parseColor("#ffffff"));
@@ -284,7 +283,7 @@ public class FrgLearnToDay extends Fragment {
                             lettersEngWord.add(String.valueOf(answer));
                             for (String[] s : deletedBtn) {
                                 if (s[0].equals(String.valueOf(answer))) {
-                                    CardView c = (CardView)getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1]));
+                                    CardView c = (CardView) getActivity().getWindow().getDecorView().findViewById(Integer.parseInt(s[1]));
                                     c.setEnabled(true);
                                     c.setCardElevation(4);
                                     c.setCardBackgroundColor(Color.parseColor("#ffffff"));
@@ -340,7 +339,7 @@ public class FrgLearnToDay extends Fragment {
             }
         }
         /*если буквы не влазят то слово пропускаем*/
-        if(countLetter/buttonOnDisplayWidth>8){
+        if (countLetter / buttonOnDisplayWidth > 8) {
             count--;
             if (wordsForFrgLetters.size() > 0) {
                 wordsForFrgLetters.remove(0);
@@ -366,17 +365,17 @@ public class FrgLearnToDay extends Fragment {
 
     protected void drawTheWord() {
         final TextView tvSumWords = (TextView) getActivity().findViewById(R.id.tvSumWords);
-        TextView tvEnglishWord    = (TextView) getActivity().findViewById(R.id.englishWord);
-        TextView tvTransWord      = (TextView) getActivity().findViewById(R.id.transWord);
-        TextView tvRussianWord    = (TextView) getActivity().findViewById(R.id.russianWord);
-        Button nextBtn            = (Button) getActivity().findViewById(R.id.btn_next);
+        TextView tvEnglishWord = (TextView) getActivity().findViewById(R.id.englishWord);
+        TextView tvTransWord = (TextView) getActivity().findViewById(R.id.transWord);
+        TextView tvRussianWord = (TextView) getActivity().findViewById(R.id.russianWord);
+        Button nextBtn = (Button) getActivity().findViewById(R.id.btn_next);
 
         tvEnglishWord.setText(englishWord);
         tvTransWord.setText(transWord);
         tvRussianWord.setText(russianWord);
         tvSumWords.setText(wordsForFrgLetters.size() + "/" + toDayListWords.size());
 
-        if(MainActivity.isAutoSpeech){
+        if (MainActivity.isAutoSpeech) {
             MainActivity.toSpeech.speak(englishWord, TextToSpeech.QUEUE_ADD, null);
         }
 
@@ -396,8 +395,8 @@ public class FrgLearnToDay extends Fragment {
         word = arrayWords.get(0);
         englishWord = word[0];
         russianWord = word[1];
-        transWord   = word[2];
-        answer      = new StringBuilder();
+        transWord = word[2];
+        answer = new StringBuilder();
         if (lettersEngWord == null) {
             lettersEngWord = new ArrayList<>();
             for (char c : englishWord.toCharArray()) {
@@ -408,8 +407,8 @@ public class FrgLearnToDay extends Fragment {
     }
 
     public void reloadFragment() {
-        Fragment thisFrg = getActivity().getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.TAG_FRG_REPEAT_TO_DAY");
-        final FragmentTransaction fTrans = getFragmentManager().beginTransaction();
+        Fragment thisFrg = getActivity().getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.TAG_FRG_REPEAT_TO_DAY");
+        FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
         fTrans.detach(thisFrg);
         fTrans.attach(thisFrg);
         fTrans.commit();

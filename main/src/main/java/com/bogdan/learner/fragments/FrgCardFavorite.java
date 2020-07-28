@@ -1,17 +1,18 @@
 package com.bogdan.learner.fragments;
 
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
@@ -20,7 +21,6 @@ import com.rey.material.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Set;
 
 public class FrgCardFavorite extends Fragment implements View.OnClickListener {
 
@@ -42,17 +42,17 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.frg_card_favorite, null);
 
         btn_audio = (CardView) view.findViewById(R.id.btn_audio);
-        btn_next  = (Button) view.findViewById(R.id.btn_next);
-        favorite  = (CheckBox) view.findViewById(R.id.favorite);
+        btn_next = (Button) view.findViewById(R.id.btn_next);
+        favorite = (CheckBox) view.findViewById(R.id.favorite);
 
-        favorite. setOnClickListener(this);
+        favorite.setOnClickListener(this);
         btn_audio.setOnClickListener(this);
-        btn_next. setOnClickListener(this);
+        btn_next.setOnClickListener(this);
 
-        tv_english       = (TextView) view.findViewById(R.id.tv_english);
-        tv_russian       = (TextView) view.findViewById(R.id.tv_russian);
+        tv_english = (TextView) view.findViewById(R.id.tv_english);
+        tv_russian = (TextView) view.findViewById(R.id.tv_russian);
         tv_transcription = (TextView) view.findViewById(R.id.tv_transcription);
-        tv_sumWords      = (TextView) view.findViewById(R.id.tv_sumWords);
+        tv_sumWords = (TextView) view.findViewById(R.id.tv_sumWords);
 
         inflateView();
         return view;
@@ -68,10 +68,10 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
                 MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
                 break;
             case R.id.favorite:
-                if(favorite.isChecked()){
+                if (favorite.isChecked()) {
                     DBHelper.getDbHelper(getActivity()).setFavorite("true", randomWord[3]);
                     randomWord[4] = "true";
-                }else {
+                } else {
                     DBHelper.getDbHelper(getActivity()).setFavorite("false", randomWord[3]);
                     randomWord[4] = "false";
                 }
@@ -83,12 +83,12 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
     void inflateView() {
         btn_next.setText(R.string.answer);
 
-        if(arrayWords == null){
+        if (arrayWords == null) {
 //            arrayWords = DBHelper.getDbHelper(getActivity()).getListFavoriteWords();
             arrayWords = new ArrayList<>();
             for (String[] el : DBHelper.getDbHelper(getActivity()).learnedWords) {
-                if(null != el[4] && !el[4].equals("false")){
-                  arrayWords.add(el);
+                if (null != el[4] && !el[4].equals("false")) {
+                    arrayWords.add(el);
                 }
             }
         }
@@ -96,15 +96,15 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
         if (arrayWords.size() == 0) {
 //            arrayWords = DBHelper.getDbHelper(getActivity()).getListFavoriteWords();
             for (String[] el : DBHelper.getDbHelper(getActivity()).learnedWords) {
-                if(null != el[4] && !el[4].equals("false")){
+                if (null != el[4] && !el[4].equals("false")) {
                     arrayWords.add(el);
                 }
             }
             Collections.shuffle(arrayWords);
         }
 
-        if (arrayWords.size() != 0){
-            if(clickCount == 0){
+        if (arrayWords.size() != 0) {
+            if (clickCount == 0) {
                 randomWord = arrayWords.get(0);
                 String eng = randomWord[0];
                 String trans = randomWord[2];
@@ -121,7 +121,7 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
                 tv_transcription.setText(trans);
                 tv_sumWords.setText(String.valueOf(arrayWords.size()));
             }
-            if(clickCount == 1){
+            if (clickCount == 1) {
                 btn_next.setText(R.string.next);
                 String rus = randomWord[1];
                 //если повторять ру-англ
@@ -137,13 +137,13 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
             }
             clickCount++;
 
-            if(MainActivity.isAutoSpeech){
+            if (MainActivity.isAutoSpeech) {
                 MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
             }
             favorite.setChecked(true);
 
         } else {
-            getFragmentManager().popBackStack();
+            getActivity().getSupportFragmentManager().popBackStack();
             Toast.makeText(getActivity(), R.string.no_favor, Toast.LENGTH_SHORT).show();
         }
     }

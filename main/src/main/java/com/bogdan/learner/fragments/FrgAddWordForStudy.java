@@ -1,14 +1,8 @@
 package com.bogdan.learner.fragments;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 import com.rey.material.widget.Button;
-
-import java.util.Locale;
 
 public class FrgAddWordForStudy extends Fragment implements View.OnClickListener {
     private final String LOG_TAG = "MyLog";
@@ -46,10 +42,9 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
         btn_audio.setOnClickListener(this);
 
 
-
         try {
             int size;
-            if (dayLibrary.getListWordsByDate(MainActivity.toDayDate) == null){
+            if (dayLibrary.getListWordsByDate(MainActivity.toDayDate) == null) {
                 size = 0;
             } else {
                 size = dayLibrary.getListWordsByDate(MainActivity.toDayDate).size();
@@ -64,11 +59,11 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
             tvSumWords = (TextView) view.findViewById(R.id.tvSumWords);
             tvSumWords.setText(getResources().getText(R.string.add_to_study) + " " + size);
 
-            if(MainActivity.isAutoSpeech){
+            if (MainActivity.isAutoSpeech) {
                 MainActivity.toSpeech.speak(word[0], TextToSpeech.QUEUE_ADD, null);
             }
         } catch (NullPointerException nullPointerException) {
-            getFragmentManager().beginTransaction().
+            getActivity().getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new FrgMainMenu()).
                     addToBackStack(null).commit();
 
@@ -86,7 +81,7 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         Integer wordsAllowed = 1000;
-        if(!MainActivity.isPremium){
+        if (!MainActivity.isPremium) {
             wordsAllowed = (DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate) == null)
                     ? 0 : DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate).size();
         }
@@ -98,11 +93,12 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
 
             case R.id.btn_unknown:
 
-                if(!MainActivity.isPremium&& MainActivity.isTrialTimeEnd && wordsAllowed > 4){
+                if (!MainActivity.isPremium && MainActivity.isTrialTimeEnd && wordsAllowed > 4) {
                     Toast.makeText(getActivity(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     dayLibrary.isLearnWord(true);
-                    reloadFragment();}
+                    reloadFragment();
+                }
                 break;
 
             case R.id.btn_audio:
@@ -113,8 +109,8 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
 
 
     public void reloadFragment() {
-        Fragment thisFrg = getActivity().getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.FrgAddWordForStudy");
-        final FragmentTransaction fTrans = getFragmentManager().beginTransaction();
+        Fragment thisFrg = getActivity().getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.FrgAddWordForStudy");
+        final FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
         fTrans.detach(thisFrg);
         fTrans.attach(thisFrg);
         fTrans.commit();

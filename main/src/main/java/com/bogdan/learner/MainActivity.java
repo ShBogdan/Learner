@@ -2,9 +2,6 @@ package com.bogdan.learner;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,12 +11,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.speech.tts.TextToSpeech;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -34,6 +25,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.bogdan.learner.fragments.FragmentListener;
 import com.bogdan.learner.fragments.FrgAddOwnWordToBase;
 import com.bogdan.learner.fragments.FrgAddWordForStudy;
@@ -45,6 +46,8 @@ import com.bogdan.learner.util.CallBackBill;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
@@ -81,7 +84,6 @@ public class MainActivity extends AppCompatActivity
     public static boolean isPremium = false;
     public static boolean isTrialTimeEnd = false;
 
-
     DBHelper dbHelper;
     TreeMap<Integer, ArrayList<String[]>> uploadDb;
     FrgMainMenu frgMainMenu;
@@ -111,21 +113,24 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         savedInstanceState = null;
         super.onCreate(savedInstanceState);
-
         Log.d(LOG_TAG, "onCreate");
         setContentView(R.layout.main);
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         dbHelper = DBHelper.getDbHelper(this);
         uploadDb = dbHelper.uploadDb;
         context = this;
-        MobileAds.initialize(this, "ca-app-pub-2432219544659182~3755019955");
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
 
         sp = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         editor = sp.edit();
 
         bill = new Billing(this);
         bill.startSetup(); //add to comment for emulator
-
 
         if (!sp.contains("IsPremium")) {
             editor.putBoolean("IsPremium", false).apply();
@@ -144,7 +149,7 @@ public class MainActivity extends AppCompatActivity
         frgLearnToDay = new FrgLearnToDay();
         frgAddOwnWordToBase = new FrgAddOwnWordToBase();
 
-        fTrans = getFragmentManager().beginTransaction();
+        fTrans = getSupportFragmentManager().beginTransaction();
         fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
         fTrans.commit();
 
@@ -156,7 +161,6 @@ public class MainActivity extends AppCompatActivity
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         initDrawerLayout();
-
     }
 
     void advertise(Boolean isShow) {
@@ -177,7 +181,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onButtonSelected(View view) {
-        fTrans = getFragmentManager().beginTransaction();
+        fTrans = getSupportFragmentManager().beginTransaction();
         Integer wordsAllowed = 1000;
         if (!isPremium) {
             wordsAllowed = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();
@@ -185,7 +189,7 @@ public class MainActivity extends AppCompatActivity
         switch (view.getId()) {
             /*Кнопки активити*/
             case R.id.btn_toMain:
-                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
                 fTrans.addToBackStack("frgMainMenu");
                 hideKeyboard();
@@ -195,7 +199,7 @@ public class MainActivity extends AppCompatActivity
                 if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
                     Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
                 } else {
-                    FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
+                    FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
                     if (f != null && f.isVisible()) {
                         //do nothing
                     } else {
@@ -204,7 +208,6 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
                 break;
-
 
             /*Кнопки фрагментов*/
             case R.id.btn_addMoreWord:
@@ -232,6 +235,12 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(this, R.string.no_words, Toast.LENGTH_SHORT).show();
                 }
                 break;
+
+            case R.id.btn_options:
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+                mSlideState = true;
+                break;
+
             case R.id.btn_buyIt:
                 try {
                     bill.launchPurchaseFlow();
@@ -239,7 +248,6 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(this, "Попробуйте позже", Toast.LENGTH_SHORT).show();
                 }
                 infoAfterBuy();
-
                 break;
 
         }
@@ -310,7 +318,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.MAIN_MENU");
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.MAIN_MENU");
         if (fragment != null && fragment.isVisible()) {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_info)
@@ -366,15 +374,15 @@ public class MainActivity extends AppCompatActivity
         try {
             File dir = context.getCacheDir();
             deleteDir(dir);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
     public boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
+            for (String child : children) {
+                boolean success = deleteDir(new File(dir, child));
                 if (!success) {
                     return false;
                 }
@@ -433,6 +441,7 @@ public class MainActivity extends AppCompatActivity
 
     void initDrawerLayout() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         mMainView = (LinearLayout) findViewById(R.id.main_activity);
         //реакция на открытие-закрытие
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -467,7 +476,6 @@ public class MainActivity extends AppCompatActivity
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
 
     }
 
@@ -510,7 +518,6 @@ public class MainActivity extends AppCompatActivity
         tv_seekBarValue = (TextView) findViewById(R.id.tv_seekBarValue);
         tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
 
-
         final SeekBar seekbar = (SeekBar) findViewById(R.id.seekBar);
         seekbar.setMax(10);
         seekbar.setProgress(wordAlternation);
@@ -524,7 +531,6 @@ public class MainActivity extends AppCompatActivity
                     wordAlternation = seekBar.getProgress();
                 }
                 tv_seekBarValue.setText(getApplication().getString(R.string.alternation) + " " + String.valueOf(wordAlternation));
-
             }
 
             @Override
@@ -549,8 +555,6 @@ public class MainActivity extends AppCompatActivity
                 editor.putInt("WordAlternation", wordAlternation).apply();
             }
         });
-
-
     }
 
     private void setUseBase() {
@@ -736,7 +740,7 @@ public class MainActivity extends AppCompatActivity
 
     public void infoAfterBuy() {
         final CheckBox dontShowAgain;
-        android.support.v7.app.AlertDialog.Builder adb = new android.support.v7.app.AlertDialog.Builder(this);
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
         LayoutInflater adbInflater = LayoutInflater.from(this);
         View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
         SharedPreferences settings = getSharedPreferences(SETTINGS, 0);

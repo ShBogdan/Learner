@@ -1,7 +1,5 @@
 package com.bogdan.learner.fragments;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,26 +11,29 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
-import com.bogdan.learner.R;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.bogdan.learner.R;
 
 public class FrgCardOrList extends Fragment implements View.OnClickListener {
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
     SharedPreferences sp;
     SharedPreferences.Editor editor;
-    Button btnCards, btnFavorite ,btnList;
-//    RadioGroup radioGroup;
+    Button btnCards, btnFavorite, btnList;
+    //    RadioGroup radioGroup;
     RadioButton radioRandom, radioDate, radioAlphabet;
     CheckBox cbKnowWords;
     View.OnClickListener radioListener;
+    Context mContext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frg_m_card_or_list, null);
+        mContext = getActivity();
 
-        sp = getActivity().getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+        sp = mContext.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         editor = sp.edit();
-
 
         btnCards = (Button) view.findViewById(R.id.btn_cards);
         btnList = (Button) view.findViewById(R.id.btn_list);
@@ -47,33 +48,32 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
         cbKnowWords = (CheckBox) view.findViewById(R.id.cb_know_word);
 
 //        при первом запуске приложения задаем рандом
-        if(!sp.contains("how_to_repeat")){
+        if (!sp.contains("how_to_repeat")) {
             editor.putString("how_to_repeat", "random").apply();
             radioRandom.toggle();
-        }else {
-            if(sp.getString("how_to_repeat",null).equals("random"))
+        } else {
+            if (sp.getString("how_to_repeat", null).equals("random"))
                 radioRandom.toggle();
-            if(sp.getString("how_to_repeat",null).equals("date"))
+            if (sp.getString("how_to_repeat", null).equals("date"))
                 radioDate.toggle();
-            if(sp.getString("how_to_repeat",null).equals("alphabet"))
+            if (sp.getString("how_to_repeat", null).equals("alphabet"))
                 radioAlphabet.toggle();
         }
 
 
-
-        if(!sp.contains("add_know_words")) {
+        if (!sp.contains("add_know_words")) {
             editor.putBoolean("add_know_words", false).apply();
         }
-        if(sp.getBoolean("add_know_words", false)){
+        if (sp.getBoolean("add_know_words", false)) {
         }
-        if(sp.getBoolean("add_know_words", true)){
+        if (sp.getBoolean("add_know_words", true)) {
             cbKnowWords.toggle();
         }
 
         cbKnowWords.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(cbKnowWords.isChecked()){
+                if (cbKnowWords.isChecked()) {
                     editor.putBoolean("add_know_words", true).apply();
                 } else
                     editor.putBoolean("add_know_words", false).apply();
@@ -84,14 +84,19 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
         radioDate.setOnClickListener(onClickRadio());
         radioAlphabet.setOnClickListener(onClickRadio());
 
-
-
         return view;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mContext = context;
     }
 
     @Override
     public void onClick(View v) {
-        FragmentTransaction fTrans = getActivity().getFragmentManager().beginTransaction();
+        FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
         switch (v.getId()) {
             case R.id.btn_cards:
                 fTrans.replace(R.id.fragment_container, new FrgCardAllWords());
@@ -110,11 +115,11 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
         }
     }
 
-    View.OnClickListener onClickRadio(){
+    View.OnClickListener onClickRadio() {
         radioListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
+                switch (v.getId()) {
                     case R.id.radioRandom:
                         editor.putString("how_to_repeat", "random");
                         break;

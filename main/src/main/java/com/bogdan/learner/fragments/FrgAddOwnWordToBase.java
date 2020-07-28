@@ -1,6 +1,5 @@
 package com.bogdan.learner.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,12 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.bogdan.learner.DBHelper;
 import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.NativeExpressAdView;
 
 import java.util.ArrayList;
 
@@ -62,7 +61,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                 transcription = dbHelper.getWord(parent.getItemAtPosition(position).toString())[2];
                 word_id = Integer.parseInt(dbHelper.getWord(parent.getItemAtPosition(position).toString())[3]);
 
-                if(Integer.parseInt(dbHelper.getWord(parent.getItemAtPosition(position).toString())[5]) > 1){
+                if (Integer.parseInt(dbHelper.getWord(parent.getItemAtPosition(position).toString())[5]) > 1) {
                     Toast.makeText(getActivity(), "Это слово уже учили", Toast.LENGTH_LONG).show();
                 }
 
@@ -81,14 +80,14 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
 
     public void onClick(View v) {
         Integer wordsAllowed = 1000;
-        if(!MainActivity.isPremium){
+        if (!MainActivity.isPremium) {
             wordsAllowed = (DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate) == null)
                     ? 0 : DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate).size();
         }
 
-        if(!MainActivity.isPremium && MainActivity.isTrialTimeEnd && wordsAllowed > 4){
+        if (!MainActivity.isPremium && MainActivity.isTrialTimeEnd && wordsAllowed > 4) {
             Toast.makeText(getActivity(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             // проверяем на наличе заволненых полей и отсутствие пробелов
             if (TextUtils.isEmpty(englishWord.getText())) {
                 englishWord.setError(getResources().getString(R.string.cant_be_space));
@@ -96,7 +95,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                 russianWord.setError(getResources().getString(R.string.cant_be_space));
             } else {
                 // если слово пользователя менялось то транскипции не будет
-                if(!(englishWord.getText().toString()).equals(takenWord)){
+                if (!(englishWord.getText().toString()).equals(takenWord)) {
                     transcription = "";
                     dbHelper.insertWord(
                             englishWord.getText().toString(),
@@ -104,7 +103,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                             transcription,
                             MainActivity.toDayDate);
                     //если менялся только перевод
-                } else if ((englishWord.getText().toString()).equals(takenWord) && !russWord.equals(russianWord.getText().toString())){
+                } else if ((englishWord.getText().toString()).equals(takenWord) && !russWord.equals(russianWord.getText().toString())) {
                     dbHelper.insertWord(
                             englishWord.getText().toString(),
                             russianWord.getText().toString(),
@@ -124,7 +123,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                 isChange = true;
             }
         }
-        if(!MainActivity.isPremium){
+        if (!MainActivity.isPremium) {
             DBHelper.getDbHelper(getActivity()).uploadDb();
         }
     }
@@ -141,12 +140,13 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
     @Override
     public void onStop() {
         super.onStop();
-        if(isChange){
+        if (isChange) {
             DBHelper.getDbHelper(getActivity()).uploadDb();
             Log.d(LOG_TAG, "База перегруженна");
         }
         isChange = false;
     }
+
     @Override
     public void onResume() {
         super.onResume();
