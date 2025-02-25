@@ -1,0 +1,79 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+}
+
+android {
+    namespace "com.bogdan.learner"
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.bogdan.learner"
+        minSdk 23
+        targetSdk 34
+        versionCode 9
+        versionName "2.3"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "version"
+    productFlavors {
+        english_card {
+            dimension "version"
+            applicationId 'com.bogdan.english.card'
+            minSdk 23
+            targetSdk 34
+            versionCode 24
+            versionName '2.7.4'
+        }
+    }
+    buildFeatures {
+        viewBinding false
+    }
+    dependenciesInfo {
+        includeInApk false
+        includeInBundle false
+    }
+    buildToolsVersion '35.0.0'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // AndroidX Core Libraries
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.cardview
+    implementation libs.androidx.recyclerview
+    implementation libs.material
+
+    // Calendar widget (replacement for times-square)
+    implementation libs.material.calendarview
+
+    implementation 'xyz.danoz:recyclerviewfastscroller:0.1.3'
+    implementation 'com.squareup:android-times-square:1.7.11'
+    implementation 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
+
+    // FastScroller (updated alternative)
+    implementation libs.library
+
+    // Firebase
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.analytics
+    implementation libs.firebase.ads
+
+    // AdMob
+    implementation libs.play.services.ads
+}

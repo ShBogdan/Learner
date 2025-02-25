@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/frg_repeat_to_day_word"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:weightSum="1"
+              android:background="@color/my_background">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical|center_horizontal">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="18dp"
+            android:gravity="left">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="ответ"
+                android:id="@+id/tv_correct_answer"
+                android:tag="tv_correct_answer"
+                android:textSize="25sp"
+                android:gravity="center_vertical|left"
+                android:textColor="@color/my_background"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:layout_marginRight="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:id="@+id/tvSumWords"
+                android:textSize="25sp"
+                android:gravity="center_vertical|right"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/btn_audio"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffffff"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true"
+        android:layout_marginTop="-5dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Русское слово"
+                android:textStyle="bold"
+                android:id="@+id/russianWord"
+                android:layout_gravity="center_horizontal"
+                android:textSize="35sp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center|center_horizontal" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text=""
+                android:id="@+id/tv_input"
+                android:textSize="25sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:gravity="center|center_horizontal"
+                android:layout_marginBottom="18dp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/randomLettersLayout"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center|center_vertical">
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_1"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_2"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_3"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_4"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_5"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_6"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                android:id="@+id/linearLayoutInnerButtonLine_7"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal">
+            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_8"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_9"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutInnerButtonLine_10"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal">
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_weight="1">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/lay_wipe"
+            android:tag="lay_wipe"
+            android:background="@color/my_background"
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/erase"
+
+            android:gravity="center|bottom"
+            android:textSize="30sp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/lay_next"
+            android:tag="lay_wipe"
+            android:background="@color/my_background"
+
+
+            android:text="@string/skip"
+
+            android:textSize="20sp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="18dp"
+            />
+    </LinearLayout>
+
+</LinearLayout>
