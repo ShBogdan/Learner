@@ -382,8 +382,15 @@ public class FrgLearnToDay extends Fragment {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (wordsForFrgRepeat.size() != 0) wordsForFrgRepeat.remove(0);
-                reloadFragment();
+                // Simulate click on lay_next element
+                View layNext = getActivity().findViewById(R.id.lay_next);
+                if (layNext != null) {
+                    layNext.performClick();
+                } else {
+                    // Fallback to original logic if lay_next not found
+                    if (wordsForFrgRepeat.size() != 0) wordsForFrgRepeat.remove(0);
+                    reloadFragment();
+                }
             }
         });
     }
@@ -463,4 +470,3 @@ public class FrgLearnToDay extends Fragment {
         return px;
     }
 }
-

@@ -3,6 +3,7 @@ package com.bogdan.learner.fragments;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,11 +103,11 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     }
 
 
-    public void reloadFragment() {
-        Fragment thisFrg = getActivity().getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.FrgAddWordForStudy");
-        final FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-        fTrans.detach(thisFrg);
-        fTrans.attach(thisFrg);
-        fTrans.commit();
+public void reloadFragment() {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new FrgAddWordForStudy())
+                .addToBackStack(null)
+                .commit();
     }
 }

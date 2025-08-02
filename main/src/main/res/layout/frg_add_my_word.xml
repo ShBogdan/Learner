@@ -81,13 +81,6 @@
             android:foregroundGravity="bottom"
             android:gravity="bottom">
 
-            <com.google.android.gms.ads.NativeExpressAdView
-                android:id="@+id/adView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                ads:adUnitId="ca-app-pub-2432219544659182/8045618753"
-                ads:adSize="FULL_WIDTHx200">
-            </com.google.android.gms.ads.NativeExpressAdView>
 
         </LinearLayout>
 
