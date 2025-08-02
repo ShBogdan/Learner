@@ -97,21 +97,16 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-        switch (v.getId()) {
-            case R.id.btn_cards:
-                fTrans.replace(R.id.fragment_container, new FrgCardAllWords());
-                fTrans.addToBackStack(null).commit();
-                break;
-
-            case R.id.btn_favorite:
-                fTrans.replace(R.id.fragment_container, new FrgCardFavorite());
-                fTrans.addToBackStack(null).commit();
-                break;
-
-            case R.id.btn_list:
-                fTrans.replace(R.id.fragment_container, new FrgListAllWord());
-                fTrans.addToBackStack(null).commit();
-                break;
+        int id = v.getId();
+        if (id == R.id.btn_cards) {
+            fTrans.replace(R.id.fragment_container, new FrgCardAllWords());
+            fTrans.addToBackStack(null).commit();
+        } else if (id == R.id.btn_favorite) {
+            fTrans.replace(R.id.fragment_container, new FrgCardFavorite());
+            fTrans.addToBackStack(null).commit();
+        } else if (id == R.id.btn_list) {
+            fTrans.replace(R.id.fragment_container, new FrgListAllWord());
+            fTrans.addToBackStack(null).commit();
         }
     }
 
@@ -119,16 +114,13 @@ public class FrgCardOrList extends Fragment implements View.OnClickListener {
         radioListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.radioRandom:
-                        editor.putString("how_to_repeat", "random");
-                        break;
-                    case R.id.radioDate:
-                        editor.putString("how_to_repeat", "date");
-                        break;
-                    case R.id.radioAlphabet:
-                        editor.putString("how_to_repeat", "alphabet");
-                        break;
+                int id = v.getId();
+                if (id == R.id.radioRandom) {
+                    editor.putString("how_to_repeat", "random");
+                } else if (id == R.id.radioDate) {
+                    editor.putString("how_to_repeat", "date");
+                } else if (id == R.id.radioAlphabet) {
+                    editor.putString("how_to_repeat", "alphabet");
                 }
                 editor.apply();
             }
