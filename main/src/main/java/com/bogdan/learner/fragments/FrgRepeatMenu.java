@@ -67,32 +67,25 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_repeat_day1:
-                startFragment(getOldDate(0));
-                break;
-            case R.id.btn_repeat_day2:
-                startFragment(getOldDate(-1));
-                break;
-            case R.id.btn_repeat_day3:
-                startFragment(getOldDate(-2));
-                break;
-            case R.id.btn_repeat_day21:
-                startFragment(getOldDate(-20));
-                break;
-            case R.id.btn_repeat_day90:
-                startFragment(getOldDate(-89));
-                break;
-            case R.id.btn_calendar:
-                FragmentTransaction fCTrans = getActivity().getSupportFragmentManager().beginTransaction();
-                fCTrans.replace(R.id.fragment_container, new FrgCalendar());
-                fCTrans.addToBackStack(null).commit();
-                break;
-            case R.id.btn_all_words:
-                FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-                fTrans.replace(R.id.fragment_container, new FrgCardOrList());
-                fTrans.addToBackStack(null).commit();
-                break;
+        int id = v.getId();
+        if (id == R.id.btn_repeat_day1) {
+            startFragment(getOldDate(0));
+        } else if (id == R.id.btn_repeat_day2) {
+            startFragment(getOldDate(-1));
+        } else if (id == R.id.btn_repeat_day3) {
+            startFragment(getOldDate(-2));
+        } else if (id == R.id.btn_repeat_day21) {
+            startFragment(getOldDate(-20));
+        } else if (id == R.id.btn_repeat_day90) {
+            startFragment(getOldDate(-89));
+        } else if (id == R.id.btn_calendar) {
+            FragmentTransaction fCTrans = getActivity().getSupportFragmentManager().beginTransaction();
+            fCTrans.replace(R.id.fragment_container, new FrgCalendar());
+            fCTrans.addToBackStack(null).commit();
+        } else if (id == R.id.btn_all_words) {
+            FragmentTransaction fTrans = getActivity().getSupportFragmentManager().beginTransaction();
+            fTrans.replace(R.id.fragment_container, new FrgCardOrList());
+            fTrans.addToBackStack(null).commit();
         }
     }
 
@@ -207,5 +200,3 @@ public class FrgRepeatMenu extends Fragment implements View.OnClickListener {
         });
     }
 }
-
-

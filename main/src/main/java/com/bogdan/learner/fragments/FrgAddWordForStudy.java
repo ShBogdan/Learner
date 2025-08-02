@@ -85,25 +85,19 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
             wordsAllowed = (DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate) == null)
                     ? 0 : DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate).size();
         }
-        switch (v.getId()) {
-            case R.id.btn_know:
-                dayLibrary.isLearnWord(false);
+        int id = v.getId();
+        if (id == R.id.btn_know) {
+            dayLibrary.isLearnWord(false);
+            reloadFragment();
+        } else if (id == R.id.btn_unknown) {
+            if (!MainActivity.isPremium && MainActivity.isTrialTimeEnd && wordsAllowed > 4) {
+                Toast.makeText(getActivity(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
+            } else {
+                dayLibrary.isLearnWord(true);
                 reloadFragment();
-                break;
-
-            case R.id.btn_unknown:
-
-                if (!MainActivity.isPremium && MainActivity.isTrialTimeEnd && wordsAllowed > 4) {
-                    Toast.makeText(getActivity(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
-                } else {
-                    dayLibrary.isLearnWord(true);
-                    reloadFragment();
-                }
-                break;
-
-            case R.id.btn_audio:
-                MainActivity.toSpeech.speak(tv_english.getText().toString(), TextToSpeech.QUEUE_ADD, null);
-                break;
+            }
+        } else if (id == R.id.btn_audio) {
+            MainActivity.toSpeech.speak(tv_english.getText().toString(), TextToSpeech.QUEUE_ADD, null);
         }
     }
 
@@ -116,5 +110,3 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
         fTrans.commit();
     }
 }
-
-

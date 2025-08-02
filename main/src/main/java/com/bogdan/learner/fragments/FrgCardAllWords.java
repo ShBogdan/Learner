@@ -131,38 +131,33 @@ public class FrgCardAllWords extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.lay_known:
-                if (clickCount == 0)
-                    removeWordFromFile();
-                inflateView();
-                break;
-            case R.id.lay_unknown:
-                inflateView();
-                break;
-            case R.id.btn_audio:
-                MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
-                break;
-            case R.id.reset:
-                arrayWords.clear();
-                inflateView();
-                tv_sumWords.setText(arrayWords.size() + "/" + DBHelper.getDbHelper(getActivity()).learnedWords.size());
-                break;
-            case R.id.favorite:
-                if (favorite.isChecked()) {
-                    DBHelper.getDbHelper(getActivity()).setFavorite("true", randomWord[3]);
-                    randomWord[4] = "true";
+        int id = v.getId();
+        if (id == R.id.lay_known) {
+            if (clickCount == 0)
+                removeWordFromFile();
+            inflateView();
+        } else if (id == R.id.lay_unknown) {
+            inflateView();
+        } else if (id == R.id.btn_audio) {
+            MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
+        } else if (id == R.id.reset) {
+            arrayWords.clear();
+            inflateView();
+            tv_sumWords.setText(arrayWords.size() + "/" + DBHelper.getDbHelper(getActivity()).learnedWords.size());
+        } else if (id == R.id.favorite) {
+            if (favorite.isChecked()) {
+                DBHelper.getDbHelper(getActivity()).setFavorite("true", randomWord[3]);
+                randomWord[4] = "true";
 
-                    Log.d(LOG_TAG, "В избранное");
+                Log.d(LOG_TAG, "В избранное");
 
-                } else {
-                    DBHelper.getDbHelper(getActivity()).setFavorite("false", randomWord[3]);
-                    randomWord[4] = "false";
+            } else {
+                DBHelper.getDbHelper(getActivity()).setFavorite("false", randomWord[3]);
+                randomWord[4] = "false";
 
-                    Log.d(LOG_TAG, "Удалить избранное");
+                Log.d(LOG_TAG, "Удалить избранное");
 
-                }
-                break;
+            }
         }
     }
 

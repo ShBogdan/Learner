@@ -104,32 +104,28 @@ public class FrgRepeatDay extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_next:
-                countBtnClick--;
-                if (countBtnClick >= 1) {
-                    btnNext.setText(R.string.next);
-                    russianWord.setText(rus);
-                    transWord.setText(toDayListWords.get(0)[2]);
-                    toDayListWords.remove(0);
-                } else {
-                    countBtnClick = 2;
-                    reloadFragment();
-                }
-                break;
-            case R.id.btn_audio:
-                MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
-                break;
-            case R.id.favorite:
-                if (favorite.isChecked()) {
-                    DBHelper.getDbHelper(getActivity()).setFavorite("true", randomWord[3]);
-                    randomWord[4] = "true";
-                } else {
-                    DBHelper.getDbHelper(getActivity()).setFavorite("false", randomWord[3]);
-                    randomWord[4] = "false";
-                }
-//                MainActivity.isBaseChanged = true;
-                break;
+        int id = v.getId();
+        if (id == R.id.btn_next) {
+            countBtnClick--;
+            if (countBtnClick >= 1) {
+                btnNext.setText(R.string.next);
+                russianWord.setText(rus);
+                transWord.setText(toDayListWords.get(0)[2]);
+                toDayListWords.remove(0);
+            } else {
+                countBtnClick = 2;
+                reloadFragment();
+            }
+        } else if (id == R.id.btn_audio) {
+            MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
+        } else if (id == R.id.favorite) {
+            if (favorite.isChecked()) {
+                DBHelper.getDbHelper(getActivity()).setFavorite("true", randomWord[3]);
+                randomWord[4] = "true";
+            } else {
+                DBHelper.getDbHelper(getActivity()).setFavorite("false", randomWord[3]);
+                randomWord[4] = "false";
+            }
         }
     }
 }

@@ -60,23 +60,19 @@ public class FrgCardFavorite extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_next:
-                inflateView();
-                break;
-            case R.id.btn_audio:
-                MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
-                break;
-            case R.id.favorite:
-                if (favorite.isChecked()) {
-                    DBHelper.getDbHelper(getActivity()).setFavorite("true", randomWord[3]);
-                    randomWord[4] = "true";
-                } else {
-                    DBHelper.getDbHelper(getActivity()).setFavorite("false", randomWord[3]);
-                    randomWord[4] = "false";
-                }
-//                MainActivity.isBaseChanged = true;
-                break;
+        int id = v.getId();
+        if (id == R.id.btn_next) {
+            inflateView();
+        } else if (id == R.id.btn_audio) {
+            MainActivity.toSpeech.speak(voice, TextToSpeech.QUEUE_ADD, null);
+        } else if (id == R.id.favorite) {
+            if (favorite.isChecked()) {
+                DBHelper.getDbHelper(getActivity()).setFavorite("true", randomWord[3]);
+                randomWord[4] = "true";
+            } else {
+                DBHelper.getDbHelper(getActivity()).setFavorite("false", randomWord[3]);
+                randomWord[4] = "false";
+            }
         }
     }
 

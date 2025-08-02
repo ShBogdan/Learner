@@ -5,30 +5,29 @@ ext {
     SUPPORT_VERSION = '28.0.0'
 }
 repositories {
-    jcenter()
-    maven {
-        url 'https://maven.google.com/'
-        name 'Google'
-    }
+    google()
+    mavenCentral()
+    jcenter() // Warning: this repository is going to shut down soon
 }
 android {
+    namespace "com.bogdan.learner"
     flavorDimensions "default"
 
     signingConfigs {
     }
-    compileSdkVersion 28
-    buildToolsVersion '29.0.3'
+    compileSdk 34
+    buildToolsVersion '34.0.0'
     defaultConfig {
         applicationId "com.bogdan.learner"
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion 23
+        targetSdkVersion 34
         versionCode 9
         versionName "2.3"
-
+        multiDexEnabled true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     buildTypes {
         release {
@@ -39,26 +38,29 @@ android {
     productFlavors {
         english_card {
             applicationId 'com.bogdan.english.card'
-            minSdkVersion 16
-            targetSdkVersion 28
+            minSdkVersion 23
+            targetSdkVersion 34
             versionCode 24
             versionName '2.7.4'
+            multiDexEnabled true
         }
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:appcompat-v7:$SUPPORT_VERSION"
-    implementation "com.android.support:support-v4:$SUPPORT_VERSION"
-    implementation "com.android.support:cardview-v7:$SUPPORT_VERSION"
-    implementation "com.android.support:recyclerview-v7:$SUPPORT_VERSION"
-    implementation "com.android.support:design:$SUPPORT_VERSION"
-    implementation 'com.github.rey5137:material:1.2.5'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.github.rey5137:material:1.3.1'
     implementation 'xyz.danoz:recyclerviewfastscroller:0.1.3'
     implementation 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
-    implementation 'com.squareup:android-times-square:1.7.10'
-    implementation 'com.google.android.gms:play-services-ads:19.1.0'
-    implementation 'com.google.firebase:firebase-ads:19.1.0'
-    implementation 'com.google.firebase:firebase-core:17.4.2'
+    implementation 'com.squareup:android-times-square:1.7.11'
+    implementation 'com.google.android.gms:play-services-ads:24.5.0'
+    implementation 'com.google.firebase:firebase-ads:23.6.0'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.android.billingclient:billing:8.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

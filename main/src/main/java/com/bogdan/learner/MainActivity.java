@@ -41,7 +41,6 @@ import com.bogdan.learner.fragments.FrgAddWordForStudy;
 import com.bogdan.learner.fragments.FrgLearnToDay;
 import com.bogdan.learner.fragments.FrgMainMenu;
 import com.bogdan.learner.fragments.FrgRepeatMenu;
-import com.bogdan.learner.util.Billing;
 import com.bogdan.learner.util.CallBackBill;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -106,8 +105,6 @@ public class MainActivity extends AppCompatActivity
 
     FirebaseAnalytics mFirebaseAnalytics;
     public AdView mAdView;
-    Billing bill;
-    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +125,6 @@ public class MainActivity extends AppCompatActivity
 
         sp = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         editor = sp.edit();
-
-        bill = new Billing(this);
-        bill.startSetup(); //add to comment for emulator
 
         if (!sp.contains("IsPremium")) {
             editor.putBoolean("IsPremium", false).apply();
@@ -165,11 +159,7 @@ public class MainActivity extends AppCompatActivity
 
     void advertise(Boolean isShow) {
         if (isShow) {
-            //get in as search:addTestDevice
             AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice("7D52B52E8021375F847F513F5BCC161D")
-                    .addTestDevice("62D8BB95BA97339C7A028147DA6DE5AA")
                     .build();
             mAdView.loadAd(adRequest);
             Log.d(LOG_TAG, "Стартп текламы");
@@ -186,70 +176,55 @@ public class MainActivity extends AppCompatActivity
         if (!isPremium) {
             wordsAllowed = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();
         }
-        switch (view.getId()) {
-            /*Кнопки активити*/
-            case R.id.btn_toMain:
-                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
-                fTrans.addToBackStack("frgMainMenu");
-                hideKeyboard();
-                break;
-
-            case R.id.btn_add:
-                if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
-                    Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
+        int id = view.getId();
+        /*Кнопки активити*/
+        if (id == R.id.btn_toMain) {
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
+            fTrans.addToBackStack("frgMainMenu");
+            hideKeyboard();
+        } else if (id == R.id.btn_add) {
+            if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
+                Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
+            } else {
+                FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
+                if (f != null && f.isVisible()) {
+                    //do nothing
                 } else {
-                    FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
-                    if (f != null && f.isVisible()) {
-                        //do nothing
-                    } else {
-                        fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase, "com.bogdan.learner.fragments.frgAddOwnWordToBase");
-                        fTrans.addToBackStack("frgAddOwnWordToBase");
-                    }
+                    fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase, "com.bogdan.learner.fragments.frgAddOwnWordToBase");
+                    fTrans.addToBackStack("frgAddOwnWordToBase");
                 }
-                break;
-
-            /*Кнопки фрагментов*/
-            case R.id.btn_addMoreWord:
-                if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
-                    Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
-                } else {
-                    fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
-                    fTrans.addToBackStack("frgAddWordForStudy");
-                }
-                break;
-
-            case R.id.btn_learnToday:
-                if (dbHelper.getListWordsByDate(toDayDate) != null) {
-                    fTrans.replace(R.id.fragment_container, frgLearnToDay, "com.bogdan.learner.fragments.TAG_FRG_REPEAT_TO_DAY");
-                    fTrans.addToBackStack("frgLearnToDay");
-                } else
-                    Toast.makeText(this, R.string.no_words_today, Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.btn_repeat:
-                if (dbHelper.learnedWords.size() >= 1) {
-                    fTrans.replace(R.id.fragment_container, frgRepeatMenu);
-                    fTrans.addToBackStack("frgRepeatMenu");
-                } else {
-                    Toast.makeText(this, R.string.no_words, Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            case R.id.btn_options:
-                mDrawerLayout.openDrawer(Gravity.LEFT);
-                mSlideState = true;
-                break;
-
-            case R.id.btn_buyIt:
-                try {
-                    bill.launchPurchaseFlow();
-                } catch (IllegalStateException e) {
-                    Toast.makeText(this, "Попробуйте позже", Toast.LENGTH_SHORT).show();
-                }
-                infoAfterBuy();
-                break;
-
+            }
+        } else if (id == R.id.btn_addMoreWord) {
+            if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
+                Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
+            } else {
+                fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
+                fTrans.addToBackStack("frgAddWordForStudy");
+            }
+        } else if (id == R.id.btn_learnToday) {
+            if (dbHelper.getListWordsByDate(toDayDate) != null) {
+                fTrans.replace(R.id.fragment_container, frgLearnToDay, "com.bogdan.learner.fragments.TAG_FRG_REPEAT_TO_DAY");
+                fTrans.addToBackStack("frgLearnToDay");
+            } else
+                Toast.makeText(this, R.string.no_words_today, Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.btn_repeat) {
+            if (dbHelper.learnedWords.size() >= 1) {
+                fTrans.replace(R.id.fragment_container, frgRepeatMenu);
+                fTrans.addToBackStack("frgRepeatMenu");
+            } else {
+                Toast.makeText(this, R.string.no_words, Toast.LENGTH_SHORT).show();
+            }
+        } else if (id == R.id.btn_options) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            mSlideState = true;
+        } else if (id == R.id.btn_buyIt) {
+            try {
+//                bill.launchPurchaseFlow();
+            } catch (IllegalStateException e) {
+                Toast.makeText(this, "Попробуйте позже", Toast.LENGTH_SHORT).show();
+            }
+            infoAfterBuy();
         }
         fTrans.commit();
     }
@@ -398,7 +373,7 @@ public class MainActivity extends AppCompatActivity
     public void restartApp() {
         Intent mStartActivity = new Intent(context, MainActivity.class);
         int mPendingIntentId = 123456;
-        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
@@ -611,44 +586,39 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.notify_morning:
-                if (mNotifyMorning.isChecked()) {
-                    editor.putBoolean("notify_morning", true).apply();
-                    new AlarmManagerBroadcastReceiver().setMorningAlarm(context);
-                } else {
-                    editor.putBoolean("notify_morning", false).apply();
-                    new AlarmManagerBroadcastReceiver().cancelMorning(context);
-                }
-                break;
-            case R.id.notify_evening:
-                if (mNotifyEvening.isChecked()) {
-                    editor.putBoolean("notify_evening", true).apply();
-                    new AlarmManagerBroadcastReceiver().setEveningAlarm(context);
-                } else {
-                    editor.putBoolean("notify_evening", false).apply();
-                    new AlarmManagerBroadcastReceiver().cancelEvening(context);
-                }
-                break;
-
-            case R.id.autoSpeech:
-                if (mAutoSpeech.isChecked()) {
-                    editor.putBoolean("autoSpeech", true).apply();
-                    isAutoSpeech = true;
-                } else {
-                    editor.putBoolean("autoSpeech", false).apply();
-                    isAutoSpeech = false;
-                }
-                break;
-            case R.id.changeWordPlace:
-                if (mChangeWordPlace.isChecked()) {
-                    editor.putBoolean("changeWordPlace", true).apply();
-                    isReversWordPlace = true;
-                } else {
-                    editor.putBoolean("changeWordPlace", false).apply();
-                    isReversWordPlace = false;
-                }
-                break;
+        int id = buttonView.getId();
+        if (id == R.id.notify_morning) {
+            if (mNotifyMorning.isChecked()) {
+                editor.putBoolean("notify_morning", true).apply();
+                new AlarmManagerBroadcastReceiver().setMorningAlarm(context);
+            } else {
+                editor.putBoolean("notify_morning", false).apply();
+                new AlarmManagerBroadcastReceiver().cancelMorning(context);
+            }
+        } else if (id == R.id.notify_evening) {
+            if (mNotifyEvening.isChecked()) {
+                editor.putBoolean("notify_evening", true).apply();
+                new AlarmManagerBroadcastReceiver().setEveningAlarm(context);
+            } else {
+                editor.putBoolean("notify_evening", false).apply();
+                new AlarmManagerBroadcastReceiver().cancelEvening(context);
+            }
+        } else if (id == R.id.autoSpeech) {
+            if (mAutoSpeech.isChecked()) {
+                editor.putBoolean("autoSpeech", true).apply();
+                isAutoSpeech = true;
+            } else {
+                editor.putBoolean("autoSpeech", false).apply();
+                isAutoSpeech = false;
+            }
+        } else if (id == R.id.changeWordPlace) {
+            if (mChangeWordPlace.isChecked()) {
+                editor.putBoolean("changeWordPlace", true).apply();
+                isReversWordPlace = true;
+            } else {
+                editor.putBoolean("changeWordPlace", false).apply();
+                isReversWordPlace = false;
+            }
         }
     }
 
@@ -681,10 +651,7 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
 
         //billing
-        if (bill.mHelper != null)
-            // TODO: 012 12.04.18 should be uncommitted
-            //            bill.mHelper.dispose();
-            bill.mHelper = null;
+        // Billing cleanup is no longer needed with new implementation
     }
 
     @Override
@@ -796,12 +763,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(LOG_TAG, "onActivityResult " + requestCode + "," + resultCode + "," + data);
-        if (bill.mHelper == null) return;
-        if (!bill.mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        } else {
-            Log.d(LOG_TAG, "onActivityResult handled by IABUtil.");
-        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
 
