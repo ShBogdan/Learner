@@ -23,7 +23,6 @@ import android.widget.CheckBox;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.bogdan.learner.MainActivity;
 import com.bogdan.learner.R;
 import com.rey.material.widget.Button;
 
@@ -101,9 +100,7 @@ public class FrgMainMenu extends Fragment implements View.OnClickListener, View.
             }
         });
 
-        if (MainActivity.isPremium) {
-            cardView_4.setVisibility(View.INVISIBLE);
-        }
+        cardView_4.setVisibility(View.INVISIBLE);
 
         return view;
     }

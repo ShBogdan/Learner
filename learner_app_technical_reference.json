@@ -1,0 +1,230 @@
+{
+  "app_metadata": {
+    "name": "Learner",
+    "package": "com.bogdan.learner",
+    "main_activity": "MainActivity",
+    "database_name": "dictionary.sqlite",
+    "primary_language": "Java",
+    "target_platform": "Android"
+  },
+  "core_classes": {
+    "MainActivity": {
+      "extends": "AppCompatActivity",
+      "implements": ["FragmentListener", "TextToSpeech.OnInitListener", "CompoundButton.OnCheckedChangeListener", "CallBackBill"],
+      "key_methods": {
+        "onCreate": "Main initialization, fragment setup, ad configuration",
+        "onButtonSelected": "Fragment navigation dispatcher",
+        "uploadDb": "Export database to external storage",
+        "downloadDb": "Import database from external storage",
+        "initDrawerLayout": "Setup navigation drawer and settings",
+        "isTrialTimeEmd": "Check if trial period expired"
+      },
+      "static_variables": {
+        "toDayDate": "Current date in YYYYMMDD format",
+        "toSpeech": "TextToSpeech instance",
+        "isAutoSpeech": "Auto-pronunciation setting",
+        "isReversWordPlace": "Word order preference",
+        "wordAlternation": "Cards vs spelling ratio",
+        "isTrialTimeEnd": "Trial period status"
+      }
+    },
+    "DBHelper": {
+      "extends": "SQLiteOpenHelper",
+      "pattern": "Singleton",
+      "key_methods": {
+        "getDbHelper": "Singleton instance getter",
+        "uploadDb": "Load all words into memory collections",
+        "getRandomWord": "Select random unknown word",
+        "isLearnWord": "Mark word as learned or known",
+        "insertWord": "Add new custom word",
+        "updateWordDate": "Change learning date",
+        "getListWordsByDate": "Get words for specific date",
+        "setFavorite": "Toggle favorite status",
+        "removeWordFromDb": "Delete word from database"
+      },
+      "data_collections": {
+        "uploadDb": "TreeMap<Integer, ArrayList<String[]>> - All words organized by date",
+        "listUnknownWords": "ArrayList<String[]> - Words with date=1",
+        "listKnownWords": "ArrayList<String[]> - Words with date=0", 
+        "learnedWords": "ArrayList<String[]> - All dated words",
+        "engWords": "ArrayList<String> - List of English words for validation"
+      },
+      "database_schema": {
+        "table_name": "words",
+        "columns": {
+          "_id": "INTEGER PRIMARY KEY AUTOINCREMENT",
+          "english": "TEXT NOT NULL",
+          "russian": "TEXT NOT NULL", 
+          "transcription": "TEXT",
+          "translations": "TEXT (favorites flag)",
+          "date": "TEXT NOT NULL (learning status/date)"
+        }
+      }
+    },
+    "AlarmManagerBroadcastReceiver": {
+      "extends": "BroadcastReceiver",
+      "purpose": "Daily notification system",
+      "key_methods": {
+        "onReceive": "Handle notification broadcasts",
+        "setMorningAlarm": "Schedule 7:00 AM daily reminder",
+        "setEveningAlarm": "Schedule 8:00 PM daily reminder",
+        "cancelMorning": "Cancel morning notifications",
+        "cancelEvening": "Cancel evening notifications",
+        "notification": "Display notification with app intent"
+      }
+    }
+  },
+  "fragment_architecture": {
+    "navigation_fragments": {
+      "FrgMainMenu": {
+        "purpose": "Main navigation hub",
+        "buttons": ["Add New Word", "Learn Today", "Repeat Studied", "Add Custom Word", "Settings"],
+        "implements": ["View.OnClickListener", "View.OnTouchListener"]
+      },
+      "FrgRepeatMenu": {
+        "purpose": "Review date selection",
+        "options": ["Today", "Yesterday", "2 Days Ago", "21 Days Ago", "90 Days Ago", "Calendar", "All Words"]
+      }
+    },
+    "learning_fragments": {
+      "FrgAddWordForStudy": {
+        "purpose": "Select words from dictionary",
+        "workflow": "Present random unknown word → User decides Know/Don't Know → Update database",
+        "key_methods": ["getRandomWord", "isLearnWord", "reloadFragment"]
+      },
+      "FrgLearnToDay": {
+        "purpose": "Daily learning session",
+        "modes": {
+          "card_mode": "Show word with translation",
+          "spelling_mode": "Interactive letter-by-letter input"
+        },
+        "key_methods": ["drawTheWord", "drawTheLetters", "returnRandomWord", "reloadFragment"],
+        "alternation_logic": "Switch between modes based on wordAlternation setting"
+      },
+      "FrgAddOwnWordToBase": {
+        "purpose": "Add custom vocabulary",
+        "validation": "Check for empty fields and duplicates",
+        "autocomplete": "Dictionary suggestions for English input"
+      }
+    },
+    "management_fragments": {
+      "FrgListAllWord": {
+        "purpose": "List view with search and edit",
+        "features": ["Search", "Sort (Random/Date/Alphabetical)", "Edit", "Delete", "Favorites"],
+        "recycler_view": "Custom adapter with ViewHolder pattern"
+      },
+      "FrgCardAllWords": {
+        "purpose": "Card-based word browser",
+        "navigation": "Swipe through learned words"
+      },
+      "FrgCalendar": {
+        "purpose": "Calendar-based review selection",
+        "library": "TimesSquare CalendarPickerView"
+      }
+    }
+  },
+  "learning_algorithm": {
+    "spaced_repetition": {
+      "schedule": [
+        {"day": 1, "description": "Initial learning"},
+        {"day": 2, "description": "First repetition"},
+        {"day": 3, "description": "Second repetition"},
+        {"day": 21, "description": "Third repetition"},
+        {"day": 90, "description": "Fourth repetition"}
+      ]
+    },
+    "word_states": {
+      "unknown": {"date_value": 1, "description": "Not yet studied"},
+      "known": {"date_value": 0, "description": "Already known"},
+      "learning": {"date_value": "YYYYMMDD", "description": "Being studied with specific date"}
+    },
+    "daily_flow": {
+      "word_selection": "Random from today's scheduled words",
+      "presentation_modes": [
+        "Card display (translation visible)",
+        "Spelling exercise (letter input)"
+      ],
+      "mode_switching": "Based on wordAlternation setting (1-10 ratio)"
+    }
+  },
+  "data_persistence": {
+    "sqlite_database": {
+      "location": "/data/data/com.bogdan.learner/databases/dictionary.sqlite",
+      "initialization": "Copy from assets on first run",
+      "backup_restore": "Export/import via external storage"
+    },
+    "shared_preferences": {
+      "file": "com.bogdan.learner.SETTINGS",
+      "key_settings": {
+        "autoSpeech": "Boolean - Auto-pronunciation",
+        "changeWordPlace": "Boolean - Word order preference",
+        "WordAlternation": "Integer - Exercise alternation ratio",
+        "notify_morning": "Boolean - Morning reminder",
+        "notify_evening": "Boolean - Evening reminder",
+      }
+    }
+  },
+  "android_integrations": {
+    "text_to_speech": {
+      "initialization": "MainActivity.onInit",
+      "language": "Locale.ENGLISH",
+      "usage": "Manual button tap or automatic on word display"
+    },
+    "notifications": {
+      "morning_time": "07:00",
+      "evening_time": "20:00",
+      "repeat_interval": "AlarmManager.INTERVAL_DAY",
+      "action": "Open MainActivity"
+    },
+    "permissions": [
+      "ACCESS_NETWORK_STATE",
+      "INTERNET", 
+      "WAKE_LOCK",
+      "WRITE_EXTERNAL_STORAGE",
+      "READ_EXTERNAL_STORAGE"
+    ]
+  },
+  "ui_patterns": {
+    "fragment_navigation": {
+      "pattern": "Single Activity Multiple Fragments",
+      "container": "R.id.fragment_container",
+      "backstack_management": "Manual via FragmentManager"
+    },
+    "data_display": {
+      "lists": "RecyclerView with custom adapters",
+      "cards": "CardView components",
+      "input": "EditText with validation"
+    },
+    "animations": {
+      "card_elevation": "Touch feedback on buttons",
+      "fragment_transitions": "Standard slide animations"
+    }
+  },
+  "performance_optimizations": {
+    "memory_management": {
+      "singleton_db": "Single DBHelper instance",
+      "static_collections": "Cached word lists",
+      "fragment_reuse": "Detach/attach pattern"
+    },
+    "database_efficiency": {
+      "indexed_queries": "Primary key and date lookups",
+      "batch_operations": "Single transactions",
+      "prepared_statements": "Parameter binding"
+    }
+  },
+  "error_handling": {
+    "common_scenarios": [
+      "No words available for today",
+      "Database corruption",
+      "Permission denials",
+      "Network unavailable",
+      "Screen size limitations"
+    ],
+    "recovery_strategies": [
+      "Asset database restoration",
+      "User feedback via Toast",
+      "Graceful fragment navigation",
+      "Auto-skip problematic words"
+    ]
+  }
+}

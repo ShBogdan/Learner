@@ -82,21 +82,16 @@ public class FrgAddWordForStudy extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         Integer wordsAllowed = 1000;
-        if (!MainActivity.isPremium) {
             wordsAllowed = (DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate) == null)
                     ? 0 : DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate).size();
-        }
         int id = v.getId();
         if (id == R.id.btn_know) {
             dayLibrary.isLearnWord(false);
             reloadFragment();
         } else if (id == R.id.btn_unknown) {
-            if (!MainActivity.isPremium && MainActivity.isTrialTimeEnd && wordsAllowed > 4) {
-                Toast.makeText(getActivity(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
-            } else {
+
                 dayLibrary.isLearnWord(true);
                 reloadFragment();
-            }
         } else if (id == R.id.btn_audio) {
             MainActivity.toSpeech.speak(tv_english.getText().toString(), TextToSpeech.QUEUE_ADD, null);
         }

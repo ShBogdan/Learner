@@ -80,14 +80,10 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
 
     public void onClick(View v) {
         Integer wordsAllowed = 1000;
-        if (!MainActivity.isPremium) {
             wordsAllowed = (DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate) == null)
                     ? 0 : DBHelper.getDbHelper(getActivity()).getListWordsByDate(MainActivity.toDayDate).size();
-        }
 
-        if (!MainActivity.isPremium && MainActivity.isTrialTimeEnd && wordsAllowed > 4) {
-            Toast.makeText(getActivity(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
-        } else {
+
             // проверяем на наличе заволненых полей и отсутствие пробелов
             if (TextUtils.isEmpty(englishWord.getText())) {
                 englishWord.setError(getResources().getString(R.string.cant_be_space));
@@ -122,10 +118,7 @@ public class FrgAddOwnWordToBase extends Fragment implements View.OnClickListene
                 transcription = "";
                 isChange = true;
             }
-        }
-        if (!MainActivity.isPremium) {
-            DBHelper.getDbHelper(getActivity()).uploadDb();
-        }
+
     }
 
     private void hideKeyboard() {

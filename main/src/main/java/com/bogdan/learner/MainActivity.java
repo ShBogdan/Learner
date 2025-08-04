@@ -1,5 +1,7 @@
 package com.bogdan.learner;
 
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -14,7 +16,6 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -41,8 +42,6 @@ import com.bogdan.learner.fragments.FrgAddWordForStudy;
 import com.bogdan.learner.fragments.FrgLearnToDay;
 import com.bogdan.learner.fragments.FrgMainMenu;
 import com.bogdan.learner.fragments.FrgRepeatMenu;
-import com.bogdan.learner.util.CallBackBill;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -57,20 +56,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+public class MainActivity extends AppCompatActivity implements FragmentListener, TextToSpeech.OnInitListener, CompoundButton.OnCheckedChangeListener {
 
-
-public class MainActivity extends AppCompatActivity
-        implements FragmentListener, TextToSpeech.OnInitListener,
-        CompoundButton.OnCheckedChangeListener, CallBackBill {
-    //var
-    //region
     final String LOG_TAG = "MyLog";
     private static final String DATABASE_NAME = "dictionary.sqlite";
     private final String SETTINGS = "com.bogdan.learner.SETTINGS";
@@ -80,8 +71,6 @@ public class MainActivity extends AppCompatActivity
     public static boolean isReversWordPlace;
     public static boolean isBaseChanged;
     public static int wordAlternation;
-    public static boolean isPremium = false;
-    public static boolean isTrialTimeEnd = false;
 
     DBHelper dbHelper;
     TreeMap<Integer, ArrayList<String[]>> uploadDb;
@@ -117,6 +106,8 @@ public class MainActivity extends AppCompatActivity
         uploadDb = dbHelper.uploadDb;
         context = this;
 
+        mAdView = (AdView) findViewById(R.id.adView);
+
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -125,17 +116,6 @@ public class MainActivity extends AppCompatActivity
 
         sp = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         editor = sp.edit();
-
-        if (!sp.contains("IsPremium")) {
-            editor.putBoolean("IsPremium", false).apply();
-        }
-        isPremium = sp.getBoolean("IsPremium", false);
-        mAdView = (AdView) findViewById(R.id.adView);
-
-        // TODO: 012 12.04.18
-//        setPremium(true); //test
-
-        advertise(!isPremium);
 
         frgMainMenu = new FrgMainMenu();
         frgAddWordForStudy = new FrgAddWordForStudy();
@@ -157,57 +137,34 @@ public class MainActivity extends AppCompatActivity
         initDrawerLayout();
     }
 
-    void advertise(Boolean isShow) {
-        if (isShow) {
-            AdRequest adRequest = new AdRequest.Builder()
-                    .build();
-            mAdView.loadAd(adRequest);
-            Log.d(LOG_TAG, "Стартп текламы");
-        } else {
-            mAdView.destroy();
-            mAdView.setLayoutParams(new LinearLayout.LayoutParams(DrawerLayout.LayoutParams.MATCH_PARENT, 0));
-        }
-    }
-
     @Override
     public void onButtonSelected(View view) {
         fTrans = getSupportFragmentManager().beginTransaction();
-        Integer wordsAllowed = 1000;
-        if (!isPremium) {
-            wordsAllowed = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();
-        }
         int id = view.getId();
-        /*Кнопки активити*/
         if (id == R.id.btn_toMain) {
             getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fTrans.replace(R.id.fragment_container, frgMainMenu, "com.bogdan.learner.fragments.MAIN_MENU");
             fTrans.addToBackStack("frgMainMenu");
             hideKeyboard();
         } else if (id == R.id.btn_add) {
-            if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
-                Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
+
+            FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
+            if (f != null && f.isVisible()) {
+                //do nothing
             } else {
-                FrgAddOwnWordToBase f = (FrgAddOwnWordToBase) getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.frgAddOwnWordToBase");
-                if (f != null && f.isVisible()) {
-                    //do nothing
-                } else {
-                    fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase, "com.bogdan.learner.fragments.frgAddOwnWordToBase");
-                    fTrans.addToBackStack("frgAddOwnWordToBase");
-                }
+                fTrans.replace(R.id.fragment_container, frgAddOwnWordToBase, "com.bogdan.learner.fragments.frgAddOwnWordToBase");
+                fTrans.addToBackStack("frgAddOwnWordToBase");
             }
+
         } else if (id == R.id.btn_addMoreWord) {
-            if (!isPremium && isTrialTimeEnd && wordsAllowed > 4) {
-                Toast.makeText(getApplication(), R.string.more_than_6, Toast.LENGTH_SHORT).show();
-            } else {
-                fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
-                fTrans.addToBackStack("frgAddWordForStudy");
-            }
+
+            fTrans.replace(R.id.fragment_container, frgAddWordForStudy, "com.bogdan.learner.fragments.FrgAddWordForStudy");
+            fTrans.addToBackStack("frgAddWordForStudy");
         } else if (id == R.id.btn_learnToday) {
             if (dbHelper.getListWordsByDate(toDayDate) != null) {
                 fTrans.replace(R.id.fragment_container, frgLearnToDay, "com.bogdan.learner.fragments.TAG_FRG_REPEAT_TO_DAY");
                 fTrans.addToBackStack("frgLearnToDay");
-            } else
-                Toast.makeText(this, R.string.no_words_today, Toast.LENGTH_SHORT).show();
+            } else Toast.makeText(this, R.string.no_words_today, Toast.LENGTH_SHORT).show();
         } else if (id == R.id.btn_repeat) {
             if (dbHelper.learnedWords.size() >= 1) {
                 fTrans.replace(R.id.fragment_container, frgRepeatMenu);
@@ -220,11 +177,9 @@ public class MainActivity extends AppCompatActivity
             mSlideState = true;
         } else if (id == R.id.btn_buyIt) {
             try {
-//                bill.launchPurchaseFlow();
             } catch (IllegalStateException e) {
                 Toast.makeText(this, "Попробуйте позже", Toast.LENGTH_SHORT).show();
             }
-            infoAfterBuy();
         }
         fTrans.commit();
     }
@@ -295,17 +250,12 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("com.bogdan.learner.fragments.MAIN_MENU");
         if (fragment != null && fragment.isVisible()) {
-            new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_dialog_info)
-                    .setTitle(null)
-                    .setMessage(R.string.exit)
-                    .setPositiveButton(R.string.no, null)
-                    .setNegativeButton(R.string.yas, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    }).show();
+            new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_info).setTitle(null).setMessage(R.string.exit).setPositiveButton(R.string.no, null).setNegativeButton(R.string.yas, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            }).show();
         } else {
             super.onBackPressed();
         }
@@ -333,8 +283,7 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 if (status == TextToSpeech.SUCCESS) {
                     int result = toSpeech.setLanguage(Locale.ENGLISH);
-                    if (result == TextToSpeech.LANG_MISSING_DATA
-                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     } else {
                         Log.d(LOG_TAG, "onInit_Its fine!");
                     }
@@ -381,15 +330,11 @@ public class MainActivity extends AppCompatActivity
 
     public void dialog(String massage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.help)
-                .setMessage(massage)
-                .setCancelable(false)
-                .setNegativeButton("Ok",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+        builder.setTitle(R.string.help).setMessage(massage).setCancelable(false).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -419,24 +364,20 @@ public class MainActivity extends AppCompatActivity
 
         mMainView = (LinearLayout) findViewById(R.id.main_activity);
         //реакция на открытие-закрытие
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
+        mDrawerToggle = new ActionBarDrawerToggle(this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
                 null,  /* значок-гамбургер для замены стрелки 'Up' */
                 R.string.drawer_open,  /* добавьте строку "open drawer" - описание для  accessibility */
-                R.string.drawer_close  /* добавьте "close drawer" - описание для accessibility */
-        ) {
+                R.string.drawer_close  /* добавьте "close drawer" - описание для accessibility */) {
             public void onDrawerClosed(View view) {
 
             }
 
             public void onDrawerOpened(View drawerView) {
                 tv_learned = (TextView) findViewById(R.id.tv_learned);
-                tv_learned.setText(getString(R.string.you_know) +
-                        DBHelper.getDbHelper(context).learnedWords.size() + getString(R.string.new_words));
+                tv_learned.setText(getString(R.string.you_know) + DBHelper.getDbHelper(context).learnedWords.size() + getString(R.string.new_words));
                 tv_know = (TextView) findViewById(R.id.tv_known);
-                tv_know.setText(getString(R.string.you_knew) +
-                        DBHelper.getDbHelper(context).listKnownWords.size() + getString(R.string.words));
+                tv_know.setText(getString(R.string.you_knew) + DBHelper.getDbHelper(context).listKnownWords.size() + getString(R.string.words));
                 tv_today = (TextView) findViewById(R.id.tv_today);
                 Integer size = (DBHelper.getDbHelper(context).getListWordsByDate(toDayDate) == null) ? 0 : DBHelper.getDbHelper(context).getListWordsByDate(toDayDate).size();
                 tv_today.setText(getString(R.string.today_learned) + size + getString(R.string.words));
@@ -627,46 +568,31 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         toDayDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         dbHelper.date = Integer.parseInt(toDayDate);
-        isTrialTimeEnd = isTrialTimeEmd();
         toSpeech = new TextToSpeech(MainActivity.this, MainActivity.this);
         Log.d(LOG_TAG, "onResume");
-        mAdView.resume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
     }
 
     @Override
     protected void onPause() {
-        mAdView.pause();
+        if (mAdView != null) {
+            mAdView.pause();
+        }
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        //tospeech
         if (toSpeech != null) {
             toSpeech.shutdown();
         }
-//        //advertise
-        mAdView.destroy();
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
 
         super.onDestroy();
-
-        //billing
-        // Billing cleanup is no longer needed with new implementation
-    }
-
-    @Override
-    public void setPremium(Boolean boo) {
-        Log.d(LOG_TAG, "Hello CallBack = " + boo);
-        editor.putBoolean("IsPremium", boo).apply();
-        isPremium = sp.getBoolean("IsPremium", false);
-        if (isPremium) {
-            Log.d(LOG_TAG, "Remove advertise");
-            mAdView.destroy();
-            mAdView.setLayoutParams(new LinearLayout.LayoutParams(DrawerLayout.LayoutParams.MATCH_PARENT, 0));
-        } else {
-            Log.d(LOG_TAG, "Show advertise");
-            advertise(!isPremium);
-        }
     }
 
     @Override
@@ -684,113 +610,9 @@ public class MainActivity extends AppCompatActivity
         return super.onKeyDown(keyCode, e);
     }
 
-    boolean isTrialTimeEmd() {
-        long installedDate = 0;
-        try {
-            installedDate = getApplication()
-                    .getPackageManager()
-                    .getPackageInfo("com.bogdan.english.card", 0)
-                    .firstInstallTime;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        installedDate = installedDate + TimeUnit.DAYS.toMillis(3);
-
-        Log.d(LOG_TAG, "end data" + new SimpleDateFormat("yyyyMMdd").format(installedDate));
-
-        Calendar time = Calendar.getInstance();
-        if (time.getTimeInMillis() > installedDate) {
-            return true;
-        }
-        return false;
-    }
-
-    public void infoAfterBuy() {
-        final CheckBox dontShowAgain;
-        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        LayoutInflater adbInflater = LayoutInflater.from(this);
-        View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
-        SharedPreferences settings = getSharedPreferences(SETTINGS, 0);
-        String skipMessage = settings.getString("infoAfterBuy", "NOT checked");
-
-        dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
-        adb.setView(eulaLayout);
-        adb.setTitle(R.string.toread);
-        adb.setMessage(R.string.infoAfteBuy);
-
-        adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                String checkBoxResult = "NOT checked";
-
-                if (dontShowAgain.isChecked()) {
-                    checkBoxResult = "checked";
-                }
-
-                SharedPreferences settings = getSharedPreferences(SETTINGS, 0);
-                SharedPreferences.Editor editor = settings.edit();
-
-                editor.putString("infoAfterBuy", checkBoxResult);
-                editor.apply();
-
-                // Do what you want to do on "OK" action
-            }
-        });
-
-        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                String checkBoxResult = "NOT checked";
-
-                if (dontShowAgain.isChecked()) {
-                    checkBoxResult = "checked";
-                }
-
-                SharedPreferences settings = getSharedPreferences(SETTINGS, 0);
-                SharedPreferences.Editor editor = settings.edit();
-
-                editor.putString("infoAfterBuy", checkBoxResult);
-                editor.apply();
-
-                // Do what you want to do on "CANCEL" action
-            }
-        });
-
-        if (!skipMessage.equals("checked")) {
-            adb.show();
-        }
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(LOG_TAG, "onActivityResult " + requestCode + "," + resultCode + "," + data);
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if(hasPermission (WRITE_EXTERNAL_STORAGE)){
-//            // Handle item selection
-//            switch (item.getItemId()) {
-//                case R.id.save:
-//                    uploadDb();
-//                    return true;
-//                case R.id.load:
-//                    downloadDb();
-//                    return true;
-//                default:
-//                    return super.onOptionsItemSelected(item);
-//            }
-//        }else {
-//            askForPermission(WRITE_EXTERNAL_STORAGE , 10);
-//            return super.onOptionsItemSelected(item);
-//        }
-//    }

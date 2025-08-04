@@ -16,12 +16,15 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../main/build/generated/ap_generated_sources/english_cardDebug/out">
       <sourceFolder url="file://$MODULE_DIR$/../../../main/build/generated/ap_generated_sources/english_cardDebug/out" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../main/build/generated/ap_generated_sources/english_cardDebug/out" isTestSource="false" generated="true" />
     </content>
     <content url="file://$MODULE_DIR$/../../../main/build/generated/res/processEnglish_cardDebugGoogleServices">
-      <sourceFolder url="file://$MODULE_DIR$/../../../main/build/generated/res/processEnglish_cardDebugGoogleServices" type="java-resource" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../main/build/generated/res/processEnglish_cardDebugGoogleServices" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../main/build/generated/res/processEnglish_cardDebugGoogleServices" type="java-resource" />
     </content>
     <content url="file://$MODULE_DIR$/../../../main/build/generated/res/resValues/english_card/debug">
-      <sourceFolder url="file://$MODULE_DIR$/../../../main/build/generated/res/resValues/english_card/debug" type="java-resource" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../main/build/generated/res/resValues/english_card/debug" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../main/build/generated/res/resValues/english_card/debug" type="java-resource" />
     </content>
     <content url="file://$MODULE_DIR$/../../../main/src/debug" />
     <content url="file://$MODULE_DIR$/../../../main/src/english_card" />
